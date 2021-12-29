@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CakePHP: the rapid development php framework: Managers</title>
+    <link href="statics/icon/favicon.ico" type="image/x-icon" rel="icon">
+    <link href="statics/icon/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link rel="stylesheet" type="text/css" href="statics/css/cake.generic.css">
+
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div id="flashMessage" class="message" style="display: none;"></div>
+	<form action="" method="POST">
+		<select id = "user_type">
+	    	<option>選擇類別</option>
+	    	<option>系統管理者</option>
+	    	<option>學生</option>
+	    	<option>教授</option>
+		</select>
+		<br>
+		ID<input id="id" type="text"/> <br>
+		password<input id="password" type="text"/> <br>
+		<input type="submit" id = "submit"/>
+	</form>
+</body>
+
+            <script type="text/javascript">
+            
+                $(document).ready(function() {
+                    // 處理表單點擊事件
+                    var $form = $('#submit');
+                    
+                    $form.click(function() {
+                        submit();
+                    });
+
+                    function submit() {
+                    	var user_type = $('#user_type').val();
+                        var id = $('#id').val();
+                        var password= $('#password').val();
+                        console.log(user_type+id+password);
+
+                        //var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+                        //var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+//                        if (!email_rule.test(email)) {
+//                            alert("Email格式不符！");
+//                        }
+//                        else if(!password_rule.test(password)) {
+//                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+//                        }
+//                        else {
+//                            // 將資料組成JSON格式
+//                            var data_object = {
+//                                "ManagerName": name,
+//                                "ManagerEmail": email,
+//                                "Password": password
+//                            };
+
+						if(user_type == "系統管理者"){
+							var data_object = {
+									"ManagerId" : id,
+									"Password": password
+							};							
+							
+						}
+						
+						console.log(data_object);
+
+                            // 將JSON格式轉換成字串
+                            var data_string = JSON.stringify(data_object);
+
+                            // 發出POST的AJAX請求
+                            $.ajax({
+                                    type: "POST",
+                                    url: "api/LoginController",
+                                    data: data_string,
+                                    crossDomain: true,
+                                    cache: false,
+                                    dataType: 'json',
+                                    timeout: 5000,
+                                    success: function (response) {
+                                        //$('#flashMessage').html(response.message);
+                                        //$('#flashMessage').show();
+                                        console.log(response);
+                                        if(response.status == 200){
+                                            //updateSQLTable(response.response);
+                                            console.log("success");
+                                        	window.location.href = "http://localhost:8090/NCU_MIS_SA2/index.html";
+                                        }
+                                    },
+                                    error: function () {
+                                        alert("無法連線到伺服器！");
+                                    }
+                            });
+                        }
+                    }
+                );
+            </script>
+</html>
