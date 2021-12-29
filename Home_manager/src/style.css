@@ -1,0 +1,327 @@
+/* 通用設定 */
+body {
+  margin: 0;
+  white-space: nowrap;
+}
+a {
+  display: block;
+  text-decoration: none;
+  line-height: 30px;
+}
+ul {
+  /*  取消預設的list設定 */
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+}
+.text {
+  font-weight: 500;
+}
+.text-bold {
+  font-weight: bold;
+}
+/* 通用設定END */
+
+/* 排版&定位 */
+nav {
+  height: 55px;
+}
+nav .container {
+  overflow: hidden;
+  margin: 0 10%;
+}
+.navbar-header {
+  display: inline-block;
+  padding: 16px 0;
+}
+
+.navbar-collapse {
+  float: right;
+}
+.navbar-right a {
+  padding: 3px 15px;
+  margin: 10px 0;
+}
+.navbar-right > li {
+  float: left;
+}
+.homebtn {
+  margin: 0 10px;
+}
+.dropdown-menu {
+  position: absolute;
+  right: 10%;
+  top: 55px;
+  min-width: 100px;
+}
+.shadow-box {
+  background-color: #f7f9fa;
+  margin: 0 auto;
+  box-shadow: 0px 0px 5px #bfb9ae;
+}
+/* navbarEND */
+
+/* banner */
+.banner {
+  height: 100px;
+}
+.banner > .container {
+  margin: 0 15%;
+  padding: 25px 0;
+}
+/* bannerEND */
+
+/* lowerhalf */
+.lowerhalf > .container {
+  margin: 3% 15%;
+  display: flex;
+}
+/* sidebar */
+.sidebar {
+  flex: 170px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-top: 50px;
+  height: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.teacher {
+  margin: 30px 0;
+}
+.sidebar-menu {
+  margin: 0 0px;
+}
+.sidebar-menu a {
+  padding: 3px 30px;
+}
+/* sidebarEND */
+
+/* content */
+.hr {
+  margin: 10px 0;
+}
+.content {
+  flex: 700px;
+  margin: 0 5%;
+}
+/* contentEND */
+
+/* lowerhalfEND */
+
+/* 排版&定位END */
+
+/* 文字 */
+.homebtn span {
+  color: white;
+}
+.dropdown-menu a,
+.sidebar-menu a {
+  color: #707e8a;
+}
+.banner span {
+  color: white;
+}
+.banner-name {
+  font-size: 30px;
+}
+.banner-extInfo {
+  font-size: 15px;
+}
+.content-title {
+  font-size: 25px;
+}
+.currentpage a {
+  color: #e8833a;
+}
+.block-center {
+  display: block;
+  text-align: center;
+}
+/* 文字END */
+
+/* 初始bgc */
+.homebtn {
+  background-color: #707e8a;
+}
+.dropdown-menu,
+.sidebar {
+  background-color: #f7f9fa;
+}
+.banner {
+  background-color: #c4bdaf;
+}
+.hr {
+  border-bottom: 2px solid #c3cfd9;
+}
+/* 初始bgcEND */
+
+/* hover */
+.homebtn a:hover {
+  background-color: #4d5c68;
+  border-radius: 3px;
+}
+.dropdown-menu a:hover {
+  background-color: #e8eff2;
+}
+.sidebar-menu a:hover {
+  color: #e8833a;
+}
+/* hoverEND */
+
+/* click */
+.dropdown-menu {
+  display: none;
+}
+.dropdown-btn a:focus + ul {
+  display: block;
+}
+/* clickEND */
+
+/* 陰影&圓角&其他 */
+.homebtn {
+  border-radius: 3px;
+}
+.dropdown-menu {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+.sidebar {
+  box-shadow: 3px 3px 0 #c3cfd9;
+}
+.currentpage {
+  border-left: 3px solid #e8833a;
+}
+/* 陰影&圓角&其他END */
+
+/* table */
+.tblcontainer {
+  margin: 30px;
+}
+
+#content-tbl {
+  border-collapse: collapse;
+  width: 100%;
+}
+#content-tbl td {
+  padding: 10px 40px;
+  background-color: #f7f9fa;
+}
+#content-tbl tr {
+  border-bottom: 2px solid white;
+}
+#content-tbl thead td {
+  background-color: #fbe192;
+  border-bottom: 2px solid #c3cfd9;
+}
+#content-tbl .link {
+  color: black;
+}
+/* tbl hover */
+#content-tbl .link:hover {
+  color: #707e8a;
+}
+/* tbl hover END */
+/*登入模組*/
+.fs-infobox-logo {
+  height: 80px;
+  display: block;
+  margin: 80px 0px 0px 0px;
+}
+.fs-infobox-panel {
+  background-color: #f7f9fa;
+  margin: 0 auto;
+  box-shadow: 0px 0px 5px #bfb9ae;
+  display: block;
+  text-align: center;
+}
+#login_form {
+  margin: 40px;
+  display: inline-block;
+}
+#login_form input {
+  border: 1px solid #c3cfd9;
+  font-size: 16px;
+  margin: 10px;
+}
+.loginbtn {
+  width: 70px;
+  height: 30px;
+  margin: 15px;
+  border: 1px solid #c3cfd9;
+  background-color: #707e8a;
+  color: #ffffff;
+}
+.loginbtn:hover {
+  border: 1px solid #c3cfd9;
+  background-color: #f7f9fa;
+  color: #707e8a;
+}
+.radiobtn {
+  background: #f7c325;
+  color: #ffffff;
+  display: inline-block;
+  width: 100px;
+  height: 30px;
+  border-radius: 3px;
+  text-align: center;
+}
+/*登入模組 END*/
+/* table END */
+
+/*搜尋模組*/
+
+#search-form tr {
+  height: 50px;
+  border-collapse: collapse;
+}
+.search-yellow {
+  height: 30px;
+  background-color: #fbe192;
+}
+.search-bar {
+  height: 25px;
+  width: 80%;
+  font-size: 15px;
+}
+/*搜尋模組END*/
+
+/* 單選表單 */
+#radio-container input[type="radio"] {
+  display: none;
+}
+#radio-container input:checked + .button {
+  border: 1px solid #c3cfd9;
+  background: #f7c325;
+  color: #fff;
+  cursor: default;
+}
+#radio-container .button {
+  border: 1px solid #c3cfd9;
+  display: inline-block;
+  margin: 0 5px 10px 0;
+  padding: 5px 10px;
+  background: #f7f9fa;
+  color: #333;
+  cursor: pointer;
+}
+#radio-container .button:hover {
+  border: 1px solid #c3cfd9;
+  background: #bbb;
+  color: #fff;
+}
+#radio-container .round {
+  border-radius: 3px;
+}
+.item-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 單選表單 END */
+/*篩選條件*/
+.do-not-show{
+  display: none;
+}
+/*篩選條件END*/

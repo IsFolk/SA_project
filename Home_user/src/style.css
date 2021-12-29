@@ -1,0 +1,250 @@
+
+/* 通用設定 */
+body{
+	margin: 0;
+	white-space: nowrap;
+}
+a{
+	display: block;
+	text-decoration: none;
+	line-height: 30px;
+}
+ul{	/*  取消預設的list設定 */
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	overflow: hidden;
+}
+.text{
+	font-weight: 500;
+}
+.text-bold{
+	font-weight: bold;
+}
+/* 通用設定END */
+
+/* 排版&定位 */
+nav{
+	height: 55px;
+}
+nav .container{
+	overflow: hidden;
+	margin: 0 10%;
+}
+.navbar-header{
+	display: inline-block;
+	padding: 16px 0;
+}
+
+.navbar-collapse{
+	float: right;
+}
+.navbar-right a{
+	padding: 3px 15px;
+	margin: 10px 0;
+}
+.navbar-right > li{
+	float: left;
+}
+.homebtn{
+	margin: 0 10px;
+}
+.dropdown-menu{
+	position: absolute;
+	right: 10%;
+	top: 55px;
+	min-width: 100px;
+}
+	/* navbarEND */
+
+	/* banner */
+.banner{
+	height: 100px;
+}
+.banner > .container{
+	margin: 0 15%;
+	padding: 25px 0;
+}
+	/* bannerEND */
+
+	/* lowerhalf */
+.lowerhalf > .container{
+	margin: 3% 15%;
+	display: flex;
+}
+		/* sidebar */
+.sidebar{
+	flex: 170px;
+	flex-shrink: 0;
+	flex-grow: 0;
+	margin-top: 50px;
+	height: 330px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.teacher{
+	margin: 30px 0;
+}
+.sidebar-menu{
+	margin: 0 0px;
+}
+.sidebar-menu a{
+	padding: 3px 30px;
+}
+		/* sidebarEND */
+
+		/* content */
+.hr{
+	margin: 10px 0;
+}
+.content{
+	flex: 700px;
+	margin: 0 5%;
+}
+		/* contentEND */
+
+	/* lowerhalfEND */
+
+/* 排版&定位END */
+
+/* 文字 */
+.homebtn span{
+	color: white;
+}
+.dropdown-menu a, .sidebar-menu a{
+	color: #707e8a;
+}
+.banner span{
+	color: white;
+}
+.banner-name{
+	font-size: 30px;
+}
+.banner-extInfo{
+	font-size: 15px;
+}
+.content-title{
+	font-size: 25px;
+}
+.currentpage a{
+	color: #e8833a;
+}
+/* 文字END */
+
+
+/* 初始bgc */
+.homebtn{
+	background-color: #707e8a;
+}
+.dropdown-menu, .sidebar{
+	background-color: #f7f9fa;
+}
+.banner{
+	background-color: #c4bdaf;
+}
+.hr{
+	border-bottom: 2px solid #c3cfd9; 
+}
+/* 初始bgcEND */
+
+
+
+/* hover */
+.homebtn a:hover{
+	background-color: #4d5c68;
+	border-radius: 3px;
+}
+.dropdown-menu a:hover{
+	background-color: #e8eff2;
+}
+.sidebar-menu a:hover{
+	color: #e8833a;
+}
+/* hoverEND */
+
+/* click */
+.dropdown-menu {
+	display: none;
+}
+.dropdown-btn a:focus + ul {
+	display: block;
+}
+/* clickEND */
+
+/* 陰影&圓角&其他 */
+.homebtn{
+	border-radius: 3px;
+}
+.dropdown-menu{
+	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+.sidebar{
+	box-shadow: 3px 3px 0 #c3cfd9;
+}
+.currentpage{
+	border-left: 3px solid #e8833a;
+}
+/* 陰影&圓角&其他END */
+
+/* table */
+.tblcontainer{
+	margin: 30px;
+}
+
+#content-tbl{
+	border-collapse: collapse;
+	width: 100%;
+}
+#content-tbl td{
+	padding: 10px 40px;
+	background-color: #f7f9fa;
+}
+#content-tbl tr{
+	border-bottom: 2px solid white;
+}
+#content-tbl thead td{
+	background-color: #fbe192;
+	border-bottom: 2px solid #c3cfd9;
+}
+#content-tbl .link{
+	color: black;
+}
+	/* tbl hover */
+#content-tbl .link:hover{
+	color: #707e8a;
+}
+	/* tbl hover END */
+/* 課程清單 */
+.clearfix{
+  clear: both;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.clearfix > a{
+    margin: 15px;
+}
+.col-md-6{
+  background-color: #f7f9fa;
+  height: 100px;
+  width: 170px;
+  border: solid 2px #c3cfd9;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+.col-md-6:hover{
+  background-color: #dfe6ed;  
+}
+.fs-label{
+  color: #000000;
+  font-size: 18px;
+}
+.fs-hint{
+  color: #4d5c68;
+  font-size: 14px;
+}
+/* 課程清單 END */ 
+/* table END */

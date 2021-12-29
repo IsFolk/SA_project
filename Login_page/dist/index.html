@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - 登入頁面</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!--LOGIN -->
+<?php
+$account = isset($_POST['account'] ? $_POST['account'] : '');
+$password = isset($_POST['password'] ? $_POST['password'] : '');
+?>
+<div class="item-center">
+  <img class="fs-infobox-logo" src="" alt="logo">
+</div>
+<div class="fs-infobox-panel" style="width:550px; height:400px;">
+    <form id="login_form" action="" method="POST">
+      <div class="content-title">
+        <span class="text-bold">您好，歡迎</span><br>
+      </div>
+    <div id="radio-container" style="margin: 20px">
+      <label><input type="radio" name="login-type"><span class="round button">老師</span></label>
+      <label><input type="radio" name="login-type"><span class="round button">學生</span></label>
+    </div>
+
+      <!--
+<lable><input type="radio" name="teacher"><span class="loginbtn">老師</span></lable>
+      -->
+      帳號<input name="account" type="text" placeholder="輸入帳號"><br>
+      密碼<input name="password" type="password" placeholder="輸入密碼"><br>
+      <button type="button" class="loginbtn" data-role="form-submit">登入</button>
+      <p id="forget">忘記密碼？</p>
+</div>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
