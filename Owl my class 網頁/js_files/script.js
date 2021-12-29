@@ -1,39 +1,11 @@
-$(".search").click(function(){
-  $("#s-course").toggleClass("do-not-show");
-  $("#s-user").toggleClass("do-not-show");
-});
-///.setAttribute("style","display:none");
-/*
-function showUser() {
-  //var mychar = document.getElementById(id);
-  document.getElementById(s-course).style.display = "block";
-  document.getElementById(s-course).style.display = "none";
-}
-function showCourse() {
-  //var mychar = document.getElementById(id);
-  document.getElementById(s-course).style.display = "none";
-  document.getElementById(s-course).style.display = "block";
-}
-
-$(document).ready(function ()
-  $("#s-course").hide();
+$(".search-course").click(function () {
+  $("#s-course").show();
   $("#s-user").hide();
-$("input:radio[name="lable"]").change(function(){
-    if ($("input[name='label']:checked").val() == "1") {
-      document.getElementById(id).style.display = "block";
-      $("#s-course").show()
-      $("#s-user").hide()
-      //"#s-course".show();
-      //"#s-user".hide();
-    } else {
-      //"#s-course".hide();
-      //"#s-user".show();
-      $("#s-user").show()
-      $("#s-course").hide()
-    }
-  });
-);
-*/
+});
+$(".search-user").click(function () {
+  $("#s-course").hide();
+  $("#s-user").show();
+});
 /////////////////////////////////////
 var courseInfo = {
   name: "系統分析與設計",
