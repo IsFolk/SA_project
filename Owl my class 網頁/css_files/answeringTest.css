@@ -1,0 +1,12 @@
+.lowerhalf .container{
+	margin: 0 13%;
+	border: 2px solid #c3cfd9;
+	padding: 30px 50px;
+}
+.content-center{
+	
+}
+
+table, td, tr{
+	border: 1px solid gray;
+}

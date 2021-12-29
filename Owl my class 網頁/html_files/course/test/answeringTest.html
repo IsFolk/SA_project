@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/answeringTest.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name test-name text-bold"></span>
+					<span class="banner-extInfo course-name"></span>
+			</div>
+		</div>
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<div class="content-center">
+					<form>
+						<table class="form-tbl" id="1">
+							<tr>
+								<td class="tr-title"><span class="text question-order"></span><span class="text">.</span></td>
+								<td></td>
+								<td class="question-img"></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+						<table class="form-tbl" id="2">
+							<tr>
+								<td class="tr-title"><span class="text question-order"></span><span class="text">.</span></td>
+								<td></td>
+								<td class="question-img"></td>
+							</tr>
+							<tr>
+								<td></td><td></td>
+							</tr>
+						</table>
+						<input type="submit" class="submit-btn" value="交卷">
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+$(".test-name").text("測驗一");
+/////////第N題//////////////////
+var questionNumber = 1;
+$(".question-order").text(questionNumber);
+		</script>
+		<script src="../../../js_files/general.js"></script>
+	</body>
+</html>
