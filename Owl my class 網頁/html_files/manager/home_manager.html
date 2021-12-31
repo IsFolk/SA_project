@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>CodePen - 管理者首頁</title>
   <link rel="stylesheet" href="../../css_files/style.css">
+
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -49,18 +50,20 @@
 
 <!--下半部分-->
 <div class="lowerhalf">
+  <!--切換按鈕-->
   <div class="item-center">
     <div id="radio-container" style="margin: 10px">
       <label><input type="radio" name="label" class="search-course"><span class="round button">搜尋課程</span></label>
       <label><input type="radio" name="label" class="search-user"><span class="round button">搜尋使用者</span></label>
     </div>
   </div>
+  <!--關鍵字與篩選條件-->
   <div class="item-center">
     <div class="fs-infobox-panel" style="width: 600px;">
       <div class="shadow-box">
         <div class="block-center">
           <form id="search-form" action="" method="POST">
-            <div id="s-course" class="">
+            <div id="s-course" class="do-not-show">
               <table width="100%" style="table-layout:fixed">
                 <tr>
                   <td colspan="3">
@@ -70,10 +73,10 @@
                 </tr>
 
                 <!--style="display:none" -->
-                <tr>
-                  <td colspan="3" class="search-yellow">篩選條件</td>
+                <tr class="search-yellow">
+                  <td colspan="3">篩選條件</td>
                 </tr>
-                <tr>
+                <tr class="search-default">
                   <td>學年
                     <select name="semester" style="width:100px;">
                       <option value=""></option>
@@ -103,10 +106,10 @@
                     </select>
                   </td>
                 </tr>
-                <tr>
-                  <td colspan="3" class="search-yellow">開課時間</td>
+                <tr class="search-yellow">
+                  <td colspan="3">開課時間</td>
                 </tr>
-                <tr>
+                <tr class="search-default">
                   <td>節次
                     <select name="semester" style="width:100px;">
                       <option value=""></option>
@@ -179,8 +182,7 @@
   </div>
 </div>
 <!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script><script  src="./script.js"></script>
-  <script  src="../../js_files/script.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script><script  src="../../js_files/script.js"></script>
 
 </body>
 </html>
