@@ -7,7 +7,6 @@
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
 		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -60,13 +59,13 @@
 								<a href="addTestInfo.html"><span class="text">測驗資訊</span></a>
 							</li>
 						</ul>
-						<a href="addTestQuestion.html"><span class="text add-question-btn">+ 新增題目</span></a>
+						<a href="addTestQuestion.html"><span id="" class="text add-question-btn">+ 新增題目</span></a>
 					</div>
 				</div>
 			<!--右下區域-->
 				<div class="content-right">
 					<div class="content-right-title">
-						<span class="text-bold">新增測驗資訊</span>
+						<span class="text-bold">編輯測驗資訊</span>
 					</div>
 					<div class="hr"></div>
 					<form>
@@ -74,49 +73,107 @@
 							<tbody>
 								<tr>
 									<td class="tr-title"><span class="text-bold">標題</span></td>
-									<td><input class="round-border blue-border blue-border" name="title" placeholder="測驗標題" type="text"></td>
+									<td><input class="round-border blue-border blue-border" id="test_name" name="title" placeholder="測驗標題" type="text"></td>
 								</tr>
 								<tr>
 									<td class="tr-title"><span class="text-bold">開放時間</span></td>
-									<td><input class="round-border blue-border blue-border" type="date">&ensp;<input class="round-border blue-border" type="time"></td>
+									<td><input class="round-border blue-border blue-border" id="opening_time" type="datetime-local"></td>
 								</tr>
 								<tr>
 									<td class="tr-title"><span class="text-bold">關閉時間</span></td>
-									<td><input class="round-border blue-border" type="date">&ensp;<input class="round-border blue-border" type="time"></td>
+									<td><input class="round-border blue-border" id="ending_time" type="datetime-local"></td>
 								</tr>
 								<tr>
 									<td class="tr-title"><span class="text-bold">說明</span></td>
-									<td><textarea class="round-border blue-border" name="description" placeholder="測驗說明"></textarea></td>
+									<td><textarea class="round-border blue-border" id="test_detail" name="description" placeholder="測驗說明"></textarea></td>
 								</tr>
 								<tr>
 									<td class="tr-title"><span class="text-bold">配分</span></td>
 									<td>
 										<span class="text">單選題</span>
-										<input class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
+										<input id="" class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
 										<span class="text">分/題</span>&ensp;&ensp;
 										<span class="text">多選題</span>
-										<input class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
+										<input id="" class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
 										<span class="text">分/題</span>&ensp;&ensp;
 										<span class="text">簡答題</span>
-										<input class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
+										<input id="" class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
 										<span class="text">分/題</span>
 									</td>
 								</tr>
 								<tr>
 									<td></td>
-									<td><input class="round-border blue-border" type="checkbox"><span class="text">平均分配總分</span><input class="" name="total-score" type="number"><span class="text">分</span></td>
+									<td><input id="" class="round-border blue-border" type="checkbox"><span class="text">平均分配總分</span><input id="total-score" class="round-border blue-border" type="number" disabled><span class="text">分</span></td>
 								</tr>
 							</tbody>
 						</table>
-						<input type="submit" class="submit-btn round-border" value="完成編輯">
+						<input id="submit_btn" type="submit" class="submit-btn round-border" value="完成編輯">
 					</form>
 				</div>
 			</div>
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="../../../js_files/general.js"></script>
+		<script src="../../../js_files/test.js"></script>
 		<script>
+$('#test_name').attr("value", "測驗一");
+$('#opening_time').attr("value",'2022-01-03T12:05:00');
+$('#ending_time').attr("value",'2022-01-03T13:05:00');
+$('#test_detail').text("測驗說明");
+
+////////////////////////////////////////////////////
+$('#submit_btn').click(function(){
+	submit();
+});
+
+
+
+
+		
+function submit() {
+	var test_name = $('#test_name').val();
+	var test_detail = $('#test_detail').val();
+	var opening_time = $('#opening_time').val();
+	var ending_time = $('#ending_time').val();
+	var test_detail = $('#test_detail').val();
+	if (test_name == ""){
+		alert("請輸入測驗標題!");
+	}else if((opening_time == '')||(ending_time == '')){
+		alert("請輸入測驗時間!");
+	}else{
+		//將資料轉成JSON格式
+		var data_object = {
+			"TestName": test_name,
+			"TestDetail":　test_detail,
+			"OpeningTime": opening_time,
+			"EndingTime": ending_time
+		};
+		//將JSON格式轉成字串
+		var data_string = JSON.stringify(data_object);
+		//發出POST的AJAX請求
+		$.ajax({
+			type: "POST",
+			url: "api/test.do",
+			data: data_string,
+			crossDomain: true,
+			cache: false,
+			dataType: 'json',
+			timeout: 5000,
+			success: function(response){
+				console.log("response.message");
+				console.log("response.response");
+				console.log("response.status");
+				if(response.status == 200){
+					updateSQLTable(response.response);
+				}
+			},
+			error: function(){
+				alert("無法連線到伺服器!");
+			}
+		});
+	}
+}
 		</script>
+		<script src="../../../js_files/general.js"></script>
 	</body>
 </html>
