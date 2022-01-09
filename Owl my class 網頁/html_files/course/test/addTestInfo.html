@@ -115,21 +115,24 @@ $('#submit_btn').click(function(){
 		
 function submit() {
 	var test_name = $('#test_name').val();
-	var test_detail = $('#test_detail').val();
 	var opening_time = $('#opening_time').val();
 	var ending_time = $('#ending_time').val();
 	var test_detail = $('#test_detail').val();
-	if (test_name == ""){
+	var total_score = $('#total-score').val();
+	if (test_name == ''){
 		alert("請輸入測驗標題!");
 	}else if((opening_time == '')||(ending_time == '')){
 		alert("請輸入測驗時間!");
+	}else if(total_score == ''){
+		alert("請輸入總分!");
 	}else{
 		//將資料轉成JSON格式
 		var data_object = {
 			"TestName": test_name,
 			"TestDetail":　test_detail,
 			"OpeningTime": opening_time,
-			"EndingTime": ending_time
+			"EndingTime": ending_time,
+			"TestTotalScore": total_score  //測驗資料表裡有這一項嗎??
 		};
 		//將JSON格式轉成字串
 		var data_string = JSON.stringify(data_object);
