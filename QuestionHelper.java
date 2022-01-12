@@ -44,15 +44,35 @@ public class QuestionHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`question`(`QuestionId`)"
-                    + " VALUES(?)";
+            String sql = "INSERT INTO `sa_project`.`question`(`QuestionText`,`QuestionAttachment`,`OptionA`,`OptionB`,`OptionC`,`OptionD`,`CorrectAnswer1`,`CorrectAnswer2`,`CorrectAnswer3`,`CorrectAnswer4`,`GivePoint`)"
+                    + " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             
             /** 取得所需之參數 */
-            int id = q.getId();
+            String text = q.getText();
+            String attachment = q.getAttachment();
+            String optionA = q.getOptionA();
+            String optionB = q.getOptionB();
+            String optionC = q.getOptionC();
+            String optionD = q.getOptionD();
+            String answerA = q.getAnswerA();
+            String answerB = q.getAnswerB();
+            String answerC = q.getAnswerC();
+            String answerD = q.getAnswerD();
+            int givePoint = q.getGivePoint();
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
-            pres.setInt(1, id);
+            pres.setString(1, text);
+            pres.setString(2, attachment);
+            pres.setString(3, optionA);
+            pres.setString(4, optionB);
+            pres.setString(5, optionC);
+            pres.setString(6, optionD);
+            pres.setString(7, answerA);
+            pres.setString(8, answerB);
+            pres.setString(9, answerC);
+            pres.setString(10, answerD);
+            pres.setInt(11, givePoint);
 
             
             /** 執行新增之SQL指令並記錄影響之行數 */
@@ -89,17 +109,13 @@ public class QuestionHelper {
     
     
     
-    
-    
-    
-    
-    
+      
 
     
     
     public JSONArray createByList(int test_id, List<Question> question) {
         JSONArray jsa = new JSONArray();
-        /** 記錄實際執行之SQL指令 */
+        /** 記錄實際執行之SQL指令 **/
         String exexcute_sql = "";
         
         for(int i=0 ; i < question.size() ; i++) {
@@ -147,8 +163,8 @@ public class QuestionHelper {
         return jsa;
     }
     
-    
-    public JSONObject deleteByQuestionID(int id) {
+   
+    public JSONObject deleteByID(int id) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
         /** 紀錄程式開始執行時間 */
@@ -422,70 +438,9 @@ public class QuestionHelper {
     }
     
     
-    
-    public Question getByQuestionId(String id) {
-        /** 新建一個 Product 物件之 m 變數，用於紀錄每一位查詢回之商品資料 */
-        Question q = null;
-        /** 記錄實際執行之SQL指令 */
-        String exexcute_sql = "";
-        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
-        ResultSet rs = null;
-        
-        try {
-            /** 取得資料庫之連線 */
-            conn = DBMgr.getConnection();
-            /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`question` WHERE `question`.`QuestionId` = ? LIMIT 1";
-            
-            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
-            pres = conn.prepareStatement(sql);
-            pres.setString(1, id);
-            /** 執行查詢之SQL指令並記錄其回傳之資料 */
-            rs = pres.executeQuery();
 
-            /** 紀錄真實執行的SQL指令，並印出 **/
-            exexcute_sql = pres.toString();
-            System.out.println(exexcute_sql);
-            
-            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
-            while(rs.next()) {
-                /** 將 ResultSet 之資料取出 */
-                int question_id = rs.getInt("id");
-                String text = rs.getString("text");
-                String attachment = rs.getString("attachment");
-                String optionA = rs.getString("optionA");
-                String optionB = rs.getString("optionB");
-                String optionC = rs.getString("optionC");
-                String optionD = rs.getString("optionD");
-                String answerA = rs.getString("answerA");
-                String answerB = rs.getString("answerB");
-                String answerC = rs.getString("answerC");
-                String answerD = rs.getString("answerD");
-                int givePoint = rs.getInt("givePoint");
-                
-                /** 將每一筆商品資料產生一名新Product物件 */
-                q = new Question(question_id, text, attachment, optionA, optionB, optionC, optionD, answerA, answerB, answerC, answerD, givePoint);
-            }
+    
 
-        } catch (SQLException e) {
-            /** 印出JDBC SQL指令錯誤 **/
-            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            /** 若錯誤則印出錯誤訊息 */
-            e.printStackTrace();
-        } finally {
-            /** 關閉連線並釋放所有資料庫相關之資源 **/
-            DBMgr.close(rs, pres, conn);
-        }
-
-        return q;
-    }
-    
-    
-    
- 
-    
-    
     public JSONObject getAll() {
         Question q = null;
         JSONArray jsa = new JSONArray();
