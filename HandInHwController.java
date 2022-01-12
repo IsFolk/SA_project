@@ -12,7 +12,7 @@ import sa_project.tools.JsonReader;
 /**
  * Servlet implementation class ProfessorController
  */
-@WebServlet("/ProfessorController")
+@WebServlet("/HandInHwController")
 
 
 // TODO: Auto-generated Javadoc
@@ -50,41 +50,35 @@ public class HandInHwController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
-        String email = jso.getString("ProfessorEmail");
-        String password = jso.getString("ProfessorPassword");
-        String name = jso.getString("ProfessorName");
+        int c_id = jso.getInt("CourseId");
+        int h_id = jso.getInt("HwId");
+        int st_id = jso.getInt("StudentId");
+        String detail = jso.getString("HandInHwDetail");
         
         /** 建立一個新的會員物件 */
-        Professor p = new Professor(email, password, name);
+        HandInHw p = new HandInHw(c_id, h_id, st_id, detail);
         
         /** 後端檢查是否有欄位為空值，若有則回傳錯誤訊息 */
-        if(email.isEmpty() || password.isEmpty() || name.isEmpty()) {
+        if(detail.isEmpty()) {
             /** 以字串組出JSON格式之資料 */
             String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
             /** 透過JsonReader物件回傳到前端（以字串方式） */
             jsr.response(resp, response);
         }
-        /** 透過MemberHelper物件的checkDuplicate()檢查該會員電子郵件信箱是否有重複 */
-        else if (!ph.checkDuplicate(p)) {
-            /** 透過MemberHelper物件的create()方法新建一個會員至資料庫 */
-            JSONObject data = ph.create(p);
+    
+        JSONObject data = hih.create(p);
             
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "成功! 註冊會員資料...");
-            resp.put("response", data);
+        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "成功! 註冊會員資料...");
+        resp.put("response", data);
             
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
-        }
-        else {
-            /** 以字串組出JSON格式之資料 */
-            String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，此E-Mail帳號重複！\', \'response\': \'\'}";
-            /** 透過JsonReader物件回傳到前端（以字串方式） */
-            jsr.response(resp, response);
-        }
-    }
+        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        jsr.response(resp, response);
+        
+        
+	}
 
     /**
      * 處理Http Method請求GET方法（取得資料）
@@ -99,37 +93,23 @@ public class HandInHwController extends HttpServlet {
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         /** 若直接透過前端AJAX之data以key=value之字串方式進行傳遞參數，可以直接由此方法取回資料 */
-        String id = jsr.getParameter("ProfessorId");
+        String id = jsr.getParameter("StudentId");
+        String id2= jsr.getParameter("CourseId");
         
         System.out.println(request);
         
-        /** 判斷該字串是否存在，若存在代表要取回個別會員之資料，否則代表要取回全部資料庫內會員之資料 */
-        if (id.isEmpty()) {
-            /** 透過MemberHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = ph.getAll();
+        /** 透過MemberHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
+        JSONObject query = hih.getByID(id,id2);
             
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "所有會員資料取得成功");
-            resp.put("response", query);
+        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "會員資料取得成功");
+        resp.put("response", query);
     
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
-        }
-        else {
-            /** 透過MemberHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = ph.getByID(id);
-            
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "會員資料取得成功");
-            resp.put("response", query);
-    
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
-        }
+        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+        jsr.response(resp, response);
+        
     }
 
     /**
@@ -148,10 +128,11 @@ public class HandInHwController extends HttpServlet {
        
         
         /** 取出經解析到JSONObject之Request參數 */
-        int id = jso.getInt("ProfessorId");
+        int id = jso.getInt("HwId");
+        int st_id = jso.getInt("StudentId");
         
         /** 透過MemberHelper物件的deleteByID()方法至資料庫刪除該名會員，回傳之資料為JSONObject物件 */
-        JSONObject query = ph.deleteByID(id);
+        JSONObject query =hih.deleteByID(id, st_id);
         
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
@@ -178,13 +159,12 @@ public class HandInHwController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
-        int id = jso.getInt("ProfessorId");
-        String email = jso.getString("Professoremail");
-        String password = jso.getString("ProfessorPassword");
-        String name = jso.getString("ProfessorName");
+        int id = jso.getInt("StudentId");
+        int hwid = jso.getInt("HwId");
+        String detail = jso.getString("HandInHwDetail");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-        Professor p = new Professor(id, email, password, name);
+        HandInHw p = new HandInHw(id, hwid, detail);
         
         /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         JSONObject data = p.update();
