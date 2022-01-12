@@ -44,16 +44,22 @@ public class HandInHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`handIn`(`HandInId`)"
-                    + " VALUES(?)";
+            String sql = "INSERT INTO `sa_project`.`handIn`(`HandInAnswerA`,ˋHandInAnswerBˋˋHandInAnswerC`,ˋHandInAnswerDˋ)"
+                    + " VALUES(?,?,?,?)";
             
             /** 取得所需之參數 */
-            int id = h.getId();
+            String ansA = h.getHandInAnswer1();
+            String ansB = h.getHandInAnswer2();
+            String ansC = h.getHandInAnswer3();
+            String ansD = h.getHandInAnswer4();
+
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
-            pres.setInt(1, id);
-
+            pres.setString(1, ansA);
+            pres.setString(2, ansB);
+            pres.setString(3, ansC);
+            pres.setString(4, ansD);
             
             /** 執行新增之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
@@ -106,13 +112,12 @@ public class HandInHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`handIn` SET  ˋHandInAnswerAˋ = ? , ˋHandInAnswerBˋ = ?, ˋHandInAnswerCˋ = ?, ˋHandInAnswerDˋ = ?, ˋGotPointˋ = ? WHERE `HandInId` = ?";
+            String sql = "Update `sa_project`.`handIn` SET  ˋHandInAnswerAˋ = ? , ˋHandInAnswerBˋ = ?, ˋHandInAnswerCˋ = ?, ˋHandInAnswerDˋ = ?  WHERE `HandInId` = ?";
             /** 取得所需之參數 */
             String answer1 = h.getHandInAnswer1();
             String answer2 = h.getHandInAnswer2();
             String answer3 = h.getHandInAnswer3();
             String answer4 = h.getHandInAnswer4();
-            int gotPoint = h.getGotPoint();
             int handin_id = h.getId();
             
             /** 將參數回填至SQL指令當中 */
@@ -121,8 +126,7 @@ public class HandInHelper {
             pres.setString(2, answer2);
             pres.setString(3, answer3);
             pres.setString(4, answer4);
-            pres.setInt(5, gotPoint);
-            pres.setInt(6, handin_id);
+            pres.setInt(5, handin_id);
             /** 執行更新之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
 
@@ -159,7 +163,7 @@ public class HandInHelper {
     
     
     
-    public JSONObject deleteByHandInID(int id) {
+    public JSONObject deleteByID(int id) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
         /** 紀錄程式開始執行時間 */
@@ -213,13 +217,10 @@ public class HandInHelper {
     
     
     
-    
-  
-    
-    
+   
     
  
-    public JSONObject getByID(String id) { //變成int ID??
+    public JSONObject getByID(String id) { 
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
         HandIn h = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
@@ -262,10 +263,10 @@ public class HandInHelper {
                 String handInAns2 = rs.getString("HandInAnswerB");
                 String handInAns3 = rs.getString("HandInAnswerC");
                 String handInAns4 = rs.getString("HandInAnswerD");
-                int gotPoint = rs.getInt("GotPoint");
+                //int gotPoint = rs.getInt("GotPoint");
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
-                h = new HandIn(handin_id, handInAns1, handInAns2, handInAns3, handInAns4, gotPoint);
+                h = new HandIn(handin_id, handInAns1, handInAns2, handInAns3, handInAns4);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(h.getData());
             }
@@ -372,4 +373,70 @@ public class HandInHelper {
 
         return response;
     }
+    
+    
+    
+    /**
+     * 檢查作答是否正確
+     *
+     * @param m 一名會員之Member物件
+     * @return boolean 若重複註冊回傳False，若該信箱不存在則回傳True
+     */
+    public void correctAnswer(HandIn h){
+        /** 紀錄SQL總行數，若為「-1」代表資料庫檢索尚未完成 */
+        int row = -1;
+        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
+        ResultSet rs = null;
+        
+        try {
+            /** 取得資料庫之連線 */
+            conn = DBMgr.getConnection();
+            /** SQL指令 */
+            String sql = "SELECT * FROM `sa_project`.`handIn` INNER JOIN `sa_project`.`question` WHERE `handin`.`HandInId` = ? and `question`.`QuestionId` = ?";
+            
+            /** 取得所需之參數 */
+            int id = h.getId();
+            
+            /** 將參數回填至SQL指令當中 */
+            pres = conn.prepareStatement(sql);
+            pres.setInt(1, id);
+            pres.setInt(2, id);
+            /** 執行查詢之SQL指令並記錄其回傳之資料 */
+            rs = pres.executeQuery();
+
+
+            /** 將 ResultSet 之資料取出 */
+            int handin_id = rs.getInt("HandInId");
+            String answerA = rs.getString("HandInAnswerA");
+            String answerB = rs.getString("HandInAnswerB");
+            String answerC = rs.getString("HandInAnswerC");
+            String answerD = rs.getString("HandInAnswerD");
+            String rightAnsA = rs.getString("CorrectAnswerA");
+            String rightAnsB = rs.getString("CorrectAnswerB");
+            String rightAnsC = rs.getString("CorrectAnswerC");
+            String rightAnsD = rs.getString("CorrectAnswerD");
+            int givepoint = rs.getInt("GivePoint");
+            
+            
+            		
+            if(answerA==rightAnsA & answerB==rightAnsB & answerC==rightAnsC & answerD==rightAnsD) {
+            	
+            	h.setGotPoint(givepoint);
+            }		
+
+        } catch (SQLException e) {
+            /** 印出JDBC SQL指令錯誤 **/
+            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            /** 若錯誤則印出錯誤訊息 */
+            e.printStackTrace();
+        } finally {
+            /** 關閉連線並釋放所有資料庫相關之資源 **/
+            DBMgr.close(rs, pres, conn);
+        }
+        
+   
+        //return 0;
+    }
+
 }
