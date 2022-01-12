@@ -38,7 +38,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`homework`(`CourseId`, `HwType`, `HwOpeningTime`, `HwEndingTime`, `HwDetail`, `HwName`, `HwDetailAttachment`)"
+            String sql = "INSERT INTO `sa_project`.`hw`(`CourseId`, `Type`, `OpeningTime`, `EndingTime`, `HwDetail`, `HwName`, `HwDetailAttachment`)"
                     + " VALUES(?, ?, ?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
@@ -105,7 +105,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`homework`(`CourseId`, `HwType`, `HwOpeningTime`, `HwEndingTime`, `HwDetail`, `HwName`)"
+            String sql = "INSERT INTO `sa_project`.`hw`(`CourseId`, `Type`, `OpeningTime`, `EndingTime`, `HwDetail`, `HwName`)"
                     + " VALUES(?, ?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
@@ -167,7 +167,7 @@ private HomeworkHelper() {
         
         try {
             conn = DBMgr.getConnection();
-            String sql = "DELETE FROM `sa_project`.`homework` WHERE `id` = ? LIMIT 1";
+            String sql = "DELETE FROM `sa_project`.`hw` WHERE `id` = ? LIMIT 1";
             pres = conn.prepareStatement(sql);
             pres.setInt(1, id);
             row = pres.executeUpdate();
@@ -212,7 +212,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`homework`";
+            String sql = "SELECT * FROM `sa_project`.`hw`";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -230,10 +230,10 @@ private HomeworkHelper() {
                 
                 /** 將 ResultSet 之資料取出 */
                 int courseid = rs.getInt("CourseId");
-                String hwtype = rs.getString("HwType");
-                String hwopeningtime = rs.getString("HwOpeningTime");
-                String hwendingtime = rs.getString("HwEndingTime");
-                String hwupdatetime = rs.getString("HwUpdateTime");
+                String hwtype = rs.getString("Type");
+                String hwopeningtime = rs.getString("OpeningTime");
+                String hwendingtime = rs.getString("EndingTime");
+                String hwupdatetime = rs.getString("UpdateTime");
                 String hwdetail = rs.getString("HwDetail");
                 String hwname = rs.getString("HwName");
                 String hwdetailattachment = rs.getString("HwDetailAttachment");
@@ -289,7 +289,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`homework` WHERE `CourseId` = ? LIMIT 1";
+            String sql = "SELECT * FROM `sa_project`.`hw` WHERE `CourseId` = ? LIMIT 1";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
@@ -309,10 +309,10 @@ private HomeworkHelper() {
                 
                 /** 將 ResultSet 之資料取出 */
                 int courseid = rs.getInt("CourseId");
-                String hwtype = rs.getString("HwType");
-                String hwopeningtime = rs.getString("HwOpeningTime");
-                String hwendingtime = rs.getString("HwEndingTime");
-                String hwupdatetime = rs.getString("HwUpdateTime");
+                String hwtype = rs.getString("Type");
+                String hwopeningtime = rs.getString("OpeningTime");
+                String hwendingtime = rs.getString("EndingTime");
+                String hwupdatetime = rs.getString("UpdateTime");
                 String hwdetail = rs.getString("HwDetail");
                 String hwname = rs.getString("HwName");
                 String hwdetailattachment = rs.getString("HwDetailAttachment");
@@ -364,7 +364,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`homework` SET `HwType` = ? ,`HwOpeningTime` = ? ,`HwEndingTime` = ? , `HwUpdateTime` = ? ,`HwDetail`= ? ,`HwName` = ?  WHERE `HwId` = ?";
+            String sql = "Update `sa_project`.`hw` SET `Type` = ? ,`OpeningTime` = ? ,`EndingTime` = ? , `UpdateTime` = ? ,`HwDetail`= ? ,`HwName` = ?  WHERE `HwId` = ?";
             /** 取得所需之參數 */
             int hwid = h.getHwId();
             String hwtype = h.getHwType();
