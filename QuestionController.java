@@ -49,10 +49,20 @@ public class QuestionController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
-        int id = jso.getInt("id");
+        String text = jso.getString("text");
+        String attachment = jso.getString("attachment");
+        String optionA = jso.getString("optionA");
+        String optionB = jso.getString("optionB");
+        String optionC = jso.getString("optionC");
+        String optionD = jso.getString("optionD");
+        String answerA = jso.getString("answerA");
+        String answerB = jso.getString("answerB");
+        String answerC = jso.getString("answerC");
+        String answerD = jso.getString("answerD");
+        int givePoint = jso.getInt("givePoint");
         
         /** 建立一個新的會員物件 */
-        Question q = new Question(id); 
+        Question q = new Question(text, attachment, optionA, optionB, optionC, optionD, answerA, answerB, answerC, answerD, givePoint); 
         
 
         /** 透過MemberHelper物件的checkDuplicate()檢查該會員電子郵件信箱是否有重複 */
@@ -115,7 +125,7 @@ public class QuestionController extends HttpServlet {
             /** 新建一個JSONObject用於將回傳之資料進行封裝 */
             JSONObject resp = new JSONObject();
             resp.put("status", "200");
-            resp.put("message", "會員資料取得成功");
+            resp.put("message", "題目取得成功");
             resp.put("response", query);
     
             /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
@@ -142,7 +152,7 @@ public class QuestionController extends HttpServlet {
         int id = jso.getInt("id");
         
         /** 透過MemberHelper物件的deleteByID()方法至資料庫刪除該名會員，回傳之資料為JSONObject物件 */
-        JSONObject query = qh.deleteByQuestionID(id);
+        JSONObject query = qh.deleteByID(id);
         
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
@@ -169,6 +179,7 @@ public class QuestionController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
+        int id = jso.getInt("id");
         String text = jso.getString("text");
         String attachment = jso.getString("attachment");
         String optionA = jso.getString("optionA");
@@ -182,7 +193,7 @@ public class QuestionController extends HttpServlet {
         int givePoint = jso.getInt("givePoint");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Question物件 */
-        Question q = new Question(text, attachment, optionA, optionB, optionC, optionD, answerA, answerB, answerC, answerD, givePoint);
+        Question q = new Question(id, text, attachment, optionA, optionB, optionC, optionD, answerA, answerB, answerC, answerD, givePoint);
         
         /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         JSONObject data = q.update();
