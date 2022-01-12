@@ -24,24 +24,31 @@ public class HandIn {
 	private HandInHelper hih = HandInHelper.getHelper();
 	
 	
-	/** 建立一個新的答題 **/
-	public HandIn(int id) {
-		this.id = id;
-	}
-	
-	/** 編輯or更新完整ㄉ答題 **/
-	public HandIn(String handInAns1, String handInAns2, String handInAns3, String handInAns4, int gotPoint) {
+
+	/** 新增答題 **/
+	public HandIn(String handInAns1, String handInAns2, String handInAns3, String handInAns4) {
 	
 		this.handInAns1 = handInAns1;
 		this.handInAns2 = handInAns2;
 		this.handInAns3 = handInAns3;
 		this.handInAns4 = handInAns4;
-		this.gotPoint = gotPoint;
-		update();
+		//update();
 	}
 	
 
-	/** 取得完整的答題資訊 **/
+	/** 更新作答 **/
+	public HandIn(int id, String handInAns1, String handInAns2, String handInAns3, String handInAns4) {
+		
+		this.id = id;
+		this.handInAns1 = handInAns1;
+		this.handInAns2 = handInAns2;
+		this.handInAns3 = handInAns3;
+		this.handInAns4 = handInAns4;
+		update();
+
+	}
+	
+	/** 提取作答 **/
 	public HandIn(int id, String handInAns1, String handInAns2, String handInAns3, String handInAns4, int gotPoint) {
 		
 		this.id = id;
@@ -50,6 +57,7 @@ public class HandIn {
 		this.handInAns3 = handInAns3;
 		this.handInAns4 = handInAns4;
 		this.gotPoint = gotPoint;
+
 	}
 	
 	
@@ -71,8 +79,8 @@ public class HandIn {
 
 	
 	
-	public void setId(int id) {
-		this.id = id;
+	public void setGotPoint(int gotPoint) {
+		this.gotPoint = gotPoint;
 	}
 
 	public int getId() {
