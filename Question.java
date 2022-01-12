@@ -35,12 +35,9 @@ public class Question {
 	private QuestionHelper qsh = QuestionHelper.getHelper();
 	
 	
-	/** 建立一道題目 **/
-	public Question(int id) {
-		this.id = id;
-	}
 	
-	/** 編輯or更新完整ㄉ題目 **/
+	
+	/** 新增完整ㄉ題目 **/
 	public Question(String text, String attachment, String optionA, String optionB, String optionC, String optionD,
 			String answerA, String answerB, String answerC, String answerD, int givePoint) {
 		
@@ -59,7 +56,7 @@ public class Question {
 	}
 	
 
-	/*取得一個題目的資訊 */
+	/*查看、修改一個題目的資訊 */
 	public Question(int id, String text, String attachment, String optionA, String optionB, String optionC, String optionD,
 			String answerA, String answerB, String answerC, String answerD, int givePoint) {
 		
@@ -167,10 +164,7 @@ public class Question {
 
         return data;
     }	
-	
-	
-	
-	
+
 	
 	
 }
