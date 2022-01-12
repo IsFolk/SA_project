@@ -77,11 +77,11 @@
 								</tr>
 								<tr>
 									<td class="tr-title"><span class="text-bold">開放時間</span></td>
-									<td><input class="round-border blue-border blue-border" id="opening_time" type="datetime-local"></td>
+									<td><input class="round-border blue-border blue-border" id="opening_date" type="date">&ensp;&ensp;<input class="round-border blue-border blue-border" id="opening_time" type="time"></td>
 								</tr>
 								<tr>
 									<td class="tr-title"><span class="text-bold">關閉時間</span></td>
-									<td><input class="round-border blue-border" id="ending_time" type="datetime-local"></td>
+									<td><input class="round-border blue-border" id="ending_date" type="date">&ensp;&ensp;<input class="round-border blue-border blue-border" id="ending_time" type="time"></td>
 								</tr>
 								<tr>
 									<td class="tr-title"><span class="text-bold">說明</span></td>
@@ -104,8 +104,10 @@
 		<script>
 
 $('#test_name').attr("value", "測驗一");
-$('#opening_time').attr("value",'2022-01-03T12:05:00');
-$('#ending_time').attr("value",'2022-01-03T13:05:00');
+$('#opening_date').attr("value",'2022-01-03');
+$('#opening_time').attr("value",'08:30');
+$('#ending_date').attr("value",'2022-01-03');
+$('#ending_time').attr("value",'09:30');
 $('#test_detail').text("測驗說明");
 
 ////////////////////////////////////////////////////
@@ -115,10 +117,13 @@ $('#submit_btn').click(function(){
 		
 function submit() {
 	var test_name = $('#test_name').val();
-	var opening_time = $('#opening_time').val();
-	var ending_time = $('#ending_time').val();
+	var opentime_input = $('#opening_date').val() + ' ' + $('#opening_time').val() + ':00';
+	var endtime_input = $('#ending_date').val() + ' ' + $('#ending_time').val() + ':00';
 	var test_detail = $('#test_detail').val();
 	var total_score = $('#total-score').val();
+	
+	alert(opentime_input);
+	
 	if (test_name == ''){
 		alert("請輸入測驗標題!");
 	}else if((opening_time == '')||(ending_time == '')){
@@ -130,8 +135,8 @@ function submit() {
 		var data_object = {
 			"TestName": test_name,
 			"TestDetail":　test_detail,
-			"OpeningTime": opening_time,
-			"EndingTime": ending_time,
+			"OpeningTime": opentime_input,
+			"EndingTime": endtime_input,
 			"TestTotalScore": total_score  //測驗資料表裡有這一項嗎??
 		};
 		//將JSON格式轉成字串
