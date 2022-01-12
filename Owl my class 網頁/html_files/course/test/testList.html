@@ -114,11 +114,11 @@ function json2table(jsonString, $table){
 	
 	var bodyRows = '';
 	
-	for(let hm of json.test){ //將資料填入表格
+	for(let cell of json.test){ //將資料填入表格
 		bodyRows += '<tr>';
-		bodyRows += '<td><a href="test.html"><span class="content-tbl-link">' + hm.title + '</span></a></td>' ;
-		bodyRows += '<td>' + hm.endDate + '</td>' ;
-		bodyRows += '<td class="stu-only">' + hm.status + '</td>' ;
+		bodyRows += '<td><a href="test.html"><span class="content-tbl-link">' + cell.title + '</span></a></td>' ;
+		bodyRows += '<td>' + cell.endDate + '</td>' ;
+		bodyRows += '<td class="stu-only">' + cell.status + '</td>' ;
 		bodyRows += '</tr>';
 	}
 	
@@ -126,6 +126,37 @@ function json2table(jsonString, $table){
 }
 
 json2table(testJson, $(".content-tbl"));
+
+//////////////////////////////////////////////////////////////
+$.ajax({
+        url: "api/test.do",
+        type: "GET",
+		dataType:"json",
+        success: function (info) {
+			console.log(info.length);
+			total_len = info.length;
+			
+			for(i=0;i<total_len;i++){
+				console.log(info[i].name);
+				
+				for(let cell of info){ //將資料填入表格
+				bodyRows += '<tr>';
+				bodyRows += '<td><a href="test.html"><span class="content-tbl-link">' + cell.name + '</span></a></td>' ;
+				bodyRows += '<td>' + cell.end_time + '</td>' ;
+				bodyRows += '<td class="stu-only">' + cell.status + '</td>' ;
+				bodyRows += '</tr>';
+	}
+	
+	$table.find('tbody').append(bodyRows);
+				
+			}
+						
+        },
+        error: function (data) {
+            console.log("請求失敗");
+        }
+    });
+});
 		</script>
 		<script src="../../../js_files/general.js"></script>
 	</body>
