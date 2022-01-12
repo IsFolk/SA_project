@@ -1,6 +1,8 @@
 package sa_project.controller;
 
 import java.io.*;
+import java.util.Date;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -8,12 +10,12 @@ import org.json.*;
 import sa_project.app.Homework;
 import sa_project.app.HomeworkHelper;
 import sa_project.tools.JsonReader;
-import java.util.Date;
+
 
 /**
  * Servlet implementation class ProfessorController
  */
-@WebServlet("/HomeworkController")
+@WebServlet("HomeworkController")
 
 
 // TODO: Auto-generated Javadoc
@@ -61,7 +63,7 @@ public class HomeworkController extends HttpServlet {
         	String hwopeningtime = jso.getString("HwOpeningTime");
         	String hwendingtime = jso.getString("HwEndingTime");
         	String hwdetail = jso.getString("HwDetail");
-        	String hwname = jso.getString("HwName");
+        	String hwname = jso.getString("HwName"); 
  
         	Homework h = new Homework(courseid, hwtype, hwopeningtime, hwendingtime, hwupdatetime, hwdetail, hwname);
         
@@ -134,37 +136,21 @@ public class HomeworkController extends HttpServlet {
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         /** 若直接透過前端AJAX之data以key=value之字串方式進行傳遞參數，可以直接由此方法取回資料 */
-        String id = jsr.getParameter("HwId");
+        String id = jsr.getParameter("CourseId");
         
         System.out.println(request);
         
-        /** 判斷該字串是否存在，若存在代表要取回個別會員之資料，否則代表要取回全部資料庫內會員之資料 */
-        if (id.isEmpty()) {
-            /** 透過MemberHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = hh.getAll();
+
+        JSONObject query = hh.getByID(id);
             
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "所有會員資料取得成功");
-            resp.put("response", query);
+        /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "會員資料取得成功");
+        resp.put("response", query);
     
             /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
             jsr.response(resp, response);
-        }
-        else {
-            /** 透過MemberHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = hh.getByID(id);
-            
-            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "會員資料取得成功");
-            resp.put("response", query);
-    
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
-        }
     }
 
     /**
@@ -211,20 +197,20 @@ public class HomeworkController extends HttpServlet {
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
-        Date date = new Date();
+        Date date= new Date();
         
         /** 取出經解析到JSONObject之Request參數 */
         int id = jso.getInt("HwId");
+        int c_id = jso.getInt("CourseId");
         String hwtype = jso.getString("HwType");
         String hwopeningtime = jso.getString("HwOpeningTime");
         String hwendingtime = jso.getString("HwEndingTime");
-        String hwupdatetime = date.toString();
+		String hwupdatetime = date.toString();
         String hwdetail = jso.getString("HwDetail");
         String hwname = jso.getString("HwName");
-        int hwscore = jso.getInt("HwScore");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-        Homework h = new Homework(id, hwtype, hwopeningtime, hwendingtime, hwupdatetime, hwdetail, hwname, hwscore);
+        Homework h = new Homework(c_id, id, hwtype, hwopeningtime, hwendingtime, hwupdatetime, hwdetail, hwname);
         
         /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         JSONObject data = h.update();
