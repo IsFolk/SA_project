@@ -87,6 +87,8 @@
 										<option value=".ans_3">簡答題</option>
 									</select>
 									<br><br>
+									<span class="text">配分:</span>&ensp;<input class="round-border blue-border" id="score" type="number" step="10" value="50">
+									<br><br>
 									<input type="file" id="input-img" accept=".jpg, .png, .jpeg">
 								</td>
 							</tr>
@@ -231,6 +233,7 @@ $('#submit_btn').click(function(){
 		
 function submit() {
 	var question_detail = $('#question').val();
+	var score = $('#score').val();
 	var choice_1 = $('.choice1').val();
 	var choice_2 = $('.choice2').val();
 	var choice_3 = $('.choice3').val();
@@ -267,6 +270,7 @@ function submit() {
 		//將資料轉成JSON格式
 		var data_object = {
 			"QuestionText": question_detail,
+			"GivePoint": score,
 			"OptionA":　choice_1,
 			"OptionB":　choice_2,
 			"OptionC":　choice_3,
@@ -274,7 +278,7 @@ function submit() {
 			"CorrectAnswer1":　ans_1,
 			"CorrectAnswer2":　ans_2,
 			"CorrectAnswer3":　ans_3,
-			"CorrectAnswer4":　ans_4,
+			"CorrectAnswer4":　ans_4
 		};
 		//將JSON格式轉成字串
 		var data_string = JSON.stringify(data_object);
