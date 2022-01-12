@@ -5,6 +5,8 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.json.*;
+import java.sql.Timestamp;
+
 
 import ncu.im3069.demo.app.Test;
 import ncu.im3069.demo.app.TestHelper;
@@ -49,37 +51,32 @@ public class TestController extends HttpServlet {
         JSONObject jso = jsr.getObject();
 
         /** 取出經解析到 JSONObject 之 Request 參數 */
-        int id = jso.getInt("id");
- //       String name = jso.getString("name");
- //       String detail = jso.getString("detail");
- //       String opening_time = jso.getString("opening_time");
- //       String end_time = jso.getString("end_time");
-        JSONArray question = jso.getJSONArray("questionId");
+        //int id = jso.getInt("id");
+        String name = jso.getString("TestName");
+        String detail = jso.getString("TestDetail");
+        String opening_time = jso.getString("OpeningTime");
+        String end_time = jso.getString("EndingTime");
+        //JSONArray question = jso.getJSONArray("questionId");
 
+        
+        Timestamp openingTime = Timestamp.valueOf(opening_time);
+        Timestamp endingTime = Timestamp.valueOf(end_time);
+        
+        
+        
         /** 建立一個新的訂單物件 */
-        Test t = new Test(id);
+        Test t = new Test(name, detail, openingTime, endingTime);
 
-        /** 將每一筆訂單細項取得出來 */
-        for(int i=0 ; i < question.length() ; i++) {
-            String question_id = question.getString(i);
-
-            /** 透過 QuestionHelper 物件之 getById()，取得題目題號並加測驗物件裡 */
-            Question q = qh.getByQuestionId(question_id);
-            t.addQuestion(q);
-        }
-
+ 
         /** 透過 orderHelper 物件的 create() 方法新建一筆訂單至資料庫 */
         JSONObject result = th.create(t);
 
-        /** 設定回傳回來的訂單編號與訂單細項編號 */
-        t.setId((int) result.getLong("test_id"));
-        t.setQuestionId(result.getJSONArray("question_id"));
         
         /** 新建一個 JSONObject 用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
         resp.put("status", "200");
         resp.put("message", "測驗新增成功！");
-        resp.put("response", t.getTestAllInfo());
+        resp.put("response", t.getTestData());
 
         /** 透過 JsonReader 物件回傳到前端（以 JSONObject 方式） */
         jsr.response(resp, response);
@@ -103,32 +100,34 @@ public class TestController extends HttpServlet {
         String id = jsr.getParameter("id");
         
         /** 判斷該字串是否存在，若存在代表要取回個別會員之資料，否則代表要取回全部資料庫內會員之資料 */
-        if (id.isEmpty()) {
+      //  if (id.isEmpty()) {
             /** 透過MemberHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
             JSONObject query = th.getAll();
             
             /** 新建一個JSONObject用於將回傳之資料進行封裝 */
             JSONObject resp = new JSONObject();
             resp.put("status", "200");
-            resp.put("message", "所有會員資料取得成功");
+            resp.put("message", "所有測驗資料取得成功");
             resp.put("response", query);
     
             /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
             jsr.response(resp, response);
-        }
-        else {
+    //    }
+        
+        
+      //  else {
             /** 透過MemberHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
-            JSONObject query = th.getById(id);
+      //      JSONObject query = th.getById(id);
             
             /** 新建一個JSONObject用於將回傳之資料進行封裝 */
-            JSONObject resp = new JSONObject();
-            resp.put("status", "200");
-            resp.put("message", "測驗資料取得成功");
-            resp.put("response", query);
+      //      JSONObject resp = new JSONObject();
+      //      resp.put("status", "200");
+      //      resp.put("message", "測驗資料取得成功");
+      //      resp.put("response", query);
     
-            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-            jsr.response(resp, response);
-        }
+       //     /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+       //     jsr.response(resp, response);
+       // }  
     }
 
     /**
@@ -179,14 +178,17 @@ public class TestController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
+        int id = jso.getInt("id");
         String name = jso.getString("name");
         String detail = jso.getString("detail");
         String opening_time = jso.getString("opening_time");
         String end_time = jso.getString("end_time");
 
-
+        Timestamp openingTime = Timestamp.valueOf(opening_time);
+        Timestamp endTime = Timestamp.valueOf(end_time);
+        
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-        Test t = new Test(name, detail, opening_time, end_time);
+        Test t = new Test(id, name, detail, openingTime, endTime);
         
         /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         JSONObject data = t.update();
