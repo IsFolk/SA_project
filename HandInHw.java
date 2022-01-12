@@ -7,6 +7,8 @@ public class HandInHw {
 	private int CourseId;
 	private int HwId;
 	private int StudentId;
+	private String HwHandInDetail;
+	private int HwHandInScore;
     /** ph，ProfessorHelper之物件與Professor相關之資料庫方法（Sigleton） */
     private HandInHwHelper hih =  HandInHwHelper.getHelper();
     
@@ -18,10 +20,17 @@ public class HandInHw {
      * @param password 教授密碼
      * @param name 教授姓名
      */
-    public HandInHw(int courseid, int hwid, int studentid) {
+    public HandInHw(int courseid, int hwid, int studentid, String HwHandInDetail) {
         this.CourseId=courseid;
         this.HwId = hwid;
         this.StudentId = studentid;
+        this.HwHandInDetail = HwHandInDetail;
+    }
+    
+    public HandInHw(int courseid, int hwid, String detail) {
+        this.CourseId=courseid;
+        this.HwId = hwid;
+        this.HwHandInDetail= detail;
         update();
     }
 
@@ -30,11 +39,19 @@ public class HandInHw {
     }
     
     public int getHwId() {
-    	return this.CourseId;
+    	return this.HwId;
     }
     
     public int getStudentId() {
-    	return this.CourseId;
+    	return this.StudentId;
+    }
+    
+    public String getHwHandInDetail() {
+    	return this.HwHandInDetail;
+    }
+    
+    public int getHwHandInScore() {
+    	return this.HwHandInScore;
     }
     /**
      * 更新會員資料
@@ -44,33 +61,13 @@ public class HandInHw {
     public JSONObject update() {
         /** 新建一個JSONObject用以儲存更新後之資料 */
         JSONObject data = new JSONObject();
-        /** 檢查該名會員是否已經在資料庫 */
-        if(this.Id != 0) {
-            /** 透過MemberHelper物件，更新目前之會員資料置資料庫中 */
-            data = ph.update(this);
-        }
+            data = hih.update(this);
         
         return data;
     }
     
-    /**
-     * 取得該名會員所有資料
-     *
-     * @return the data 取得該名會員之所有資料並封裝於JSONObject物件內
-     */
-    public JSONObject getData() {
-        /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
-        JSONObject jso = new JSONObject();
-        jso.put("ProfessorId", getId());
-        jso.put("ProfessorName", getName());
-        jso.put("Position", getPosition());
-        jso.put("Department",getDepartment());
-        jso.put("Email", getEmail());
-        jso.put("Password", getPassword());
-        jso.put("CourseListId", getCourseListId());
-        
-        return jso;
-    }
+
+
     
 
 }
