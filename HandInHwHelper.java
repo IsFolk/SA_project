@@ -59,7 +59,7 @@ public class HandInHwHelper {
      * @param id 會員編號
      * @return the JSONObject 回傳SQL執行結果
      */
-    public JSONObject deleteByID(int id) {
+    public JSONObject deleteByID(int id, int st_id) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
         /** 紀錄程式開始執行時間 */
@@ -74,11 +74,12 @@ public class HandInHwHelper {
             conn = DBMgr.getConnection();
             
             /** SQL指令 */
-            String sql = "DELETE FROM `sa_project`.`professor` WHERE `ProfessorId` = ? LIMIT 1";
+            String sql = "DELETE FROM `sa_project`.`handinhw` WHERE `HwId` = ?, `StudentId`=?  LIMIT 1";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setInt(1, id);
+            pres.setInt(2,st_id);
             /** 執行刪除之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
 
@@ -134,7 +135,7 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`professor`";
+            String sql = "SELECT * FROM `sa_project`.`handinhw`";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -196,9 +197,9 @@ public class HandInHwHelper {
      * @param id 會員編號
      * @return the JSON object 回傳SQL執行結果與該會員編號之會員資料
      */
-    public JSONObject getByID(String id) {
+    public JSONObject getByID(String id, String id2) {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
-    	Professor p = null;
+    	HandInHw p = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
@@ -214,11 +215,12 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`professor` WHERE `ProfessorId` = ? LIMIT 1";
+            String sql = "SELECT `StudentName` FROM `sa_project`.`Student` INNER JOIN (SELECT * FROM `sa_project`.`handinhw` LEFT JOIN 'sa_project'.'hw' ON `sa_project`.`handinhw`.`CourseId`='sa_project'.'hw'.`CourseId`) ON `sa_project`.`Student`.`StudentId`=`sa_project`.`handinhw`.'StudentId' WHERE `StudentId` = ? AND 'CourseId' = ? ";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setString(1, id);
+            pres.setString(2,  id2);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
 
@@ -226,25 +228,24 @@ public class HandInHwHelper {
             exexcute_sql = pres.toString();
             System.out.println(exexcute_sql);
             
-            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
-            /** 正確來說資料庫只會有一筆該會員編號之資料，因此其實可以不用使用 while 迴圈 */
-            while(rs.next()) {
-                /** 每執行一次迴圈表示有一筆資料 */
-                row += 1;
+            int c_Id = rs.getInt("CourseId");
+            int s_id = rs.getInt("StudentId");
+            String s_name=rs.getString("StudentName");
+            String hw_name = rs.getString("HwName");
+            String optime = rs.getString("HwOpeningTime");
+            String endtime = rs.getString("HwEndingTime");
+            String hwdetail = rs.getString("HwHandInDetail");
+            int hwscore =rs.getInt("HwHandInScore");
                 
-                /** 將 ResultSet 之資料取出 */
-                int Id = rs.getInt("ProfessorId");
-                String name = rs.getString("ProfessorName");
-                String position=rs.getString("Position");
-                String email = rs.getString("Email");
-                String password = rs.getString("Password");
-                String department = rs.getString("Department");
-                
-                /** 將每一筆會員資料產生一名新Member物件 */
-                p = new Professor(Id, email, password, name, department, position);
-                /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
-                jsa.put(p.getData());
-            }
+            JSONObject jso = new JSONObject();
+            jso.put("CourseId", c_Id);
+            jso.put("StudentId", s_id);
+            jso.put("StudentName", s_name);
+            jso.put("HwName", hw_name);
+            jso.put("HwOpeningTime", optime);
+            jso.put("HwEndingTime", endtime);
+            jso.put("HwHandInDetail", hwdetail);
+            jso.put("HwHandInScore", hwscore);
             
         } catch (SQLException e) {
             /** 印出JDBC SQL指令錯誤 **/
@@ -329,7 +330,7 @@ public class HandInHwHelper {
      * @param m 一名會員之Member物件
      * @return the JSON object 回傳SQL指令執行之結果
      */
-    public JSONObject create(Professor p) {
+    public JSONObject create(HandInHw p) {
         /** 記錄實際執行之SQL指令 */
         String exexcute_sql = "";
         /** 紀錄程式開始執行時間 */
@@ -341,22 +342,22 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`professor`(`ProfessorName`, `ProfessorEmail`, `Password`, `Deaprtment`, `Position`)"
+            String sql = "INSERT INTO `sa_project`.`handinhw`(`CourseId`, `HwId`, `StudentId`, `HwHandInDetail`, `HwHandInScore`)"
                     + " VALUES(?, ?, ?, ?)";
             
             /** 取得所需之參數 */
-            String name = p.getName();
-            String email = p.getEmail();
-            String password = p.getPassword();
-            String department=p.getDepartment();
-            String position=p.getPosition();
+            int c_id = p.getCourseId();
+            int h_id = p.getHwId();
+            int st_id = p.getStudentId();
+            String detail=p.getHwHandInDetail();
+            int score=0;
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
-            pres.setString(1, name);
-            pres.setString(2, email);
-            pres.setString(3, password);
-            pres.setString(4, department);
-            pres.setString(5, position);
+            pres.setInt(1, c_id);
+            pres.setInt(2, h_id);
+            pres.setInt(3, st_id);
+            pres.setString(4, detail);
+            pres.setInt(5, score);
 
             
             /** 執行新增之SQL指令並記錄影響之行數 */
@@ -397,7 +398,7 @@ public class HandInHwHelper {
      * @param m 一名會員之Member物件
      * @return the JSONObject 回傳SQL指令執行結果與執行之資料
      */
-    public JSONObject update(Professor p) {
+    public JSONObject update(HandInHw p) {
         /** 紀錄回傳之資料 */
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
@@ -411,17 +412,17 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`professor` SET `ProfessorName` = ? ,`Password` = ?  WHERE `Email` = ?";
+            String sql = "Update `sa_project`.`handinhw` SET `HwHandInDetail` = ?   WHERE `HwId` = ? AND 'StudentId'=? ";
             /** 取得所需之參數 */
-            String name = p.getName();
-            String email = p.getEmail();
-            String password = p.getPassword();
+            String detail = p.getHwHandInDetail();
+            int hwid = p.getHwId();
+            int stid = p.getStudentId();
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
-            pres.setString(1, name);
-            pres.setString(2, password);
-            pres.setString(3, email);
+            pres.setString(1, detail);
+            pres.setInt(2, hwid);
+            pres.setInt(3, stid);
             /** 執行更新之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
 
