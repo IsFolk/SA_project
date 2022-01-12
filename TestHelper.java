@@ -33,23 +33,21 @@ public class TestHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`test`(`TestName`, `TestDetail`, `OpeningTime`, `EndingTime`, `UpdateTime`)"
-                    + " VALUES(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO `sa_project`.`test`(`TestName`, `TestDetail`, `OpeningTime`, `EndingTime`)"
+                    + " VALUES(?, ?, ?, ?)";
             
             /** 取得所需之參數 */
             String name = test.getName();
             String detail = test.getDetail();
-            String opening_time = test.getOpeningTime();
-            String end_time = test.getEndTime();
-            Timestamp update_time = test.getUpdateTime();
+            Timestamp opening_time = test.getOpeningTime();
+            Timestamp end_time = test.getEndTime();
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pres.setString(1, name);
             pres.setString(2, detail);
-            pres.setString(3, opening_time);
-            pres.setString(4, end_time);
-            pres.setTimestamp(5, update_time);
+            pres.setTimestamp(3, opening_time);
+            pres.setTimestamp(4, end_time);
             
             /** 執行新增之SQL指令並記錄影響之行數 */
             pres.executeUpdate();
@@ -60,11 +58,6 @@ public class TestHelper {
             
             ResultSet rs = pres.getGeneratedKeys();
 
-            if (rs.next()) {
-                id = rs.getInt(1);
-                ArrayList<Question> ques = test.getQuestion();
-                qa = qsh.createByList(id, ques); //Start from here
-            }
         } catch (SQLException e) {
             /** 印出JDBC SQL指令錯誤 **/
             System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
@@ -100,8 +93,9 @@ public class TestHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`test`";
+            String sql = "SELECT `TestName`,`EndingTime` FROM `sa_project`.`test` ";
             
+            //int course_id = t.get();
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
@@ -117,17 +111,16 @@ public class TestHelper {
                 row += 1;
                 
                 /** 將 ResultSet 之資料取出 */
-                int id = rs.getInt("TestId");
+                //int id = rs.getInt("TestId");
                 String name = rs.getString("TestName");
-                String detail = rs.getString("TestDetail");
-                String opening_time = rs.getString("OpeningTime");
-                String end_time = rs.getString("EndingTime");
-                Timestamp update_time = rs.getTimestamp("UpdateTime");
+                //String detail = rs.getString("TestDetail");
+                //Timestamp opening_time = rs.getTimestamp("OpeningTime");
+                Timestamp end_time = rs.getTimestamp("EndingTime");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
-                t = new Test(id, name, detail, opening_time, end_time);
+                t = new Test(name, end_time);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-                jsa.put(t.getTestAllInfo());
+                jsa.put(t.getTestData());
             }
 
         } catch (SQLException e) {
@@ -155,6 +148,9 @@ public class TestHelper {
 
         return response;
     }
+    
+    
+    
     
     public JSONObject getById(String test_id) {
         JSONObject data = new JSONObject();
@@ -193,14 +189,13 @@ public class TestHelper {
                 int id = rs.getInt("id");
                 String name = rs.getString("TestName");
                 String detail = rs.getString("TestDetail");
-                String opening_time = rs.getString("OpeningTime");
-                String end_time = rs.getString("EndingTime");
-                Timestamp update_time = rs.getTimestamp("UpdateTime");
+                Timestamp opening_time = rs.getTimestamp("OpeningTime");
+                Timestamp end_time = rs.getTimestamp("EndingTime");
                 
                 /** 將每一筆商品資料產生一名新Product物件 */
                 t = new Test(name, detail, opening_time, end_time);
                 /** 取出該項商品之資料並封裝至 JSONsonArray 內 */
-                data = t.getTestAllInfo();
+                data = t.getTestData();
             }
 
         } catch (SQLException e) {
@@ -303,24 +298,22 @@ public class TestHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`test` SET `TestName` = ? ,`TestDetail` = ? , `OpeningTime` = ?, `EndingTime` = ? , `UpdateTime` = ? WHERE `TestId` = ?";
+            String sql = "Update `sa_project`.`test` SET `TestName` = ? ,`TestDetail` = ? , `OpeningTime` = ?, `EndingTime` = ?  WHERE `TestId` = ?";
             /** 取得所需之參數 */
             int id = t.getID(); //added
             String name = t.getName();
             String detail = t.getDetail();
-            String opening_time = t.getOpeningTime();
-            String end_time = t.getEndTime();
-            Timestamp update_time = t.getUpdateTime();
+            Timestamp opening_time = t.getOpeningTime();
+            Timestamp end_time = t.getEndTime();
             
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setString(1,name); //add
             pres.setString(2, detail);
-            pres.setString(3, opening_time);
-            pres.setString(4, end_time);
-            pres.setTimestamp(5, update_time);
-            pres.setInt(6, id); //add
+            pres.setTimestamp(3, opening_time);
+            pres.setTimestamp(4, end_time);
+            pres.setInt(5, id); //add
             
             /** 執行更新之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
@@ -356,64 +349,5 @@ public class TestHelper {
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public boolean checkDuplicate(Test t){
-        /** 紀錄SQL總行數，若為「-1」代表資料庫檢索尚未完成 */
-        int row = -1;
-        /** 儲存JDBC檢索資料庫後回傳之結果，以 pointer 方式移動到下一筆資料 */
-        ResultSet rs = null;
-        
-        try {
-            /** 取得資料庫之連線 */
-            conn = DBMgr.getConnection();
-            /** SQL指令 */
-            String sql = "SELECT count(*) FROM `sa_project`.`test` WHERE `TestId` = ?";
-            
-            /** 取得所需之參數 */
-            int id = t.getID();
-            
-            /** 將參數回填至SQL指令當中 */
-            pres = conn.prepareStatement(sql);
-            pres.setInt(1, id);
-            /** 執行查詢之SQL指令並記錄其回傳之資料 */
-            rs = pres.executeQuery();
 
-            /** 讓指標移往最後一列，取得目前有幾行在資料庫內 */
-            rs.next();
-            row = rs.getInt("count(*)");
-            System.out.print(row);
-
-        } catch (SQLException e) {
-            /** 印出JDBC SQL指令錯誤 **/
-            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            /** 若錯誤則印出錯誤訊息 */
-            e.printStackTrace();
-        } finally {
-            /** 關閉連線並釋放所有資料庫相關之資源 **/
-            DBMgr.close(rs, pres, conn);
-        }
-        
-        /** 
-         * 判斷是否已經有一筆該電子郵件信箱之資料
-         * 若無一筆則回傳False，否則回傳True 
-         */
-        return (row == 0) ? false : true;
-    }
 }
