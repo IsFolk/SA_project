@@ -1,7 +1,5 @@
 package sa_project.app;
 
-import java.util.Calendar;
-
 import org.json.JSONObject;
 
 public class Homework {
@@ -13,7 +11,6 @@ public class Homework {
 	public String HwUpdateTime;
 	public String HwDetail;
 	public String HwName;
-	public int HwScore;
 	public String HwDetailAttachment;
 	public int HwId;
 	
@@ -21,7 +18,7 @@ public class Homework {
 	
 	
 	/**拿取文件**/
-	public Homework(int courseid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname,int hwscore, String detailattachment, int hwid) {
+	public Homework(int courseid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, String detailattachment, int hwid) {
 		this.CourseId=courseid;
 		this.HwType=hwtype;
 		this.HwOpeningTime=hwopeningtime;
@@ -29,7 +26,6 @@ public class Homework {
 		this.HwUpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
-		this.HwScore=hwscore;
 		this.HwDetailAttachment=detailattachment;
 	}
 	/**新增作業(有說明文件)**/
@@ -41,7 +37,6 @@ public class Homework {
 		this.HwUpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
-		this.HwScore=0;
 		this.HwDetailAttachment=detailattachment;
 	}
 	
@@ -54,29 +49,8 @@ public class Homework {
 		this.HwUpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
-		this.HwScore=0;
 	}
 	
-	/**修改作業(有說明文件)**/
-	public Homework(int courseid,int hwid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, String detailattachment) {
-		this.CourseId=courseid;
-		this.HwOpeningTime=hwopeningtime;
-		this.HwEndingTime=hwendingtime;
-		this.HwUpdateTime=hwupdatetime;
-		this.HwDetail=hwdetail;
-		this.HwName=hwname;
-		this.HwDetailAttachment=detailattachment;
-	}
-	
-	/**修改作業(無說明文件)**/
-	public Homework(int courseid,int hwid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname) {
-		this.CourseId=courseid;
-		this.HwOpeningTime=hwopeningtime;
-		this.HwEndingTime=hwendingtime;
-		this.HwUpdateTime=hwupdatetime;
-		this.HwDetail=hwdetail;
-		this.HwName=hwname;
-	}
 	
 	/**刪除作業**/
 	public Homework(int hwid) {
@@ -84,14 +58,14 @@ public class Homework {
 	}
 	
 	/**更新作業**/
-	public Homework(int hwid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, int score) {
+	public Homework(int CourseId, int hwid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname) {
 		this.HwId=hwid;
 		this.HwOpeningTime=hwopeningtime;
 		this.HwEndingTime=hwendingtime;
 		this.HwUpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
-		this.HwScore=score;
+		this.CourseId=CourseId;
 	}
 	
 	
@@ -105,7 +79,6 @@ public class Homework {
         jso.put("HwUpdateTime", getHwUpdateTime());
         jso.put("HwDetail", getHwDetail());
         jso.put("HwName", getHwName());
-        jso.put("HwScore", getHwScore());
         jso.put("HwDetailAttachment", getHwDetailAttachment());
         jso.put("HwId", getHwId());
         
@@ -155,7 +128,4 @@ public class Homework {
 		return this.HwId;
 	}
 	
-	public int getHwScore() {
-		return this.HwScore;
-	}
 }
