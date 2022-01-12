@@ -5,10 +5,10 @@ import org.json.JSONObject;
 public class Homework {
 	
 	public int CourseId;
-	public String HwType;
-	public String HwOpeningTime;
-	public String HwEndingTime;
-	public String HwUpdateTime;
+	public String Type;
+	public String OpeningTime;
+	public String EndingTime;
+	public String UpdateTime;
 	public String HwDetail;
 	public String HwName;
 	public String HwDetailAttachment;
@@ -20,10 +20,10 @@ public class Homework {
 	/**拿取文件**/
 	public Homework(int courseid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, String detailattachment, int hwid) {
 		this.CourseId=courseid;
-		this.HwType=hwtype;
-		this.HwOpeningTime=hwopeningtime;
-		this.HwEndingTime=hwendingtime;
-		this.HwUpdateTime=hwupdatetime;
+		this.Type=hwtype;
+		this.OpeningTime=hwopeningtime;
+		this.EndingTime=hwendingtime;
+		this.UpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
 		this.HwDetailAttachment=detailattachment;
@@ -31,10 +31,10 @@ public class Homework {
 	/**新增作業(有說明文件)**/
 	public Homework(int courseid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, String detailattachment) {
 		this.CourseId=courseid;
-		this.HwType=hwtype;
-		this.HwOpeningTime=hwopeningtime;
-		this.HwEndingTime=hwendingtime;
-		this.HwUpdateTime=hwupdatetime;
+		this.Type=hwtype;
+		this.OpeningTime=hwopeningtime;
+		this.EndingTime=hwendingtime;
+		this.UpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
 		this.HwDetailAttachment=detailattachment;
@@ -43,10 +43,10 @@ public class Homework {
 	/**新增作業(無說明文件)**/
 	public Homework(int courseid,String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname) {
 		this.CourseId=courseid;
-		this.HwType=hwtype;
-		this.HwOpeningTime=hwopeningtime;
-		this.HwEndingTime=hwendingtime;
-		this.HwUpdateTime=hwupdatetime;
+		this.Type=hwtype;
+		this.OpeningTime=hwopeningtime;
+		this.EndingTime=hwendingtime;
+		this.UpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
 	}
@@ -60,9 +60,9 @@ public class Homework {
 	/**更新作業**/
 	public Homework(int CourseId, int hwid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname) {
 		this.HwId=hwid;
-		this.HwOpeningTime=hwopeningtime;
-		this.HwEndingTime=hwendingtime;
-		this.HwUpdateTime=hwupdatetime;
+		this.OpeningTime=hwopeningtime;
+		this.EndingTime=hwendingtime;
+		this.UpdateTime=hwupdatetime;
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
 		this.CourseId=CourseId;
@@ -73,10 +73,10 @@ public class Homework {
         /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
         JSONObject jso = new JSONObject();
         jso.put("CourseId", getCourseId());
-        jso.put("HwType", getHwType());
-        jso.put("HwOpeningTime", getHwOpeningTime());
-        jso.put("HwEndingTime", getHwEndingTime());
-        jso.put("HwUpdateTime", getHwUpdateTime());
+        jso.put("Type", getHwType());
+        jso.put("OpeningTime", getHwOpeningTime());
+        jso.put("EndingTime", getHwEndingTime());
+        jso.put("UpdateTime", getHwUpdateTime());
         jso.put("HwDetail", getHwDetail());
         jso.put("HwName", getHwName());
         jso.put("HwDetailAttachment", getHwDetailAttachment());
@@ -97,19 +97,19 @@ public class Homework {
 		return this.CourseId;
 	}
 	public String getHwType() {
-		return this.HwType;
+		return this.Type;
 	}
 	
 	public String getHwOpeningTime() {
-		return this.HwOpeningTime;
+		return this.OpeningTime;
 	}
 	
 	public String getHwEndingTime() {
-		return this.HwEndingTime;
+		return this.EndingTime;
 	}
 	
 	public String getHwUpdateTime() {
-		return this.HwUpdateTime;
+		return this.UpdateTime;
 	}
 	
 	public String getHwDetail() {
