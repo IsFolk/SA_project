@@ -31,64 +31,51 @@ public class Test {
     /** detail，考試說明 */
     private String detail;
     
-    private ArrayList<Question> list = new ArrayList<Question>();
+    //private ArrayList<Question> list = new ArrayList<Question>();
     
     /** opening_time，測驗開始時間**/
-    private String opening_time;  
+    private Timestamp opening_time;  
     
     /** end_time，測驗結束時間 **/
-    private String end_time;
+    private Timestamp end_time;
     
-    private Timestamp update_time;
 
 
-    /** ch，CourseHelper之物件與Course相關之資料庫方法（Sigleton） */
+    /** th，TestHelper之物件與Course相關之資料庫方法（Sigleton） */
     private QuestionHelper qsh =  QuestionHelper.getHelper();
     
     private TestHelper th =  TestHelper.getHelper();
 
-    /** 新增一個考試 **/
-    public Test(int id) {
-    	this.id = id;
-    }
     
    
-    /**
-     * 修改一個考試
-     *
-     */
-    public Test(String name, String detail, String opening_time, String end_time) {
-//        this.id = id;
+    /**新增一個考試**/
+    public Test(String name, String detail, Timestamp opening_time, Timestamp end_time) {
         this.name = name;
         this.detail = detail;
         this.opening_time = opening_time;
         this.end_time = end_time;
-        this.update_time = Timestamp.valueOf(LocalDateTime.now());
-        getQuestionFromDB();
-        update();
+        //update();
     }
     
-   /**查詢一個完整題目 **/ 
-    public Test(int id, String name, String detail, String opening_time, String end_time) {
+    
+    /**查看、修改一個考試資訊 **/ 
+    public Test(int id, String name, String detail, Timestamp opening_time, Timestamp end_time) {
       this.id = id;
       this.name = name;
       this.detail = detail;
       this.opening_time = opening_time;
       this.end_time = end_time;
-      this.update_time = Timestamp.valueOf(LocalDateTime.now());
+      update();
   }
   
     
+    /**顯示一個考試資訊 **/ 
+    public Test(String name,Timestamp end_time) {
+      //this.id = id;
+      this.name = name;
+      this.end_time = end_time;
+  }
     
-    
-    
-    
-    /**
-     * 新增一個題目
-     */
-    public void addQuestion(Question q) {
-        this.list.add(q);
-    }
 
     
     public void setId(int id) {
@@ -114,35 +101,17 @@ public class Test {
     }
     
 
-    public String getOpeningTime() {
+    public Timestamp getOpeningTime() {
         return this.opening_time;
     }
     
 
-    public String getEndTime() {
+    public Timestamp getEndTime() {
         return this.end_time;
     }
     
     
 
-    public Timestamp getUpdateTime() {
-        return this.update_time;
-    }    
-    
-    public ArrayList<Question> getQuestion(){
-    	return this.list;
-    }
-    
-    
-    
-    /**
-     * 從 DB 中取得題目
-     */
-    private void getQuestionFromDB() {
-        ArrayList<Question> data = qsh.getQuestionByTestId(this.id);
-        this.list = data;
-    }   
-    
     
     public JSONObject update() {
         /** 新建一個JSONObject用以儲存更新後之資料 */
@@ -175,42 +144,9 @@ public class Test {
         jso.put("detail", getDetail());
         jso.put("opening_time", getOpeningTime());
         jso.put("end_time", getEndTime());
-        jso.put("update_time", getUpdateTime());
         
         return jso;
     }
-    
 
-    public JSONArray getQuestionData() {
-        JSONArray result = new JSONArray();
-
-        for(int i=0 ; i < this.list.size() ; i++) {
-            result.put(this.list.get(i).getData());
-        }
-
-        return result;
-    } 
-    
-    
-    
-    public JSONObject getTestAllInfo() {
-        JSONObject jso = new JSONObject();
-        jso.put("test_info", getTestData());
-        jso.put("question_info", getQuestionData());
-
-        return jso;
-    }
-
-    /**
-     * 設定訂單產品編號
-     */
-    public void setQuestionId(JSONArray data) {
-        for(int i=1 ; i < this.list.size() ; i++) {
-            this.list.get(i).setId((int) data.getLong(i));
-        }
-    }
-
- 
-    
     
 }
