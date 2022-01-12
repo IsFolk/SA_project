@@ -236,12 +236,11 @@ private HomeworkHelper() {
                 String hwupdatetime = rs.getString("HwUpdateTime");
                 String hwdetail = rs.getString("HwDetail");
                 String hwname = rs.getString("HwName");
-                int hwscore = rs.getInt("HwScore");
                 String hwdetailattachment = rs.getString("HwDetailAttachment");
                 int hwid = rs.getInt("HwId");
                 		
                 /** 將每一筆會員資料產生一名新Member物件 */
-                h = new Homework(courseid, hwtype, hwopeningtime, hwendingtime, hwupdatetime, hwdetail, hwname, hwscore, hwdetailattachment, hwid);
+                h = new Homework(courseid, hwtype, hwopeningtime, hwendingtime, hwupdatetime, hwdetail, hwname, hwdetailattachment, hwid);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(h.getData());
             }
@@ -290,7 +289,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`homework` WHERE `id` = ? LIMIT 1";
+            String sql = "SELECT * FROM `sa_project`.`homework` WHERE `CourseId` = ? LIMIT 1";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
@@ -316,12 +315,11 @@ private HomeworkHelper() {
                 String hwupdatetime = rs.getString("HwUpdateTime");
                 String hwdetail = rs.getString("HwDetail");
                 String hwname = rs.getString("HwName");
-                int hwscore = rs.getInt("HwScore");
                 String hwdetailattachment = rs.getString("HwDetailAttachment");
                 int hwid = rs.getInt("HwId");
                 		
                 /** 將每一筆會員資料產生一名新Member物件 */
-                h = new Homework(courseid, hwtype, hwopeningtime, hwendingtime, hwupdatetime, hwdetail, hwname, hwscore, hwdetailattachment, hwid);
+                h = new Homework(courseid, hwtype, hwopeningtime, hwendingtime, hwupdatetime, hwdetail, hwname, hwdetailattachment, hwid);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(h.getData());
             }
@@ -366,7 +364,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`homework` SET `HwType` = ? ,`HwOpeningTime` = ? ,`HwEndingTime` = ? , `HwUpdateTime` = ? ,`HwDetail`= ? ,`HwName` = ? ,`HwScore` = ? WHERE `HwId` = ?";
+            String sql = "Update `sa_project`.`homework` SET `HwType` = ? ,`HwOpeningTime` = ? ,`HwEndingTime` = ? , `HwUpdateTime` = ? ,`HwDetail`= ? ,`HwName` = ?  WHERE `HwId` = ?";
             /** 取得所需之參數 */
             int hwid = h.getHwId();
             String hwtype = h.getHwType();
@@ -375,7 +373,6 @@ private HomeworkHelper() {
             String hwupdatetime = h.getHwUpdateTime();
             String hwdetail = h.getHwDetail();
             String hwname = h.getHwName();
-            int score = h.getHwScore();
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
@@ -385,8 +382,7 @@ private HomeworkHelper() {
             pres.setString(4, hwupdatetime);
             pres.setString(5, hwdetail);
             pres.setString(6, hwname);
-            pres.setInt(7, score);
-            pres.setInt(8, hwid);
+            pres.setInt(7, hwid);
             /** 執行更新之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
 
