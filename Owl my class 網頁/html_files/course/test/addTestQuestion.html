@@ -88,12 +88,12 @@
 										<option value=".ans_3">簡答題</option>
 									</select>
 									<br><br>
-									<label class="upload-btn">img<input type="file" accept=".pdf, .doc"></label>
+									<input type="file" id="input-img" accept=".jpg, .png, .jpeg">
 								</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td colspan="2" class="uploaded-img"></td>
+								<td colspan="2" class="uploaded-img"><img id="preview-img" src="" width="50%"/></td>
 							</tr>
 							<tr>
 								<td></td>
@@ -102,11 +102,22 @@
 										<span class="text-reminder">(請選取正確選項)</span>
 										<ol class="ans_1_list">
 											<li>
-												<input class="" type="radio" name="choices" value="">
+												<input class="" type="radio" name="choices" value="1">
+												<textarea class="" name="choice" rows="1"></textarea>
+											</li>
+											<li>
+												<input class="" type="radio" name="choices" value="2">
+												<textarea class="" name="choice" rows="1"></textarea>
+											</li>
+											<li>
+												<input class="" type="radio" name="choices" value="3">
+												<textarea class="" name="choice" rows="1"></textarea>
+											</li>
+											<li>
+												<input class="" type="radio" name="choices" value="4">
 												<textarea class="" name="choice" rows="1"></textarea>
 											</li>
 										</ol>
-										<span class="add-choice-btn">+ Add choice</span>
 									</div>
 								</td>
 							</tr>
@@ -122,27 +133,50 @@
 				<span class="text-reminder">(請選取正確選項)</span>
 				<ol class="ans_1_list_default">
 					<li>
-						<input class="" type="radio" name="choices" value="">
+						<input class="" type="radio" name="choices" value="1">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+					<li>
+						<input class="" type="radio" name="choices" value="2">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+					<li>
+						<input class="" type="radio" name="choices" value="3">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+					<li>
+						<input class="" type="radio" name="choices" value="4">
 						<textarea class="" name="choice" rows="1"></textarea>
 					</li>
 				</ol>
-				<span class="add-choice-btn">+ Add choice</span>
 			</div>
 			<div class="ans_2">
 				<span class="text-reminder">(請選取正確選項)</span>
 				<ol class="ans_2_list_default">
 					<li>
-						<input class="round-border" type="checkbox" name="choices" value="">
+						<input class="round-border" type="checkbox" name="choices" value="1">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+					<li>
+						<input class="round-border" type="checkbox" name="choices" value="2">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+					<li>
+						<input class="round-border" type="checkbox" name="choices" value="3">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+					<li>
+						<input class="round-border" type="checkbox" name="choices" value="4">
 						<textarea class="" name="choice" rows="1"></textarea>
 					</li>
 				</ol>
-				<span class="add-choice-btn">+ Add choice</span>
 			</div>
 			<div class="ans_3"></div>
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="../../../js_files/general.js"></script>
+		<script src="../../../js_files/test.js"></script>
 		<script>
 		/////////第N題//////////////////
 var questionNumber = 1;
@@ -157,20 +191,24 @@ $(function(){
 		$('#ans_td').empty();
 		$(sltValue).clone().appendTo($('#ans_td'));
 		console.log(sltValue);
-		
-		let choiceList = sltValue + "_list";
-		$('#ans_td > ol').removeClass();
-		$('#ans_td > ol').addClass(choiceList);
-  });
-	
-////////////add choice/////////
-	//$().clone().appendTo();
-	$(".add-choice-btn").click(function(){
-		console.log("???");
-		//$(sltValue + "_list_default > li").clone().appendTo($('#ans_td > ol'));
 	});
 });
 ///////////////////////////////
+//////////////preview img/////////
+$("#input-img").change(function(){
+	readURL(this);
+});
+
+function readURL(input){
+  if(input.files && input.files[0]){
+    var reader = new FileReader();
+    reader.onload = function (e) {
+		$("#preview-img").attr('src', e.target.result);
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 		</script>
 	</body>
 </html>
