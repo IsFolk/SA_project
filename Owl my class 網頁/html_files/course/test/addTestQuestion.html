@@ -267,10 +267,14 @@ function submit() {
 		//將資料轉成JSON格式
 		var data_object = {
 			"QuestionText": question_detail,
-			"OptionA":　ans_1,
-			"OptionB":　ans_2,
-			"OptionC":　ans_3,
-			"OptionD":　ans_4,
+			"OptionA":　choice_1,
+			"OptionB":　choice_2,
+			"OptionC":　choice_3,
+			"OptionD":　choice_4,
+			"CorrectAnswer1":　ans_1,
+			"CorrectAnswer2":　ans_2,
+			"CorrectAnswer3":　ans_3,
+			"CorrectAnswer4":　ans_4,
 		};
 		//將JSON格式轉成字串
 		var data_string = JSON.stringify(data_object);
