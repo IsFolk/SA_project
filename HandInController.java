@@ -51,10 +51,15 @@ public class HandInController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
-        int id = jso.getInt("id");
+        String ansA = jso.getString("HandInAnswerA");
+        String ansB = jso.getString("HandInAnswerB");
+        String ansC = jso.getString("HandInAnswerC");
+        String ansD = jso.getString("HandInAnswerD");
+
+        
         
         /** 建立一個新的會員物件 */
-        HandIn h = new HandIn(id); 
+        HandIn h = new HandIn(ansA, ansB, ansC, ansD); 
         
 
         /** 透過MemberHelper物件的checkDuplicate()檢查該會員電子郵件信箱是否有重複 */
@@ -144,7 +149,7 @@ public class HandInController extends HttpServlet {
         int id = jso.getInt("id");
         
         /** 透過MemberHelper物件的deleteByID()方法至資料庫刪除該名會員，回傳之資料為JSONObject物件 */
-        JSONObject query = hih.deleteByHandInID(id);
+        JSONObject query = hih.deleteByID(id);
         
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
         JSONObject resp = new JSONObject();
@@ -171,14 +176,14 @@ public class HandInController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
+        int id = jso.getInt("id");
         String answer1 = jso.getString("handInAns1");
         String answer2 = jso.getString("handInAns2");
         String answer3 = jso.getString("handInAns3");
         String answer4 = jso.getString("handInAns4");
-        int gotPoint = jso.getInt("gotPoint");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Question物件 */
-        HandIn h = new HandIn(answer1, answer2, answer3, answer4, gotPoint);
+        HandIn h = new HandIn(id, answer1, answer2, answer3, answer4);
         
         /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         JSONObject data = h.update();
