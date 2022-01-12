@@ -7,7 +7,6 @@
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
 		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/.css" type="text/css" rel="stylesheet">
 		<style>
 
 		</style>
@@ -80,7 +79,7 @@
 							<tr><td><span class="text-bold question-order"></span><span class="text-bold">.</span></td></tr>
 							<tr>
 								<td></td>
-								<td><textarea class="round-border blue-border" name="question" placeholder="題目敘述" rows="6"></textarea></td>
+								<td><textarea class="round-border blue-border" id="question" name="question" placeholder="題目敘述" rows="6"></textarea></td>
 								<td>
 									<select class="round-border blue-border" id="slt">
 										<option value=".ans_1">單選題</option>
@@ -102,27 +101,27 @@
 										<span class="text-reminder">(請選取正確選項)</span>
 										<ol class="ans_1_list">
 											<li>
-												<input class="" type="radio" name="choices" value="1">
-												<textarea class="" name="choice" rows="1"></textarea>
+												<input class="ans1" type="radio" name="choices" value="1">
+												<textarea class="choice1" name="choice" rows="1"></textarea>
 											</li>
 											<li>
-												<input class="" type="radio" name="choices" value="2">
-												<textarea class="" name="choice" rows="1"></textarea>
+												<input class="ans2" type="radio" name="choices" value="1">
+												<textarea class="choice2" name="choice" rows="1"></textarea>
 											</li>
 											<li>
-												<input class="" type="radio" name="choices" value="3">
-												<textarea class="" name="choice" rows="1"></textarea>
+												<input class="ans3" type="radio" name="choices" value="1">
+												<textarea class="choice3" name="choice" rows="1"></textarea>
 											</li>
 											<li>
-												<input class="" type="radio" name="choices" value="4">
-												<textarea class="" name="choice" rows="1"></textarea>
+												<input class="ans4" type="radio" name="choices" value="1">
+												<textarea class="choice4" name="choice" rows="1"></textarea>
 											</li>
 										</ol>
 									</div>
 								</td>
 							</tr>
 						</table>
-						<input type="submit" class="submit-btn round-border" value="完成編輯">
+						<input type="submit" id="submit_btn" class="submit-btn round-border" value="完成編輯">
 					</form>
 				</div>
 			</div>
@@ -133,20 +132,20 @@
 				<span class="text-reminder">(請選取正確選項)</span>
 				<ol class="ans_1_list_default">
 					<li>
-						<input class="" type="radio" name="choices" value="1">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a1" type="radio" name="" value="1">
+						<textarea class="c1" name="choice" rows="1"></textarea>
 					</li>
 					<li>
-						<input class="" type="radio" name="choices" value="2">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a2" type="radio" name="" value="1">
+						<textarea class="c2" name="choice" rows="1"></textarea>
 					</li>
 					<li>
-						<input class="" type="radio" name="choices" value="3">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a3" type="radio" name="" value="1">
+						<textarea class="c3" name="choice" rows="1"></textarea>
 					</li>
 					<li>
-						<input class="" type="radio" name="choices" value="4">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a4" type="radio" name="" value="1">
+						<textarea class="c4" name="choice" rows="1"></textarea>
 					</li>
 				</ol>
 			</div>
@@ -154,20 +153,20 @@
 				<span class="text-reminder">(請選取正確選項)</span>
 				<ol class="ans_2_list_default">
 					<li>
-						<input class="round-border" type="checkbox" name="choices" value="1">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a1" type="checkbox" name="" value="1">
+						<textarea class="c1" name="choice" rows="1"></textarea>
 					</li>
 					<li>
-						<input class="round-border" type="checkbox" name="choices" value="2">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a2" type="checkbox" name="" value="1">
+						<textarea class="c2" name="choice" rows="1"></textarea>
 					</li>
 					<li>
-						<input class="round-border" type="checkbox" name="choices" value="3">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a3" type="checkbox" name="" value="1">
+						<textarea class="c3" name="choice" rows="1"></textarea>
 					</li>
 					<li>
-						<input class="round-border" type="checkbox" name="choices" value="4">
-						<textarea class="" name="choice" rows="1"></textarea>
+						<input class="a4" type="checkbox" name="" value="1">
+						<textarea class="c4" name="choice" rows="1"></textarea>
 					</li>
 				</ol>
 			</div>
@@ -184,13 +183,29 @@ $(".question-order").text(questionNumber);
 ///////////////////////////////////
 
 ////////////select////////////////////
+var div3_is_not_showing = 1;
 $(function(){
+	
+	
 	var sltValue = ".ans_1";
 	$('#slt').change(function(){
 		sltValue = $(this).val();
 		$('#ans_td').empty();
 		$(sltValue).clone().appendTo($('#ans_td'));
-		console.log(sltValue);
+		
+		$('#ans_td .c1').attr('class', 'choice1');
+		$('#ans_td .c2').attr('class', 'choice2');
+		$('#ans_td .c3').attr('class', 'choice3');
+		$('#ans_td .c4').attr('class', 'choice4');
+		
+		$('#ans_td .a1').attr('class', 'ans1');
+		$('#ans_td .a2').attr('class', 'ans2');
+		$('#ans_td .a3').attr('class', 'ans3');
+		$('#ans_td .a4').attr('class', 'ans4');
+		
+		if(sltValue == '.ans_3'){
+			div3_is_not_showing = 0;
+		}
 	});
 });
 ///////////////////////////////
@@ -207,6 +222,77 @@ function readURL(input){
     }
     reader.readAsDataURL(input.files[0]);
   }
+}
+
+/////////////////submit/////////////////////////
+$('#submit_btn').click(function(){
+	submit();
+});
+		
+function submit() {
+	var question_detail = $('#question').val();
+	var choice_1 = $('.choice1').val();
+	var choice_2 = $('.choice2').val();
+	var choice_3 = $('.choice3').val();
+	var choice_4 = $('.choice4').val();
+	var ans_1 = '';
+	var ans_2 = '';
+	var ans_3 = '';
+	var ans_4 = '';
+	var check1 = $("input[class=ans1]:checked").val()
+	if(check1 == 1){
+		ans_1 += choice_1;
+	}
+	var check2 = $("input[class=ans2]:checked").val()
+	if(check2 == 1){
+		ans_2 += choice_2;
+	}
+	var check3 = $("input[class=ans3]:checked").val()
+	if(check3 == 1){
+		ans_3 += choice_3;
+	}
+	var check4 = $("input[class=ans4]:checked").val()
+	if(check4 == 1){
+		ans_4 += choice_4;
+	}
+
+	if (question_detail == ''){
+		alert("請輸入題目!");
+	}else if(choice_1 == ''){
+		alert("請至少輸入選項一!");
+	}
+	else if((ans_1+ans_2+ans_3+ans_4 == '')&&(div3_is_not_showing == 1)){
+		alert("請選取正確答案!");
+	}else{
+		//將資料轉成JSON格式
+		var data_object = {
+			"QuestionText": question_detail,
+			"OptionA":　ans_1,
+			"OptionB":　ans_2,
+			"OptionC":　ans_3,
+			"OptionD":　ans_4,
+		};
+		//將JSON格式轉成字串
+		var data_string = JSON.stringify(data_object);
+		//發出POST的AJAX請求
+		$.ajax({
+			type: "POST",
+			url: "api/test.do",
+			data: data_string,
+			crossDomain: true,
+			cache: false,
+			dataType: 'json',
+			timeout: 5000,
+			success: function(response){
+				if(response.status == 200){
+					alert("上傳成功!");
+				}
+			},
+			error: function(){
+				alert("無法連線到伺服器!");
+			}
+		});
+	}
 }
 
 		</script>
