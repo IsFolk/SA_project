@@ -85,10 +85,11 @@
 					<table class="content-tbl">
 						<thead>
 							<tr>
-								<td>名稱</td><td>結束時間</td><td class="stu-only">狀態</td>
+								<td>名稱</td><td>結束時間</td>
 							</tr>
 						</thead>
-						<tbody></tbody>
+						<tbody>
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -179,13 +180,16 @@ function updateTable(data) {
 	var table_html = '';
 	$.each(data, function(index, value) {
 		table_html += '<tr>';
-		table_html += '<td><a href="test.html"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
+		table_html += '<td><a href="test.html?id=' + index + '"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
 		table_html += '<td>' + value['end_time'] + '</td>';
 		table_html += '</tr>';
 	})
 
 	$(".content-tbl > tbody").append(table_html);
 }
+
+
+
 		</script>
 		<script src="../../../js_files/general.js"></script>
 	</body>
