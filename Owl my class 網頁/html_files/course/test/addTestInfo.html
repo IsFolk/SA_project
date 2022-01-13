@@ -109,36 +109,37 @@ $('#ending_date').attr("value",'2022-01-03');
 $('#ending_time').attr("value",'09:30');
 $('#test_detail').text("測驗說明");
 ///////////////side bar//////////////////////
-var question_data = [];
 $.ajax({
-		type: "GET",
-		url: "api/Question.do",
-		crossDomain: true,
-		cache: false,
-		dataType: 'json',
-		timeout: 5000,
-		success: function (response) {
-			if(response.status == 200){
-				question_data = response.response.data;
-			}
-			console.log(response);
-		},
-		error: function () {
-			alert("無法連線到伺服器！");
+	type: "GET",
+	url: "api/Question.do",
+	crossDomain: true,
+	cache: false,
+	dataType: 'json',
+	timeout: 5000,
+	success: function (response) {
+		if(response.status == 200){
+			updateSidebar(response.response.data);
 		}
+	},
+	error: function () {
+		alert("無法連線到伺服器！");
+	}
 });
-console.log(question_data);
 
-function updateTable(data) {
-	var table_html = '';
+
+
+
+function updateSidebar(data) {
+	var sidebar_list = '';
 	$.each(data, function(index, value) {
-		table_html += '<li>';
-		table_html += '<td><a href="test.html"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
-		table_html += '<td>' + value['end_time'] + '</td>';
-		table_html += '</li>';
+		sidebar_list += '<li>';
+		sidebar_list += '<a href="editTestQuestion.html">' ;
+		sidebar_list += '<span id="' + value['id'] + '">第' + (value['id']+1) + '題</span>';
+		sidebar_list += '</a>' ;
+		sidebar_list += '</li>';
 	})
 
-	$(".test-sidebar-menu").append(table_html);
+	$(".test-sidebar-menu").append(sidebar_list);
 }
 
 
@@ -174,7 +175,7 @@ function submit() {
 		//發出POST的AJAX請求
 		$.ajax({
 			type: "POST",
-			url: "api/Test.do",
+			url: "api/test.do",
 			data: data_string,
 			crossDomain: true,
 			cache: false,
