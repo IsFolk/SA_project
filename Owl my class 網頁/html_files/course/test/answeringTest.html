@@ -129,23 +129,25 @@ function updateSidebar(data) {
 	var sidebar_list = '';
 	$.each(data, function(index, value) {
 		sidebar_list += '<li>';
-		sidebar_list += '<a href="editTestQuestion.html">' ;
-		sidebar_list += '<span id="' + value['id'] + '">第' + (value['id']+1) + '題</span>';
+		sidebar_list += '<a href="answeringTest.html?id=' + (value['id']+1) + '">' ;
+		sidebar_list += '<span>第' + (value['id']+1) + '題</span>';
 		sidebar_list += '</a>' ;
 		sidebar_list += '</li>';
 	})
 
 	$(".test-sidebar-menu").append(sidebar_list);
 }
-
 */
 ////////////////////////載入題目//////////////////////////
 
 $.ajax({
 	url: "api/Question.do",  
 	type: "GET",
-	dataType:"json",
 	data: "id=" + id,
+	dataType:"json",
+	crossDomain: true,
+	cache: false,
+	timeout: 5000,
 	success: function (response) {
 		if(response.status == 200){
 			updateHtml(response.response.data);
