@@ -7,7 +7,7 @@
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
 		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/answeringTest.css" type="text/css" rel="stylesheet">
+		
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -51,41 +51,211 @@
 		<!--下半部分-->
 		<div class="lowerhalf">
 			<div class="container">
-				<div class="content-center">
+				<!--左下的選單-->
+				<div class="test-sidebar-container">
+					<div class="test-sidebar">
+						<ul class="test-sidebar-menu">
+							<li class="currentpage">
+								<a href="addTestInfo.html"><span class="text">第N題</span></a>
+							</li>
+						</ul>
+						
+					</div>
+				</div>
+			<!--右下區域-->
+				<div class="content-right">
 					<form>
-						<table class="form-tbl" id="1">
-							<tr>
-								<td class="tr-title"><span class="text question-order"></span><span class="text">.</span></td>
-								<td></td>
-								<td class="question-img"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-							</tr>
-						</table>
-						<table class="form-tbl" id="2">
-							<tr>
-								<td class="tr-title"><span class="text question-order"></span><span class="text">.</span></td>
-								<td></td>
-								<td class="question-img"></td>
-							</tr>
-							<tr>
-								<td></td><td></td>
-							</tr>
-						</table>
-						<input type="submit" class="submit-btn" value="交卷">
+						<div id="question"></div>
+						<br><br><br>
+						<input type="submit" class="submit-btn round-border" value="確認">
 					</form>
 				</div>
+				
 			</div>
 		</div>
 		
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
-$(".test-name").text("測驗一");
-/////////第N題//////////////////
-var questionNumber = 1;
-$(".question-order").text(questionNumber);
+///////////////////從URL接收參數///////////////////////////
+function getValue(varname)
+{
+  var url = window.location.href;
+  var qparts = url.split("?");
+  if (qparts.length == 0){return "";}
+  var query = qparts[1];
+  var vars = query.split("&amp;");
+  var value = "";
+  for (i=0; i<vars.length; i++)
+  {
+    var parts = vars[i].split("=");
+    if (parts[0] == varname)
+    {
+      value = parts[1];
+      break;
+    }
+  }
+  value = unescape(value);
+  value.replace(/\+/g," ");
+  return value;
+}
+
+var questionid = getValue("questionid");
+var testid = getValue("testid");
+var userid = getValue("userid");
+////////////////載入左邊選單////////
+$.ajax({
+	type: "GET",
+	url: "api/Question.do",
+	data: "TestId="+testid,
+	crossDomain: true,
+	cache: false,
+	dataType: 'json',
+	timeout: 5000,
+	success: function (response) {
+		if(response.status == 200){
+			updateSidebar(response.response.data);
+		}
+	},
+	error: function () {
+		alert("無法連線到伺服器！");
+	}
+});
+
+
+
+
+function updateSidebar(data) {
+	var sidebar_list = '';
+	$.each(data, function(index, value) {
+		sidebar_list += '<li>';
+		sidebar_list += '<a href="answeringTest.html?questionid=' + (value['id']+1) + '">' ;
+		sidebar_list += '<span>第' + (value['id']+1) + '題</span>';
+		sidebar_list += '</a>' ;
+		sidebar_list += '</li>';
+	})
+
+	$(".test-sidebar-menu").append(sidebar_list);
+}
+
+////////////////////////載入題目//////////////////////////
+
+$.ajax({
+	url: "api/Question.do",  
+	type: "GET",
+	data: {"QuestionId":questionid, "TestId":testid},
+	dataType:"json",
+	crossDomain: true,
+	cache: false,
+	timeout: 5000,
+	success: function (response) {
+		if(response.status == 200){
+			updateHtml(response.response.data);
+		}
+    },
+	error: function () {
+		console.log("請求失敗");
+	}
+
+});
+function updateHtml(data) {
+	var div_html = '';
+	div_html += '<span>' + data['text'] + '</span>' ;//題目內容
+	num = 0;
+	if(data['answerA']!=null){ num += 1; }
+	if(data['answerB']!=null){ num += 1; }
+	if(data['answerC']!=null){ num += 1; }
+	if(data['answerD']!=null){ num += 1; }
+	switch(num){
+		case 0: //簡答題
+			div_html += '<textarea class="essay round-border blue-border" rows="6"></textarea>';
+			break;
+			
+		case 1: //單選題
+			div_html += '<ul class="choice-list">';
+			div_html += '<li><input type="radio" class="choice_1"  name="1" data="1"><span class="choice-text">'+data["optionA"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_2"  name="1" data="1"><span class="choice-text">'+data["optionB"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_3"  name="1" data="1"><span class="choice-text">'+data["optionC"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_4"  name="1" data="1"><span class="choice-text">'+data["optionD"]+'</span></li>';
+			div_html += '</ul>';
+			break;
+			
+		case 2: //多選題
+		case 3:
+		case 4:
+			div_html += '<ul class="choice-list">';
+			div_html += '<li><input type="checkbox" class="choice_1"  name="2" data="1"><span class="choice-text">'+data['optionA']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_2"  name="2" data="1"><span class="choice-text">'+data['optionB']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_3"  name="2" data="1"><span class="choice-text">'+data['optionC']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_4"  name="2" data="1"><span class="choice-text">'+data['optionD']+'</span></li>';
+			div_html += '</ul>';
+			break;
+	}
+	$("#question").append(div_html);
+}
+/////////////////////上傳/////////////////////
+$('#submit_btn').click(function(){
+	submit();
+});
+		
+function submit() {
+	var input_ans_1 = $('.choice_1').val();
+	var input_ans_2 = $('.choice_2').val();
+	var input_ans_3 = $('.choice_3').val();
+	var input_ans_4 = $('.choice_4').val();
+	var input_essay = $('.essay').val();
+	var handin_ans_1 = '';
+	var handin_ans_2 = '';
+	var handin_ans_3 = '';
+	var handin_ans_4 = '';
+	if(input_essay != null){
+		handin_ans_1 += input_essay;
+	}
+	var check1 = $("input[class=choice_1]:checked").val()
+	if(check1 == 1){
+		handin_ans_1 += input_ans_1;
+	}
+	var check2 = $("input[class=choice_2]:checked").val()
+	if(check2 == 1){
+		handin_ans_2 += input_ans_2;
+	}
+	var check3 = $("input[class=choice_3]:checked").val()
+	if(check3 == 1){
+		handin_ans_3 += input_ans_3;
+	}
+	var check4 = $("input[class=choice_4]:checked").val()
+	if(check4 == 1){
+		handin_ans_4 += input_ans_4;
+	}
+	
+	//將資料轉成JSON格式
+	var data_object = {
+		"HandInAnswerA":　handin_ans_1,
+		"HandInAnswerB":　handin_ans_2,
+		"HandInAnswerC":　handin_ans_3,
+		"HandInAnswerD":　handin_ans_4,
+	};
+	//將JSON格式轉成字串
+	var data_string = JSON.stringify(data_object);
+	//發出POST的AJAX請求
+	$.ajax({
+		type: "POST",
+		url: "api/HandIn.do",
+		data: data_string,
+		crossDomain: true,
+		cache: false,
+		dataType: 'json',
+		timeout: 5000,
+		success: function(response){
+			if(response.status == 200){
+				console.log("上傳成功!");
+			}
+		},
+		error: function(){
+			alert("無法連線到伺服器!");
+		}
+	});
+}
 		</script>
 		<script src="../../../js_files/general.js"></script>
 	</body>
