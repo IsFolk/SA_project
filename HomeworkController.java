@@ -1,6 +1,7 @@
-package sa_project.controller;
+package ncu.im3069.demo.controller;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -8,8 +9,8 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.json.*;
-import sa_project.app.Homework;
-import sa_project.app.HomeworkHelper;
+import ncu.im3069.demo.app.Homework;
+import ncu.im3069.demo.app.HomeworkHelper;
 import sa_project.tools.JsonReader;
 
 
@@ -50,8 +51,11 @@ public class HomeworkController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     	
-    	LocalTime time = LocalTime.now();
-    	String hwupdatetime = time.toString();
+    	//LocalTime time = LocalTime.now();
+    	//String hwupdatetime = time.toString();
+        Date date=new Date();
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        String hwupdatetime=ft.format(date);
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();

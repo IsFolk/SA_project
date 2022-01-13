@@ -1,4 +1,4 @@
-package sa_project.app;
+package ncu.im3069.demo.app;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,8 +38,8 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`hw`(`CourseId`, `Type`, `OpeningTime`, `EndingTime`, `HwDetail`, `HwName`, `HwDetailAttachment`)"
-                    + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO `sa_project`.`hw`(`CourseId`, `Type`, `OpeningTime`, `EndingTime`, `HwDetail`, `HwName`, `HwDetailAttachment`,`UpdateTime`)"
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
             int courseid = h.getCourseId();
@@ -49,6 +49,7 @@ private HomeworkHelper() {
             String hwdetail=h.getHwDetail();
             String hwname=h.getHwName();
             String hwdetailattachment=h.getHwDetailAttachment();
+            String hwupdatetime=h.getHwUpdateTime();     
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setInt(1, courseid);
@@ -57,8 +58,8 @@ private HomeworkHelper() {
             pres.setString(4, hwendingtime);
             pres.setString(5, hwdetail);
             pres.setString(6, hwname);
-            pres.setString(6, hwdetailattachment);
-            
+            pres.setString(7, hwdetailattachment);
+            pres.setString(8, hwupdatetime);            
 
             /** 執行新增之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
@@ -105,8 +106,8 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`hw`(`CourseId`, `Type`, `OpeningTime`, `EndingTime`, `HwDetail`, `HwName`)"
-                    + " VALUES(?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO `sa_project`.`hw`(`CourseId`, `Type`, `OpeningTime`, `EndingTime`, `HwDetail`, `HwName`,`UpdateTime`)"
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
             int courseid = h.getCourseId();
@@ -115,6 +116,7 @@ private HomeworkHelper() {
             String hwendingtime=h.getHwEndingTime();
             String hwdetail=h.getHwDetail();
             String hwname=h.getHwName();
+            String hwupdatetime=h.getHwUpdateTime();  
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             pres.setInt(1, courseid);
@@ -123,7 +125,7 @@ private HomeworkHelper() {
             pres.setString(4, hwendingtime);
             pres.setString(5, hwdetail);
             pres.setString(6, hwname);
-            
+            pres.setString(7, hwupdatetime);            
          
             /** 執行新增之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();

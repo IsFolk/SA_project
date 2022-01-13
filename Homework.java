@@ -1,4 +1,4 @@
-package sa_project.app;
+package ncu.im3069.demo.app;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class Homework {
 	public String Attachmentname;
 	
 	private HomeworkHelper hh =  HomeworkHelper.getHelper();
-	private HwUploadHelper hwuh = HwUploadHelper.getHelper();
+	//private HwUploadHelper hwuh = HwUploadHelper.getHelper();
 	
 	/**拿取文件**/
 	public Homework(int courseid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, String detailattachment, int hwid) {
@@ -31,6 +31,7 @@ public class Homework {
 		this.HwDetail=hwdetail;
 		this.HwName=hwname;
 		this.HwDetailAttachment=detailattachment;
+		this.HwId=hwid;
 	}
 	/**新增作業(有說明文件)**/
 	public Homework(int courseid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, String detailattachment) {
@@ -137,13 +138,14 @@ public class Homework {
 	public int getHwId() {
 		return this.HwId;
 	}
-	
+	/**
     public JSONObject upload() {
     	JSONObject data = new JSONObject();
     	data = hwuh.upload(this);
     	
     	return data;
     }
+    **/
 	public String getAttachmentname() {
 		// TODO Auto-generated method stub
 		return this.Attachmentname;
