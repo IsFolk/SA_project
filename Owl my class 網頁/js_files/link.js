@@ -1,5 +1,5 @@
 <!--從URL接收參數-->
-<!--<script src="statics/css/link.js"></script>-->
+<!--<script src="statics/js/link.js"></script>-->
 
 	var url_string = window.location.href;
 	var url = new URL(url_string);
