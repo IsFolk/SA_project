@@ -55,8 +55,8 @@
 				<div class="test-sidebar-container">
 					<div class="test-sidebar">
 						<ul class="test-sidebar-menu">
-							<li class="currentpage">
-								<a href="addTestInfo.html"><span class="text">第N題</span></a>
+							<li>
+								<a href="test.html?" id="handin_test_btn"><span class="text-bold">確認交卷</span></a>
 							</li>
 						</ul>
 						
@@ -76,8 +76,12 @@
 		
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>//////////////////////離開提示
+			$(window).bind('beforeunload',function(){
+				return '即將交卷，確認繼續?';
+			});
+		</script>
 		<script>
-$('.test-name').text("測驗一");
 ///////////////////從URL接收參數///////////////////////////
 function getValue(varname)
 {
@@ -101,9 +105,18 @@ function getValue(varname)
   return value;
 }
 
-var questionid = 2;
-var testid = 4;
+var questionid = getValue("questionid");
+var testid = getValue("testid");
+var userid = getValue("userid");
+//////////////在URL後加上參數///////////
+let sidebar_url = '';
+let btn_url = 'userid='+userid+'&courseid='+courseid+'&testid='+testid;
+appendURL('#handin_test_btn', btn_url);
 
+//////////////在url後加字串/////////
+function appendURL(selector, str){
+	$(selector).attr('href', $(selector).attr('href')+str);
+}
 ////////////////載入左邊選單////////
 $.ajax({
 	type: "GET",
@@ -249,7 +262,7 @@ function submit() {
 		timeout: 5000,
 		success: function(response){
 			if(response.status == 200){
-				alert("上傳成功!");
+				console.log("上傳成功!");
 			}
 		},
 		error: function(){
@@ -257,6 +270,8 @@ function submit() {
 		}
 	});
 }
+
+
 		</script>
 		<script src="../../../js_files/general.js"></script>
 	</body>
