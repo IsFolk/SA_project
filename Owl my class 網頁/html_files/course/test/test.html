@@ -149,10 +149,14 @@ $.ajax({
 });
 
 function updateHTML(data){
-	$(".test-name").text(data['name']);
-	$(".start-time").text(data['opening_time']);
-	$(".end-time").text(data['end_time']);
-	$(".test-detail").text(data['detail']);
+	str = data['name'];
+	$(".test-name").text(str);
+	str = data['opening_time'];
+	$(".start-time").text(str);
+	str = data['end_time'];
+	$(".end-time").text(str);
+	str = data['detail'];
+	$(".test-detail").text(str);
 }
 
 /////////////////////////////////////////////
