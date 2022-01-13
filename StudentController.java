@@ -2,6 +2,7 @@ package sa_project.controller;
 
 import java.io.*;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.json.*;
 import sa_project.app.Student;
@@ -19,7 +20,7 @@ import sa_project.tools.JsonReader;
  * @version 1.0.0
  * @since 1.0.0
  */
-
+//@WebServlet("StudentController")
 public class StudentController extends HttpServlet {
     
     /** The Constant serialVersionUID. */
@@ -43,8 +44,8 @@ public class StudentController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
-        String email = jso.getString("StudentEmail");
-        String password = jso.getString("StudentPassword");
+        String email = jso.getString("Email");
+        String password = jso.getString("Password");
         String name = jso.getString("StudentName");
         int grade=jso.getInt("Grade");
         
@@ -170,8 +171,8 @@ public class StudentController extends HttpServlet {
         
         /** 取出經解析到JSONObject之Request參數 */
         int id = jso.getInt("StudentId");
-        String email = jso.getString("Studentemail");
-        String password = jso.getString("StudentPassword");
+        String email = jso.getString("Email");
+        String password = jso.getString("Password");
         String name = jso.getString("StudentName");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
