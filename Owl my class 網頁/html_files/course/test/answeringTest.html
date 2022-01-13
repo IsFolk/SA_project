@@ -105,10 +105,10 @@ var questionid = 2;
 var testid = 4;
 
 ////////////////載入左邊選單////////
-/*
 $.ajax({
 	type: "GET",
 	url: "api/Question.do",
+	data: "TestId="+testid,
 	crossDomain: true,
 	cache: false,
 	dataType: 'json',
@@ -138,13 +138,13 @@ function updateSidebar(data) {
 
 	$(".test-sidebar-menu").append(sidebar_list);
 }
-*/
+
 ////////////////////////載入題目//////////////////////////
 
 $.ajax({
 	url: "api/Question.do",  
 	type: "GET",
-	data: {"QuestionId":questionid, "&TestId":testid},
+	data: {"QuestionId":questionid, "TestId":testid},
 	dataType:"json",
 	crossDomain: true,
 	cache: false,
