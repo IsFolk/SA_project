@@ -147,7 +147,7 @@ $.ajax({
 			bodyRows += '<td>' + info[i].end_time + '</td>';
 			bodyRows += '</tr>';
 		}
-		$table.find('tbody').append(bodyRows);
+		$('.content-tbl tbody').append(bodyRows);
 	},				
 	error: function (data) {
 		console.log("請求失敗");
