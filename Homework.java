@@ -1,5 +1,7 @@
 package sa_project.app;
 
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 
 public class Homework {
@@ -13,9 +15,11 @@ public class Homework {
 	public String HwName;
 	public String HwDetailAttachment;
 	public int HwId;
+	public ArrayList<String> Attachment = new ArrayList<String>();
+	public String Attachmentname;
 	
 	private HomeworkHelper hh =  HomeworkHelper.getHelper();
-	
+	private HwUploadHelper hwuh = HwUploadHelper.getHelper();
 	
 	/**拿取文件**/
 	public Homework(int courseid, String hwtype, String hwopeningtime, String hwendingtime, String hwupdatetime, String hwdetail, String hwname, String detailattachment, int hwid) {
@@ -68,6 +72,12 @@ public class Homework {
 		this.CourseId=CourseId;
 	}
 	
+	
+	public Homework(int HomeworkId, String Attachment) {
+		this.HwId = HomeworkId;
+		this.Attachmentname = Attachment;
+		
+	}
 	
     public JSONObject getData() {
         /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
@@ -126,6 +136,17 @@ public class Homework {
 	
 	public int getHwId() {
 		return this.HwId;
+	}
+	
+    public JSONObject upload() {
+    	JSONObject data = new JSONObject();
+    	data = hwuh.upload(this);
+    	
+    	return data;
+    }
+	public String getAttachmentname() {
+		// TODO Auto-generated method stub
+		return this.Attachmentname;
 	}
 	
 }
