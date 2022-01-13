@@ -22,11 +22,9 @@ public class Course {
     /** id，課程編號 */
     private int id;
     
-    /** sdl，需要學生修課名單內ㄉ學號們 */
-   // private StudentList sdl;
-    
-    /** pfl，需要教授的ID */
-   // private ProfessorList pfl;
+    /** professor，授課教授 */
+    private String professor;
+
     
     /** name，課程名稱 */
     private String name;
@@ -54,8 +52,9 @@ public class Course {
      * @param password 會員密碼
      * @param name 會員姓名
      */
-    public Course(String name, String detail, String semester, String department, int credit) {
-        this.name = name;
+    public Course(String professor, String name, String detail, String semester, String department, int credit) {
+        this.professor =professor;
+    	this.name = name;
         this.detail = detail;
         this.semester = semester;
         this.department = department;
@@ -76,8 +75,9 @@ public class Course {
      * @param login_times 更新時間的分鐘數
      * @param status the 會員之組別
      */
-    public Course(int id, String name, String detail, String semester, String department, int credit) {
+    public Course(int id, String professor, String name, String detail, String semester, String department, int credit) {
         this.id = id;
+        this.professor = professor;
         this.name = name;
         this.detail = detail;
         this.semester = semester;
@@ -90,7 +90,10 @@ public class Course {
         return this.id;
     }
 
-
+    public String getProfessor() {
+    	
+    	return this.professor;
+    }
     
     /**
      * 取得課程名
@@ -174,6 +177,7 @@ public class Course {
         /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
         JSONObject jso = new JSONObject();
         jso.put("id", getId());
+        jso.put("professor", getProfessor());
         jso.put("name", getName());
         jso.put("detail", getDetail());
         jso.put("semester", getSemester());
