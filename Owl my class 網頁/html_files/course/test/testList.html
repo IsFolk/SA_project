@@ -129,8 +129,8 @@ function json2table(jsonString, $table){
 json2table(testJson, $(".content-tbl"));
 */
 //////////////////////////////////////////////////////////////
-var bodyRows = '';
-
+//var bodyRows = '';
+/*
 $.ajax({
 	url: "api/test.do",
 	type: "GET",
@@ -153,6 +153,39 @@ $.ajax({
 		console.log("請求失敗");
 	}
 });
+*/
+
+/////////////////////////////////////
+$.ajax({
+		type: "GET",
+		url: "api/test.do",
+		crossDomain: true,
+		cache: false,
+		dataType: 'json',
+		timeout: 5000,
+		success: function (response) {
+			if(response.status == 200){
+				updateTable(response.response.data);
+			}
+			console.log(response);
+		},
+		error: function () {
+			alert("無法連線到伺服器！");
+		}
+});
+
+function updateTable(data) {
+	//$("#table > tbody").empty();
+	var table_html = '';
+	$.each(data, function(index, value) {
+		table_html += '<tr>';
+		table_html += '<td><a href="test.html"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
+		table_html += '<td>' + value['end_time'] + '</td>';
+		table_html += '</tr>';
+	})
+
+	$(".content-tbl > tbody").append(table_html);
+}
 		</script>
 		<script src="../../../js_files/general.js"></script>
 	</body>
