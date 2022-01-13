@@ -5,8 +5,9 @@
 		<meta charset="utf-8">
 		<base href="">
 		<link rel="icon" type="image/png" href="">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../css_files/info.css" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+		<!-- 		<link href="statics/css/info.css" type="text/css" rel="stylesheet"> -->
+
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -54,22 +55,7 @@
 					<div class="professor">
 						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
 					</div>
-					<ul class="sidebar-menu">
-						<li class="currentpage">
-							<a href="info.html"><span class="text">課程資訊</span></a>
-						</li>
-						<li>
-							<a href="../board/board.html"><span class="text">課程公告</span></a>
-						</li>
-						<li>
-							<a href="../textbook/textbookList.html"><span class="text">課程教材</span></a>
-						</li>
-						<li>
-							<a href="../homework/homeworkList.html"><span class="text">作業</span></a>
-						</li>
-						<li>
-							<a href="../test/testList.html"><span class="text">測驗</span></a>
-						</li>
+					<ul id="sidebar_menu" class="sidebar-menu">
 					</ul>
 				</div>
 			<!--右下區域-->
@@ -80,7 +66,7 @@
 					<div class="hr"></div>
 					<a href="editInfo.html"><span class="text go-edit-btn pro-only">修改課程資訊</span></a>
 					<table class="info-tbl">
-						<tbody>
+						<tbody id="course_info">
 							<tr>
 								<td><span class="text-bold">課程名稱</span></td>
 								<td class="course-name"></td>
@@ -108,9 +94,92 @@
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="../../../js_files/general.js"></script>
+		<script src="statics/js/general.js"></script>
+		<script src="statics/js/link.js"></script>
 		<script>
-			
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id = url.searchParams.get("id");
+		  function getCourseInfo() {
+			  $.ajax({
+		          type: "GET",
+		          url: "api/course.do",
+		          data: "id=" + id,
+		          crossDomain: true,
+		          cache: false,
+		          dataType: 'json',
+		          timeout: 5000,
+		          success: function (response) {
+		              if(response.status == 200){
+		            	  updateMenu(response.response.data);
+		            	  updateHTML(response.response.data);
+		              }
+		          },
+		          error: function () {
+		              alert("無法連線到伺服器！");
+		          }
+		    });
+		  }
+		  
+		  getCourseInfo();
+		  
+		 function updateMenu(data) {
+	         $("#sidebar_menu").empty();
+	         var table_html = '';
+	         $.each(data, function(key, value) {
+	             table_html += '<li class="currentpage">';
+	             table_html += '<a href="info.html?id='+ value['id'] + '">' + '<span class="text">' + "課程資訊" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li>';
+	             table_html += '<a href="board.html?id='+ value['id'] + '">' + '<span class="text">' + "課程公告" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li>';
+	             table_html += '<a href="textbookList.html?id='+ value['id'] + '">' + '<span class="text">' + "課程教材" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li>';
+	             table_html += '<a href="homeworkList.html?id='+ value['id'] + '">' + '<span class="text">' + "作業" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li>';
+	             table_html += '<a href="testList.html?id='+ value['id'] + '">' + '<span class="text">' + "測驗" + '</span>' + '</a>';
+	             table_html += '</li>';
+	        })
+
+	         $("#sidebar_menu").append(table_html);
+	     }
+		 
+		 <!--列出課程資訊-->
+		 function updateHTML(data) {
+	         $("#course_info").empty();
+	         var table_html = '';
+	         $.each(data, function(index, value) {
+	             table_html += '<tr>';
+	             table_html += '<td>' + '<span class="text-bold">' + "課程名稱" + '</span>' + '</td>';
+	             table_html += '<td class="course-name">' + value['name'] + '</td>';
+	             table_html += '<td>' + '<span class="text-bold">' + "開課學期" + '</span>' + '</td>';
+	             table_html += '<td class="course-name">' + value['semester'] + '</td>';
+	             table_html += '</tr>';
+	             table_html += '<tr>';
+	             table_html += '<td>' + '<span class="text-bold">' + "課號" + '</span>' + '</td>';
+	             table_html += '<td class="course-name">' + value['id'] + '</td>';
+	             table_html += '<td>' + '<span class="text-bold">' + "開設單位" + '</span>' + '</td>';
+	             table_html += '<td class="course-name">' + value['department'] + '</td>';
+	             table_html += '</tr>';
+	             table_html += '<tr>';
+	             table_html += '<td>' + '<span class="text-bold">' + "指導教授" + '</span>' + '</td>';
+	             table_html += '<td class="course-name">' + value['professor'] + '</td>';
+	             table_html += '<td>' + '<span class="text-bold">' + "學分數" + '</span>' + '</td>';
+	             table_html += '<td class="course-name">' + value['credit'] + '</td>';
+	             table_html += '</tr>';
+	             table_html += '<tr>';
+		         table_html += '<td>' + '<span class="text-bold">' + "課程介紹" + '</span>' + '</td>';
+	             table_html += '</tr>';
+	             table_html += '<tr>';
+	             table_html += '<td colspan="4">' + '<div class="course-description">' + value['detail'] + '</div>' + '</td>';
+	             table_html += '</tr>';
+	        })
+
+	         $("#course_info").append(table_html);
+	     }
 		</script>
 	</body>
 </html>
