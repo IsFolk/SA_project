@@ -340,4 +340,35 @@ textarea[name="choice"]{
 	background-color: #edb100;
 }
 /* test END */
-
+/* 課程清單 */
+.clearfix{
+  clear: both;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.clearfix > a{
+    margin: 15px;
+}
+.col-md-6{
+  background-color: #f7f9fa;
+  height: 100px;
+  width: 170px;
+  border: solid 2px #c3cfd9;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+.col-md-6:hover{
+  background-color: #dfe6ed;  
+}
+.fs-label{
+  color: #000000;
+  font-size: 18px;
+}
+.fs-hint{
+  color: #4d5c68;
+  font-size: 14px;
+}
+/* 課程清單 END */ 
