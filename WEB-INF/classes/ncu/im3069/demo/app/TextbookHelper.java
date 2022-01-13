@@ -95,11 +95,10 @@ public class TextbookHelper {
         try {
             conn = DBMgr.getConnection();
             
-            String sql = "DELETE FROM textbook inner JOIN textbookattachment where textbook.TextbookId = ? and textbookattachment.TextbookId = ?";
+            String sql = "DELETE FROM textbook where TextbookId = ?";
            
             pres = conn.prepareStatement(sql);
             pres.setInt(1, id);
-            pres.setInt(2, id);
             row = pres.executeUpdate();
 
             exexcute_sql = pres.toString();
@@ -125,7 +124,7 @@ public class TextbookHelper {
     }
     
     /**提取所有公告**/
-    public JSONObject getALL() {
+    public JSONObject getALL(String courseid) {
 	Textbook t = null;
     JSONArray jsa = new JSONArray();
     String exexcute_sql = "";
@@ -135,9 +134,10 @@ public class TextbookHelper {
     
     try {
         conn = DBMgr.getConnection();
-        String sql = "SELECT `TextbookId`, `TextbookName`, `UpdateTime` FROM `sa_project`.`Textbook`";
+        String sql = "SELECT `CourseId`, `TextbookId`, `TextbookName`, `TextbookDetail`, `UpdateTime` FROM `sa_project`.`Textbook` where CourseId = ?";
         
         pres = conn.prepareStatement(sql);
+        pres.setString(1, courseid);
         rs = pres.executeQuery();
 
         exexcute_sql = pres.toString();
@@ -146,13 +146,15 @@ public class TextbookHelper {
         while(rs.next()) {
 
             row += 1;
-            int id = rs.getInt("TextbookId");
+            int textbookid = rs.getInt("TextbookId");
+            int course_id = rs.getInt("CourseId");
             String name = rs.getString("TextbookName");
+            String detail = rs.getString("TextbookDetail");
             String updatetime = rs.getString("UpdateTime");
             Date update = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(updatetime);
 
             
-            t = new Textbook(id, name, update);
+            t = new Textbook(textbookid,  name, detail,course_id, update);
             jsa.put(t.getAllData());
         }
 
@@ -179,7 +181,7 @@ public class TextbookHelper {
     /**提取單個公告**/
     public JSONObject getByID(String id) {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
-        Board b = null;
+        Textbook t = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
@@ -196,13 +198,12 @@ public class TextbookHelper {
             conn = DBMgr.getConnection();
             /** SQL指令 */
             String sql = 
-            		"SELECT board.BoardId, BoardName, BoardDetail, Attachment, UpdateTime FROM board inner JOIN boardattachment where board.BoardId = ? and boardattachment.BoardId = ?";
+            		"SELECT TextbookId, TextbookName, TextbookDetail, Attachment, UpdateTime FROM Textbook where TextbookId = ?";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
             
             pres.setString(1, id);
-            pres.setString(2, id);
             System.out.println(pres.toString());
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
@@ -210,11 +211,10 @@ public class TextbookHelper {
             /** 紀錄真實執行的SQL指令，並印出 **/
             exexcute_sql = pres.toString();
             
-            int board_id = 0;
+            int textbook_id = 0;
             String name = null;
             String details = null;
             String updatetime;
-            ArrayList<String> totalattachment = new ArrayList<String>();
             Date update = null;
             
             while(rs.next()) {
@@ -222,22 +222,21 @@ public class TextbookHelper {
                 row += 1;
                 
                 /** 將 ResultSet 之資料取出 */
-                board_id = rs.getInt("BoardId");
-                name = rs.getString("BoardName");
-                details = rs.getString("BoardDetail");
+                textbook_id = rs.getInt("TextbookId");
+                name = rs.getString("TextbookName");
+                details = rs.getString("TextbookDetail");
                 String attachment = rs.getString("Attachment");
                 updatetime = rs.getString("UpdateTime");
-                
-                totalattachment.add(attachment);
                 
                                 
                 update = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(updatetime);
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
+                t = new Textbook(textbook_id, name, details, attachment ,update);
+                /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
+                jsa.put(t.getData());
             }
-            b = new Board(board_id, name, details, totalattachment ,update);
-            /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
-            jsa.put(b.getData());
+
          
         } catch (SQLException e) {
             /** 印出JDBC SQL指令錯誤 **/
@@ -280,11 +279,11 @@ public class TextbookHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`board` SET `BoardName` = ? ,`BoardDetails` = ? , `UpdateTime` = ? WHERE `BoardId` = ?";
+            String sql = "Update `sa_project`.`textbook` SET `TextbookName` = ? ,`TextbookDetail` = ? , `UpdateTime` = ? WHERE `TextbookId` = ?";
             /** 取得所需之參數 */
-            int boardid=b.getBoardId();
-            String name = b.getBoardName();
-            String details = b.getBoardDetails();
+            int textbookid=b.getTextbookId();
+            String name = b.getTextbookName();
+            String details = b.getTextbookDetail();
             String updatetime = new Date().toString();
             
             
@@ -293,7 +292,7 @@ public class TextbookHelper {
             pres.setString(1, name);
             pres.setString(2, details);
             pres.setString(3, updatetime);
-            pres.setInt(4,boardid);
+            pres.setInt(4,textbookid);
             /** 執行更新之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
 

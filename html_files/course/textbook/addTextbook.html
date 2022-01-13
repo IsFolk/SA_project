@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="../css_files/.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
+					</div>
+					<ul class="sidebar-menu">
+						<li>
+							<a href="../info/info.html"><span class="text">課程資訊</span></a>
+						</li>
+						<li>
+							<a href="../board/board.html"><span class="text">課程公告</span></a>
+						</li>
+						<li class="currentpage">
+							<a href="textbookList.html"><span class="text">課程教材</span></a>
+						</li>
+						<li>
+							<a href="../homework/homeworkList.html"><span class="text">作業</span></a>
+						</li>
+						<li>
+							<a href="../test/testList.html"><span class="text">測驗</span></a>
+						</li>
+					</ul>
+				</div>
+				<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">新增教材</span>
+					</div>
+					<div class="hr"></div>
+					<form>
+						<table class="form-tbl">
+							<tbody>
+								<tr>
+									<td class="tr-title"><span class="text-bold">標題</span></td>
+									<td><textarea class="round-border blue-border" name="title" placeholder="標題為必填，限50字" maxlength="50"></textarea></td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">說明</span></td>
+									<td><textarea class="round-border blue-border" name="description" placeholder="內文與檔案須至少擇一上傳" rows="10"></textarea></td>
+								</tr>
+								<tr>
+									<td><span class="text-bold">附件</span></td>
+									<td><input type="file" class="cursor-pointer"></td>
+								</tr>
+							</tbody>
+						</table>
+						<input type="submit" class="submit-btn round-border cursor-pointer" value="確認新增">
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="../../../js_files/general.js"></script>
+		<script>
+		</script>
+	</body>
+</html>

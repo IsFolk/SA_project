@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="test-sidebar-container">
+					<div class="test-sidebar">
+						<ul class="test-sidebar-menu">
+							<li class="currentpage">
+								<a href="addTestInfo.html"><span class="text">測驗資訊</span></a>
+							</li>
+						</ul>
+						<a href="addTestQuestion.html"><span class="text add-question-btn">+ 新增題目</span></a>
+					</div>
+				</div>
+			<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">新增測驗資訊</span>
+					</div>
+					<div class="hr"></div>
+					<form>
+						<table class="form-tbl">
+							<tbody>
+								<tr>
+									<td class="tr-title"><span class="text-bold">標題</span></td>
+									<td><input class="round-border blue-border blue-border" name="title" placeholder="測驗標題" type="text"></td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">開放時間</span></td>
+									<td><input class="round-border blue-border blue-border" type="date">&ensp;<input class="round-border blue-border" type="time"></td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">關閉時間</span></td>
+									<td><input class="round-border blue-border" type="date">&ensp;<input class="round-border blue-border" type="time"></td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">說明</span></td>
+									<td><textarea class="round-border blue-border" name="description" placeholder="測驗說明"></textarea></td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">配分</span></td>
+									<td>
+										<span class="text">單選題</span>
+										<input class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
+										<span class="text">分/題</span>&ensp;&ensp;
+										<span class="text">多選題</span>
+										<input class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
+										<span class="text">分/題</span>&ensp;&ensp;
+										<span class="text">簡答題</span>
+										<input class="round-border blue-border" type="number" value="1" min="0.5" step="0.1">
+										<span class="text">分/題</span>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td><input class="round-border blue-border" type="checkbox"><span class="text">平均分配總分</span><input class="" name="total-score" type="number"><span class="text">分</span></td>
+								</tr>
+							</tbody>
+						</table>
+						<input type="submit" class="submit-btn round-border" value="完成編輯">
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="../../../js_files/general.js"></script>
+		<script>
+		</script>
+	</body>
+</html>

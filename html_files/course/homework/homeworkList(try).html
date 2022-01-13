@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="../css_files/homework.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
+					</div>
+					<ul class="sidebar-menu">
+						<li>
+							<a href="../info/info.html"><span class="text">課程資訊</span></a>
+						</li>
+						<li>
+							<a href="../board/board.html"><span class="text">課程公告</span></a>
+						</li>
+						<li>
+							<a href="../textbook/textbookList.html"><span class="text">課程教材</span></a>
+						</li>
+						<li class="currentpage">
+							<a href="homeworkList.html"><span class="text">作業</span></a>
+						</li>
+						<li>
+							<a href="../test/testList.html"><span class="text">測驗</span></a>
+						</li>
+					</ul>
+				</div>
+				<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">作業</span>
+					</div>
+					<div class="hr"></div>
+					<a href="addHomework.html"><span class="text go-add-btn pro-only">新增作業</span></a>
+					<table class="content-tbl">
+						<thead>
+							<tr>
+								<td>名稱</td><td>結束時間</td><td class="stu-only">狀態</td>
+							</tr>
+						</thead>
+						<tbody  id="homeworkList"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+		//////////////把資料塞進table裡////////////
+
+$(function(){
+    $.ajax({
+	    type: "GET",
+		dataType:"json",
+        url: 'https://raw.githubusercontent.com/wsmwason/taiwan-bank-code/master/data/taiwanBankCodeATM.json',
+		// url可能是'../../../../Homework.ashx?Method=GetModuleInfo'之類的 額...可能
+		//需要的資訊：這堂課的 HwName, HwEndingTime, HwScore
+        success: function (info) {
+			//console.log("查詢抓回來的筆數有幾筆");
+			//console.log(info.length);
+			total_len = info.length;		
+			for(i=0; i<total_len; i++){
+				$("#homeworkList").append(
+						"<tr>"+
+						"<td>"+info[i].HwName+"</td>"+
+						"<td>"+info[i].HwEndingTime+"</td>"+
+						"<td>"+info[i].HwScore+"</td>"+	// 如果尚未批改該怎麼辦還要想想
+						//"<td>"+info[i].code+"</td>"+
+						//"<td>"+info[i].name+"</td>"+
+						"</tr>"
+				)
+			}				
+        },
+        error: function (data) {
+            console.log("請求失敗");
+        }
+    });
+});
+// 參考網頁：https://www.dotblogs.com.tw/YiruAtStudio/2020/12/10/214043
+// 沒有參考但是可以參考的網頁：https://iter01.com/158513.html
+
+
+
+		</script>
+		<script src="../../../js_files/general.js"></script>
+	</body>
+</html>
+<!--
+var testData = {
+	courseName: "SA",
+	homework: [
+		{title: "作業一", endDate: "2021.12.3", status: "95"}, 
+		{title: "作業二", endDate: "2021.12.4", status: "待批改"}, 
+		{title: "作業三", endDate: "2021.12.5", status: "尚未繳交"},
+		{title: "喵喵", endDate: "にゃんにゃん", status: "wwwwww"},
+		{title: "喵喵", endDate: "にゃんにゃん", status: "wwwwww"}
+	]
+};
+var testJson = JSON.stringify(testData); //產生測試用的JSON資料
+
+
+function json2table(jsonString, $table){	
+	
+	var json = JSON.parse(jsonString); 
+	
+	var bodyRows = '';
+	
+
+	
+	$table.find('tbody').append(bodyRows);
+}
+
+json2table(testJson, $(".content-tbl"));
+-->

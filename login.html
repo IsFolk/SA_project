@@ -12,7 +12,6 @@
 </head>
 <body>
 	<div id="flashMessage" class="message" style="display: none;"></div>
-	<form action="" method="POST">
 		<select id = "user_type">
 	    	<option>選擇類別</option>
 	    	<option>系統管理者</option>
@@ -23,7 +22,6 @@
 		ID<input id="id" type="text"/> <br>
 		password<input id="password" type="text"/> <br>
 		<input type="submit" id = "submit"/>
-	</form>
 </body>
 
             <script type="text/javascript">
@@ -34,7 +32,8 @@
                     
                     $form.click(function() {
                         submit();
-                    });
+                    })
+                });
 
                     function submit() {
                     	var user_type = $('#user_type').val();
@@ -42,30 +41,19 @@
                         var password= $('#password').val();
                         console.log(user_type+id+password);
 
-                        //var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-                        //var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-//                        if (!email_rule.test(email)) {
-//                            alert("Email格式不符！");
-//                        }
-//                        else if(!password_rule.test(password)) {
-//                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
-//                        }
-//                        else {
-//                            // 將資料組成JSON格式
-//                            var data_object = {
-//                                "ManagerName": name,
-//                                "ManagerEmail": email,
-//                                "Password": password
-//                            };
-
-						if(user_type == "系統管理者"){
-							var data_object = {
-									"ManagerId" : id,
-									"Password": password
-							};							
-							
-						}
+							if(user_type == "系統管理者"){
+								var data_object = {
+										"ManagerId" : id,
+										"Password": password
+								};							
+								
+							}else if(user_type == "教授"){
+								var data_object = {
+										"ProfessorId" : id,
+										"Password": password
+								};							
+							}
 						
 						console.log(data_object);
 
@@ -84,11 +72,15 @@
                                     success: function (response) {
                                         //$('#flashMessage').html(response.message);
                                         //$('#flashMessage').show();
+                                        alert("success");
                                         console.log(response);
+                                        
                                         if(response.status == 200){
                                             //updateSQLTable(response.response);
+                                            
                                             console.log("success");
-                                        	window.location.href = "http://localhost:8090/NCU_MIS_SA2/index.html";
+                                        	window.location.href = "index.html";
+                                    	
                                         }
                                     },
                                     error: function () {
@@ -96,7 +88,5 @@
                                     }
                             });
                         }
-                    }
-                );
             </script>
 </html>

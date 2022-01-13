@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/.css" type="text/css" rel="stylesheet">
+		<style>
+
+		</style>
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="test-sidebar-container">
+					<div class="test-sidebar">
+						<ul class="test-sidebar-menu">
+							<li>
+								<a href="addTestInfo.html"><span class="text">測驗資訊</span></a>
+							</li>
+							<li class="currentpage">
+								<a href="#"><span class="text">第</span><span class="text question-order"></span><span class="text">題</span></a>
+							</li>
+						</ul>
+						<a href="#"><span class="text add-question-btn">+ 新增題目</span></a>
+					</div>
+				</div>
+			<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">編輯題目</span>
+					</div>
+					<div class="hr"></div>
+					<form>
+						<table class="form-tbl">
+							<tr><td><span class="text-bold question-order"></span><span class="text-bold">.</span></td></tr>
+							<tr>
+								<td></td>
+								<td><textarea class="round-border blue-border" name="question" placeholder="題目敘述" rows="6"></textarea></td>
+								<td>
+									<select class="round-border blue-border" id="slt">
+										<option value=".ans_1">單選題</option>
+										<option value=".ans_2">多選題</option>
+										<option value=".ans_3">簡答題</option>
+									</select>
+									<br><br>
+									<label class="upload-btn">img<input type="file" accept=".pdf, .doc"></label>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="2" class="uploaded-img"></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td id="ans_td">
+									<div>
+										<span class="text-reminder">(請選取正確選項)</span>
+										<ol class="ans_1_list">
+											<li>
+												<input class="" type="radio" name="choices" value="">
+												<textarea class="" name="choice" rows="1"></textarea>
+											</li>
+										</ol>
+										<span class="add-choice-btn">+ Add choice</span>
+									</div>
+								</td>
+							</tr>
+						</table>
+						<input type="submit" class="submit-btn round-border" value="完成編輯">
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="do-not-show">
+			<div class="ans_1">
+				<span class="text-reminder">(請選取正確選項)</span>
+				<ol class="ans_1_list_default">
+					<li>
+						<input class="" type="radio" name="choices" value="">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+				</ol>
+				<span class="add-choice-btn">+ Add choice</span>
+			</div>
+			<div class="ans_2">
+				<span class="text-reminder">(請選取正確選項)</span>
+				<ol class="ans_2_list_default">
+					<li>
+						<input class="round-border" type="checkbox" name="choices" value="">
+						<textarea class="" name="choice" rows="1"></textarea>
+					</li>
+				</ol>
+				<span class="add-choice-btn">+ Add choice</span>
+			</div>
+			<div class="ans_3"></div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="../../../js_files/general.js"></script>
+		<script>
+		/////////第N題//////////////////
+var questionNumber = 1;
+$(".question-order").text(questionNumber);
+///////////////////////////////////
+
+////////////select////////////////////
+$(function(){
+	var sltValue = ".ans_1";
+	$('#slt').change(function(){
+		sltValue = $(this).val();
+		$('#ans_td').empty();
+		$(sltValue).clone().appendTo($('#ans_td'));
+		console.log(sltValue);
+		
+		let choiceList = sltValue + "_list";
+		$('#ans_td > ol').removeClass();
+		$('#ans_td > ol').addClass(choiceList);
+  });
+	
+////////////add choice/////////
+	//$().clone().appendTo();
+	$(".add-choice-btn").click(function(){
+		console.log("???");
+		//$(sltValue + "_list_default > li").clone().appendTo($('#ans_td > ol'));
+	});
+});
+///////////////////////////////
+		</script>
+	</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="css_files/textbook.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
+					</div>
+					<ul class="sidebar-menu">
+						<li>
+							<a href="../info/info.html"><span class="text">課程資訊</span></a>
+						</li>
+						<li>
+							<a href="../board/board.html"><span class="text">課程公告</span></a>
+						</li>
+						<li class="currentpage">
+							<a href="textbookList.html"><span class="text">課程教材</span></a>
+						</li>
+						<li>
+							<a href="../homework/homeworkList.html"><span class="text">作業</span></a>
+						</li>
+						<li>
+							<a href="../test/testList.html"><span class="text">測驗</span></a>
+						</li>
+					</ul>
+				</div>
+				<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">課程教材</span>
+					</div>
+					<div class="hr"></div>
+					<a id="addtextbook" href="addTextbook.html"><span class="text go-add-btn pro-only">新增教材</span></a>
+					<table class="content-tbl">
+						<thead>
+							<tr>
+								<td>名稱</td><td>公布日期</td>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+		var courseInfo = {
+				name: "系統分析與設計",
+				semester: "110-1",
+				code: "IM3069*",
+				division: "資管系",
+				professor: "喵喵喵",
+				credits: 3,
+				description: "課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹"
+		};
+		$(".course-name").text(courseInfo.name);
+		$(".course-semester").text(courseInfo.semester);
+		$(".course-code").text(courseInfo.code);
+		$(".course-division").text(courseInfo.division);
+		$(".course-professor").text(courseInfo.professor);
+		$(".course-credits").text(courseInfo.credits);
+		$(".course-description").text(courseInfo.description);
+
+		////////////判斷是教授還是學生/////////
+		var userIsProfessor = 1;
+		if(userIsProfessor){
+			$(".stu-only").remove();
+		}else{
+			$(".pro-only").remove();
+		}
+		
+		//////////////把資料塞進table裡////////////
+var url_string = window.location.href;                
+var url = new URL(url_string);
+console.log(url);
+var courseid = url.searchParams.get("CourseId");
+var sql_num = 0;
+
+document.getElementById("addtextbook").href = "addTextbook.html?CourseId="+courseid;
+
+$(function(){
+    $.ajax({
+        type: "GET",
+        url: "api/TextbookController",
+        data: "CourseId=" + courseid,
+        crossDomain: true,
+        cache: false,
+        dataType: 'json',
+        timeout: 5000,
+		// url可能是'../../../../Homework.ashx?Method=GetModuleInfo'之類的 額...可能
+		//需要的資訊：這堂課的 HwName, HwEndingTime, HwScore
+                           success: function (response) {
+                                if(response.status == 200){
+                                    updateTable(response.response.data);
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+    });
+});
+			
+			
+			function updateTable(data) {
+			    $("#table > tbody").empty();
+			    var table_html = '';
+			    $.each(data, function(index, value) {
+			        //table_html += '<tr><td scope="row">' + value['TextbookId'] + '</td>';
+			        table_html += '<td>' + '<a href = "textbook.html?TextbookId='+ value['TextbookId']+'">'+ value['TextbookName'] + '</a></td>';
+			        table_html += '<td>' + value['UpdateTime'] + '</td>';
+			        //table_html += '<td>' + value['login_times'] + '</td>';
+			        //table_html += '<td>' + value['status'] + '</td>';
+			        table_html += '<td>' + '<a href="editboard.html?TextbookId=' + value['TextbookId'] + '">編輯</a> | ';
+			        table_html += '<a href="javascript: deleteMember(' + value['TextbookId'] + ');">刪除</a></td></tr>';
+			    })
+			
+			$(".content-tbl").append(table_html);
+			}
+
+
+
+
+
+		function json2table(jsonString, $table){
+			var json = JSON.parse(jsonString); 
+			
+			var bodyRows = '';
+			
+			for(let hm of json.textbook){ //將資料填入表格
+				bodyRows += '<tr>';
+				bodyRows += '<td><a href="textbook.html"><span class="content-tbl-link">' + hm.title + '</span></a></td>' ;
+				bodyRows += '<td>' + hm.date + '</td>' ;
+				bodyRows += '</tr>';
+			}
+			
+			$table.find('tbody').append(bodyRows);
+		}
+		//json2table(testJson, $(".content-tbl"));
+		</script>
+	</body>
+</html>

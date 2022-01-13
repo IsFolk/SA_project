@@ -69,7 +69,11 @@
                         console.log("You pressed Cancel!");
                     }
                 }
-
+                
+                var url_string = window.location.href;                
+                var url = new URL(url_string);
+                var CourseId = url.searchParams.get("CourseId");
+                
                 function getAllMember() {
                     // 發出POST的GET請求取得所有會員列表
                     $.ajax({
@@ -77,6 +81,7 @@
                             url: "api/BoardController",
                             crossDomain: true,
                             cache: false,
+                            data: "CourseId=" + CourseId,
                             dataType: 'json',
                             timeout: 5000,
                             success: function (response) {
@@ -102,7 +107,7 @@
                         table_html += '<td>' + value['UpdateTime'] + '</td>';
                         //table_html += '<td>' + value['login_times'] + '</td>';
                         //table_html += '<td>' + value['status'] + '</td>';
-                        table_html += '<td>' + '<a href="edit.html?ManagerId=' + value['ManagerId'] + '">編輯</a> | ';
+                        table_html += '<td>' + '<a href="editboard.html?BoardId=' + value['BoardId'] + '&'+'CourseId='+value['CourseId'] + '">編輯</a> | ';
                         table_html += '<a href="javascript: deleteMember(' + value['BoardId'] + ');">刪除</a></td></tr>';
                     })
 

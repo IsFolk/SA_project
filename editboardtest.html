@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CakePHP: the rapid development php framework: Members</title>
+    <link href="statics/icon/favicon.ico" type="image/x-icon" rel="icon">
+    <link href="statics/icon/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link rel="stylesheet" type="text/css" href="statics/css/cake.generic.css">
+
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    
+</head>
+
+<body>
+<ul data-group="Companies">
+  <li data-company="Microsoft"></li>
+  <li data-company="Google"></li>
+  <li data-company ="Facebook"></li>
+</ul>
+    <div id="container">
+        <div id="header">
+            <h1><a href="http://cakephp.org/">CakePHP: the rapid development php framework</a></h1>
+        </div>
+        <div id="content">
+            <h2>更新管理員資料</h2>
+            <a href="index.html">管理員清單</a>
+            <a href="product.html">購物車模組</a>
+
+            <div id="flashMessage" class="message" style="display: none;"></div>
+
+            <form id="form" accept-charset="utf-8">
+                <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+                <div class="input text required">
+                    <label for="manager_name">姓名</label>
+                    <input name="name" maxlength="30" type="text" id="board_name" required="required">
+                </div>
+                <div class="input email required">
+                    <label for="manager_email">電郵</label>
+                    <input name="email" maxlength="50" type="email" id="board_detail" required="required" disabled>
+                </div>
+                <div class="input password required">
+                    <label for="manager_password">密碼</label>
+                    <input name="password" type="text" id="board_attachment" required="required">
+                </div>
+                <div id="attachment_panel">
+                </div>
+                <div class="input text">
+                    <label for="manager_login_times">更新時間</label>
+                    <input name="login_times" type="text" id="manager_login_times" disabled>
+                </div>
+                <div class="submit"><input type="button" value="更新" id="submit"></div>
+            </form>
+
+            <script type="text/javascript">
+                // 取得網址參數
+                var url_string = window.location.href;                
+                var url = new URL(url_string);
+                console.log(url);
+                var courseid = url.searchParams.get("CourseId");
+                var boardid = url.searchParams.get("BoardId");
+                var sql_num = 0;
+
+                function updateMember(id) {
+                    var name = $('#board_name').val();
+                    var detail = $('#board_detail').val();
+                    
+                    var attachment = $('.board_attachment')
+                    .map(function() {
+                        return this.id;
+                      })
+                      .get()
+                      .join();
+
+					console.log(attachment);
+					
+					if(attachment = null){
+						attachment = "";
+					}
+                        // 將資料組成JSON格式
+                        var data_object = {
+                        	"BoardId": id,
+                        	"CourseId": courseid,
+                            "BoardName": name,
+                            "BoardDetails": detail,
+                            "Attachment": attachment
+                        };
+
+                        // 將JSON格式轉換成字串
+                        var data_string = JSON.stringify(data_object);
+                        
+                        console.log(data_string);
+
+                        // 發出POST的PUT請求
+                        $.ajax({
+                                type: "PUT",
+                                url: "api/BoardController",
+                                data: data_string,
+                                crossDomain: true,
+                                cache: false,
+                                dataType: 'json',
+                                timeout: 5000,
+                                success: function (response) {
+                                    $('#flashMessage').html(response.message);
+                                    $('#flashMessage').show();
+                                    if(response.status == 200){
+                                        updateSQLTable(response.response);
+                                        getMember();
+                                    }
+                                },
+                                error: function () {
+                                	console.log("PUT ERROR");
+                                    alert("無法連線到伺服器！");
+                                }
+                        });
+                        
+                    	let formData = new FormData();
+                    	formData.append(boardid, ajaxfile.files[0]);
+                    	console.log(ajaxfile.files[0]);
+                		console.log("test");                                    
+                		$.ajax({
+                            type: "POST",
+                            url: "api/UploadController",
+                            data: formData,
+                            processData : false, 
+                            contentType : false,
+                            crossDomain: true,
+                            cache: false,
+                            timeout: 60000,
+                            success: function (response) {
+                                //$('#flashMessage').html(response.message);
+                                //$('#flashMessage').show();
+                                console.log(response);
+                                //alert('stop');
+                                if(response.status == 200){
+                                    //updateSQLTable(response.response);
+                                    console.log("success");
+                                    alert("上傳成功");
+                                }
+                            },
+                            error: function (XMLHttpRequest) {
+                            	console.log("POST ERROR");
+                            	console.log(XMLHttpRequest.status);
+                            	console.log(XMLHttpRequest.readyState);
+                                alert("無法連線到伺服器！");
+                            }
+                    });
+                    }
+
+
+                // 更新SQL指令歷史表格
+                function updateSQLTable(data) {
+                    var time = (data.time / 1000000).toFixed(2);
+                    var table_html = "";
+                    
+                    sql_num += 1
+
+                    table_html += '<tr>';
+                    table_html += '<td>' + sql_num + '</td>';
+                    table_html += '<td>' + data.sql + '</td>';
+                    table_html += '<td style="text-align: right">' + '0' + '</td>';
+                    table_html += '<td style="text-align: right">' + data.row + '</td>';
+                    table_html += '<td style="text-align: right">' + data.row + '</td>';
+                    table_html += '<td style="text-align: right">' + time + '</td>';
+                    table_html += '</tr>';
+                    $("#sql_log > tbody").append(table_html);
+                    $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
+                }
+
+                function getMember() {
+                    $.ajax({
+                        type: "GET",
+                        url: "api/BoardController",
+                        crossDomain: true,
+                        data: "BoardId=" + boardid,
+                        cache: false,
+                        dataType: 'json',
+                        timeout: 5000,
+                        success: function (response) {
+                            if(response.status == 200){
+                            	updateSQLTable(response.response);
+                            	//console.log(response);
+                            	document.getElementById('board_name').value = response['response']['data'][0]['BoardName'];
+                            	//console.log(response['response']['data'][0]['ManagerName']);
+                            	
+                            	
+                            	var inner_html = '';
+                            	
+                         		for(i = 0; i < response['response']['data'][0]['Attachment'].length; i++){
+                         			inner_html += '<div id ="'+ i +'">'
+                         			inner_html += '<a class = "board_attachment" href="statics/attachment/board/'+ response['response']['data'][0]['Attachment'][i] +' " target = "_blank" id = "'+response['response']['data'][0]['Attachment'][i]+'"> ' + response['response']['data'][0]['Attachment'][i] + '</a>';
+                         			inner_html += '<button data-btnid="'+ i +'" class="close">x</button><br>'
+                         			inner_html += '</div>'
+//                         			document.getElementById('board_attachment').inner_html = response['response']['data'][0]['Attachment'];
+                         		}
+                         		
+                         		inner_html += '<form method="post" action="" enctype="mutlipart/form-data">'
+                         		inner_html += '<input type="file" id="ajaxfile"/><br>'
+                         		inner_html += '<button id="upload">Upload</button>'
+                         		inner_html += '</form>'
+                         		
+                            	document.getElementById('board_detail').value = response['response']['data'][0]['BoardDetails'];
+                            	//document.getElementById('manager_login_times').value = response['response']['data'][0]['CourseId'];
+                            
+                                                                        			
+                            	$("#attachment_panel").append(inner_html);
+                            	                                                                                                           
+                            
+	                            for(i = 0 ; i < response['response']['data'][0]['Attachment'].length; i++){
+	                            	//console.log(i);
+	                            	const tmp = i;
+	                                $('button[data-btnid = "'+tmp+'"]').click(function(){
+	                                	console.log(tmp);
+	                					console.log("click");
+	                					$('div[id = "'+tmp+'"]').remove()
+	                				})
+	                            }
+	                            
+                            	$('#upload').click(function(){
+
+
+                            })
+                            
+                           }
+                        }
+                    })
+                }
+                            
+
+                
+                
+                
+                $('#submit').click(function() {
+                	console.log(boardid);
+                    updateMember(boardid);
+                });
+                
+                $(document).ready(function() {
+                	// 發出GET的AJAX請求取得原本該會員的資料
+                 	$("#sql_log > tbody").empty();
+                    getMember();
+                });
+            </script>
+        </div>
+        <div id="footer">
+            <a href="http://www.cakephp.org/" target="_blank" id="cake-powered"><img src="statics/img/cake.power.gif" alt="CakePHP: the rapid development php framework" border="0"></a>
+            <p>CakePHP 2.6.10</p>
+        </div>
+    </div>
+
+    <table class="cake-sql-log" id="sql_log" summary="Cake SQL Log" cellspacing="0">
+        <caption id="sql_summary">(default) 0 query took 0 ms</caption>
+        <thead>
+            <tr>
+                <th>Nr</th>
+                <th>Query</th>
+                <th>Error</th>
+                <th>Affected</th>
+                <th>Num. rows</th>
+                <th>Took (ms)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+
+</html>

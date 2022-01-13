@@ -11,8 +11,9 @@ public class Textbook {
 	public int CourseId;
 	public String TextbookName;
 	public String TextbookDetail;
+	public String Attachment;
 	/**附件**/
-	public ArrayList<String> Attachment = new ArrayList<String>();
+	//public ArrayList<String> Attachment = new ArrayList<String>();
 	public Date UpdateTime;
 	
 	private TextbookHelper th =  TextbookHelper.getHelper();
@@ -38,12 +39,21 @@ public class Textbook {
 	
 
 	
-	public Textbook(int TextbookId, String TextbookName, ArrayList<String> Attachment, Date UpdateTime) {
+	public Textbook(int TextbookId, String TextbookName, String Attachment, Date UpdateTime) {
 		this.TextbookId = TextbookId;
 		this.TextbookName = TextbookName;
 		this.Attachment = Attachment;
 		this.UpdateTime = UpdateTime;		
 	}
+	
+	public Textbook(int TextbookId, String TextbookName, String TextbookDetail, String Attachment, Date UpdateTime) {
+		this.TextbookId = TextbookId;
+		this.TextbookName = TextbookName;
+		this.TextbookDetail = TextbookDetail;
+		this.Attachment = Attachment;
+		this.UpdateTime = UpdateTime;		
+	}
+	
 	public int getTextbookId() {
 		return this.TextbookId;
 		
@@ -61,7 +71,7 @@ public class Textbook {
 		return this.TextbookDetail;
 	}
 	
-	public ArrayList<String> getAttachment() {
+	public String getAttachment() {
 		return this.Attachment;
 	}
 	
@@ -85,6 +95,7 @@ public class Textbook {
         JSONObject jso = new JSONObject();
         
         jso.put("TextbookId", getTextbookId());
+        jso.put("TextbookDetail", getTextbookDetail());
         jso.put("TextbookName", getTextbookName());
         jso.put("Attachment", getAttachment());
 //        jso.put("Attachment", getAttachment());
