@@ -50,8 +50,7 @@ public class CourseController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
-     //   int sdl = jso.getSdListId("studentList"); 
-     //   int pfl = jso.getPfListId("professorList");
+        String professor = jso.getString("professor");
         String name = jso.getString("name");
         String detail = jso.getString("detail");
         String semester = jso.getString("semester");
@@ -59,10 +58,10 @@ public class CourseController extends HttpServlet {
         int credit = jso.getInt("credit");
         
         /** 建立一個新的會員物件 */
-        Course c = new Course(name, detail, semester, department, credit); 
+        Course c = new Course(professor, name, detail, semester, department, credit); 
         
         /** 後端檢查是否有欄位為空值，若有則回傳錯誤訊息 */
-        if( name.isEmpty() || detail.isEmpty() || semester.isEmpty() || department.isEmpty() || credit == 0) {
+        if( professor.isEmpty() ||name.isEmpty() || detail.isEmpty() || semester.isEmpty() || department.isEmpty() || credit == 0) {
             /** 以字串組出JSON格式之資料 */
             String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
             /** 透過JsonReader物件回傳到前端（以字串方式） */
@@ -183,6 +182,7 @@ public class CourseController extends HttpServlet {
         
         /** 取出經解析到JSONObject之Request參數 */
         int id = jso.getInt("id"); //added
+        String professor = jso.getString("professor");
         String name = jso.getString("name");
         String detail = jso.getString("detail");
         String semester = jso.getString("semester");
@@ -190,7 +190,7 @@ public class CourseController extends HttpServlet {
         int credit = jso.getInt("credit");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
-        Course c = new Course(id, name, detail, semester, department, credit);
+        Course c = new Course(id, professor, name, detail, semester, department, credit);
         
         /** 透過Member物件的update()方法至資料庫更新該名會員資料，回傳之資料為JSONObject物件 */
         JSONObject data = c.update();
