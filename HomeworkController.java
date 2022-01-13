@@ -1,6 +1,7 @@
 package sa_project.controller;
 
 import java.io.*;
+import java.time.LocalTime;
 import java.util.Date;
 
 import javax.servlet.*;
@@ -49,8 +50,8 @@ public class HomeworkController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     	
-    	Date date = new Date();
-    	String hwupdatetime = date.toString();
+    	LocalTime time = LocalTime.now();
+    	String hwupdatetime = time.toString();
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
@@ -59,7 +60,7 @@ public class HomeworkController extends HttpServlet {
         /**判斷有無附加文件 以建立不同建構子**/
         if (hwdetailattachment.isEmpty()) {
         	int courseid = jso.getInt("CourseId");
-        	String hwtype = jso.getString("HwType");
+        	String hwtype = jso.getString("Type");
         	String hwopeningtime = jso.getString("HwOpeningTime");
         	String hwendingtime = jso.getString("HwEndingTime");
         	String hwdetail = jso.getString("HwDetail");
@@ -91,7 +92,7 @@ public class HomeworkController extends HttpServlet {
         }
         else {
         	int courseid = jso.getInt("CourseId");
-        	String hwtype = jso.getString("HwType");
+        	String hwtype = jso.getString("Type");
         	String hwopeningtime = jso.getString("HwOpeningTime");
         	String hwendingtime = jso.getString("HwEndingTime");
         	String hwdetail = jso.getString("HwDetail");
@@ -213,14 +214,15 @@ public class HomeworkController extends HttpServlet {
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
         Date date= new Date();
+        String update=date.toString();
         
         /** 取出經解析到JSONObject之Request參數 */
         int id = jso.getInt("HwId");
         int c_id = jso.getInt("CourseId");
-        String hwtype = jso.getString("HwType");
+        String hwtype = jso.getString("Type");
         String hwopeningtime = jso.getString("HwOpeningTime");
         String hwendingtime = jso.getString("HwEndingTime");
-		String hwupdatetime = date.toString();
+		String hwupdatetime = update;
         String hwdetail = jso.getString("HwDetail");
         String hwname = jso.getString("HwName");
 
@@ -239,13 +241,6 @@ public class HomeworkController extends HttpServlet {
         /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
         jsr.response(resp, response);
     }
-	public String HwType;
-	public String HwOpeningTime;
-	public String HwEndingTime;
-	public String HwUpdateTime;
-	public String HwDetail;
-	public String HwName;
-	public int HwScore;
-	public String HwDetailAttachment;
+
 }
 
