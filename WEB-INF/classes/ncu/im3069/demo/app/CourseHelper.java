@@ -153,6 +153,7 @@ public class CourseHelper {
                 
                 /** 將 ResultSet 之資料取出 */
                 int id = rs.getInt("CourseId");
+                String professor = rs.getString("Professor");
                 String name = rs.getString("CourseName");
                 String detail = rs.getString("CourseDetail");
                 String semester = rs.getString("Semester");
@@ -160,7 +161,7 @@ public class CourseHelper {
                 int credit = rs.getInt("Credit");
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
-                c = new Course(id, name, detail, semester, department, credit);
+                c = new Course(id, professor, name, detail, semester, department, credit);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getData());
             }
@@ -238,6 +239,7 @@ public class CourseHelper {
                 
                 /** 將 ResultSet 之資料取出 */
                 int course_id = rs.getInt("CourseId");
+                String professor = rs.getString("Professor");
                 String name = rs.getString("CourseName");
                 String detail = rs.getString("CourseDetail");
                 String semester = rs.getString("Semester");
@@ -245,7 +247,7 @@ public class CourseHelper {
                 int credit = rs.getInt("Credit");
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
-                c = new Course(course_id, name, detail, semester, department, credit);
+                c = new Course(course_id, professor, name, detail, semester, department, credit);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(c.getData());
             }
@@ -298,10 +300,11 @@ public class CourseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`course`(`CourseName`, `CourseDetail`, `Semester`, `Department`, `Credit`)"
-                    + " VALUES(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO `sa_project`.`course`(`Professor`,`CourseName`, `CourseDetail`, `Semester`, `Department`, `Credit`)"
+                    + " VALUES(?, ?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
+            String professor = c.getProfessor();
             String name = c.getName();
             String detail = c.getDetail();
             String semester = c.getSemester();
@@ -310,11 +313,12 @@ public class CourseHelper {
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
-            pres.setString(1, name);
-            pres.setString(2, detail);
-            pres.setString(3, semester);
-            pres.setString(4, department);
-            pres.setInt(5, credit);
+            pres.setString(1, professor);
+            pres.setString(2, name);
+            pres.setString(3, detail);
+            pres.setString(4, semester);
+            pres.setString(5, department);
+            pres.setInt(6, credit);
 
             
             /** 執行新增之SQL指令並記錄影響之行數 */
@@ -371,9 +375,10 @@ public class CourseHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`course` SET `CourseName` = ? ,`CourseDetail` = ? , `Semester` = ?, `Department` = ? , `Credit` = ? WHERE `CourseId` = ?";
+            String sql = "Update `sa_project`.`course` SET `Professor` = ?, `CourseName` = ? ,`CourseDetail` = ? , `Semester` = ?, `Department` = ? , `Credit` = ? WHERE `CourseId` = ?";
             /** 取得所需之參數 */
             int id = c.getId(); //added
+            String professor = c.getProfessor();
             String name = c.getName();
             String detail = c.getDetail();
             String semester = c.getSemester();
@@ -383,12 +388,13 @@ public class CourseHelper {
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
-            pres.setString(1,name); //add
-            pres.setString(2, detail);
-            pres.setString(3, semester);
-            pres.setString(4, department);
-            pres.setInt(5, credit);
-            pres.setInt(6, id); //add
+            pres.setString(1, professor);
+            pres.setString(2, name); //add
+            pres.setString(3, detail);
+            pres.setString(4, semester);
+            pres.setString(5, department);
+            pres.setInt(6, credit);
+            pres.setInt(7, id); //add
             
             /** 執行更新之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
