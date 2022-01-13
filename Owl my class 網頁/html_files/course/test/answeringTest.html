@@ -119,7 +119,7 @@ function updateSidebar(data) {
 	$.each(data, function(index, value) {
 		sidebar_list += '<li>';
 		sidebar_list += '<a href="answeringTest.html?questionid=' + value['id'] + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid +'">' ;
-		sidebar_list += '<span>第' + value['id'] + '題</span>';
+		sidebar_list += '<span>第' + '<span id="ques-id">' + value['id'] + '</span>' + '題</span>';
 		sidebar_list += '</a>' ;
 		sidebar_list += '</li>';
 	})
@@ -163,7 +163,7 @@ function updateHtml(data) {
 	}
 	$("#question").append(div_html);
 	if (question_data['id'] >= question_data.length){
-		$(#submit_btn).attr('value', '交卷');
+		$("#submit_btn").attr('value', '交卷');
 	}
 }
 
@@ -194,6 +194,9 @@ $('#submit_btn').click(function(){
 	submit();
 	if($('#submit_btn').attr('value') == '交卷'){
 		var target = 'test.html?'+btn_url;
+		window.location.href=target;
+	}else{
+	var target = "answeringTest.html?questionid=" + $('#ques-id').text() + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid;
 		window.location.href=target;
 	}
 });
