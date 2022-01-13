@@ -4,12 +4,10 @@
 		<title>OWL MY CLASS</title>
 		<meta charset="utf-8">
 		<base href="">
-		<link rel="icon" type="image/png" href="">
+		<link rel="icon" type="statics/img/logo." href="">
 		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<!--不知道為什麼有這行
-		<link href="../../../css_files/.css" type="text/css" rel="stylesheet">
-		-->
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -106,22 +104,22 @@
 									<td class="tr-title"><span class="text-bold">說明</span></td>
 									<td><textarea id="hwdetail" class="round-border blue-border homework-detail" name="description" placeholder="內文與檔案須至少擇一上傳" rows="6"></textarea></td>
 								</tr>
+								<!-- 
 								<tr>
 									<td class="tr-title"><span class="text-bold">附件</span></td>
 									<td><input id="hwdetailattachment" type="file" class="cursor-pointer"></td>
 								</tr>
+								 -->
+
 							</tbody>
 						</table>
-						<input type="submit" onclick="addHomework()" class="submit-btn round-border cursor-pointer" value="確認新增">
+						<input id="submit" type="submit" class="submit-btn round-border cursor-pointer" value="確認新增">	<!-- onclick="addHomework()" -->
 					</form>
 				</div>
 			</div>
 		</div>
 		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="../../../js_files/general.js"></script>
-		<script>
-			function addHomework(){
+						<!--
 				console.log("有執行");
 				var hwname = $('#hwname').val();
 				var hwopeningtime = $('#hwopeningtime').val();
@@ -138,22 +136,65 @@
 				};
 				
 				var data_string = JSON.stringify(data_object);
+				-->
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="statics/js/general.js"></script>
+		<script>
+			var url_string = window.location.href;
+			var url = new URL(url_string);
+			var id = url.searchParams.get("CourseId");
+	    	var date = new Date();
+	    	var iso_date = date.toISOString();
+	    	var type = "acw";
+	    	var id2 = 120;
+			console.log(iso_date);
+            $(document).ready(function() {
+                // 處理表單點擊事件
+                var $form = $('#submit');
+                $form.click(function() {
+                    submit();
+                });
 
-				$.ajax({
-					type: "POST",
-					url: "../../../../HomeworkController.java",
-					data: data_string,
-					crossDomain: true,
-					dataType: 'json',
-					success: function(){
-						window.alert('新增成功');
-					},
-					error: function(){
-						window.alert('新增失敗');					
-					}
-				})
-				
-			};		
+                function submit() {
+                    var data_object = {
+   		    			"CourseId": id2,
+   		    			"HwName": $("#hwname").val(),
+   		    			"HwDetail": $("#hwdetail").val(),
+   		    			"HeDetailAttachment": $("#hwdetailattachment").val(),
+   		    			"Type": type,
+   		    			// "UpdateTime": iso_date,
+   		    			"HwOpeningTime":$("#hwopeningtime").val(),
+   		    			"HwEndingTime": $("#hwendingtime").val()
+                    };
+
+                    // 將JSON格式轉換成字串
+                    var data_string = JSON.stringify(data_object);
+
+                    // 發出POST的AJAX請求
+                    $.ajax({
+                            type: "POST",
+                            url: "HomeworkController",
+                            data: data_string,
+                            crossDomain: true,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                //$('#flashMessage').html(response.message);
+                               // $('#flashMessage').show();
+                                if(response.status == 200){
+                                    //updateSQLTable(response.response);
+                                    console.log("成功");
+                                }
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                    });
+                }
+            });
 		</script>
 	</body>
 </html>
