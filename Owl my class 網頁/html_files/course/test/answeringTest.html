@@ -58,9 +58,6 @@
 				<div class="test-sidebar-container">
 					<div class="test-sidebar">
 						<ul class="test-sidebar-menu">
-							<li>
-								<a href="test.html?" id="handin_test_btn"><span class="text-bold">確認交卷</span></a>
-							</li>
 						</ul>
 						
 					</div>
@@ -91,7 +88,6 @@ var courseid = urlParams.get('courseid');
 //////////////在URL後加上參數///////////
 let sidebar_url = '';
 let btn_url = 'userid='+userid+'&courseid='+courseid+'&testid='+testid;
-appendURL('#handin_test_btn', btn_url);
 
 //////////////在url後加字串/////////
 function appendURL(selector, str){
