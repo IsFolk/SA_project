@@ -118,8 +118,8 @@ function updateSidebar(data) {
 	var sidebar_list = '';
 	$.each(data, function(index, value) {
 		sidebar_list += '<li>';
-		sidebar_list += '<a href="answeringTest.html?questionid=' + (value['id']) + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid +'">' ;
-		sidebar_list += '<span>第' + (value['id']) + '題</span>';
+		sidebar_list += '<a href="answeringTest.html?questionid=' + value['id'] + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid +'">' ;
+		sidebar_list += '<span>第' + value['id'] + '題</span>';
 		sidebar_list += '</a>' ;
 		sidebar_list += '</li>';
 	})
@@ -129,8 +129,9 @@ function updateSidebar(data) {
 function updateHtml(data) {
 	question_data = data[questionid-1];
 	var div_html = '';
+	div_html += '<span>第' + question_data['id'] + '題</span><br>';
 	div_html += '<span>' + question_data['text'] + '</span>' ;//題目內容
-	num = 0;
+	var num = 0;
 	if(question_data['answerA']!=""){ num += 1; }
 	if(question_data['answerB']!=""){ num += 1; }
 	if(question_data['answerC']!=""){ num += 1; }
