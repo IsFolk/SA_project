@@ -66,7 +66,7 @@
 					<form>
 						<div id="question"></div>
 						<br><br><br>
-						<input type="submit" class="submit-btn round-border" value="確認">
+						<input type="submit" id="submit_btn" class="submit-btn round-border next-ques-btn" value="下一題">
 					</form>
 				</div>
 				
@@ -162,6 +162,9 @@ function updateHtml(data) {
 			break;
 	}
 	$("#question").append(div_html);
+	if (question_data['id'] >= question_data.length){
+		$(#submit_btn).attr('value', '交卷');
+	}
 }
 
 /*
@@ -189,6 +192,10 @@ $.ajax({
 /////////////////////上傳/////////////////////
 $('#submit_btn').click(function(){
 	submit();
+	if($('#submit_btn').attr('value') == '交卷'){
+		var target = 'test.html?'+btn_url;
+		window.location.href=target;
+	}
 });
 		
 function submit() {
