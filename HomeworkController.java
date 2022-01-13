@@ -1,4 +1,4 @@
-package ncu.im3069.demo.controller;
+package sa_project.controller;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -9,8 +9,8 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.json.*;
-import ncu.im3069.demo.app.Homework;
-import ncu.im3069.demo.app.HomeworkHelper;
+import sa_project.app.Homework;
+import sa_project.app.HomeworkHelper;
 import sa_project.tools.JsonReader;
 
 
@@ -51,11 +51,9 @@ public class HomeworkController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     	
-    	//LocalTime time = LocalTime.now();
-    	//String hwupdatetime = time.toString();
-        Date date=new Date();
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
-        String hwupdatetime=ft.format(date);
+    	Date date =new Date();
+    	SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+    	String hwupdatetime=ft.format(date);
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
@@ -217,8 +215,9 @@ public class HomeworkController extends HttpServlet {
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
-        Date date= new Date();
-        String update=date.toString();
+    	Date date =new Date();
+    	SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+    	String hwupdatetime=ft.format(date);
         
         /** 取出經解析到JSONObject之Request參數 */
         int id = jso.getInt("HwId");
@@ -226,7 +225,6 @@ public class HomeworkController extends HttpServlet {
         String hwtype = jso.getString("Type");
         String hwopeningtime = jso.getString("HwOpeningTime");
         String hwendingtime = jso.getString("HwEndingTime");
-		String hwupdatetime = update;
         String hwdetail = jso.getString("HwDetail");
         String hwname = jso.getString("HwName");
 
