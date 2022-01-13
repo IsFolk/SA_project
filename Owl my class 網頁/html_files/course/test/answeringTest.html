@@ -191,7 +191,7 @@ function submit() {
 	var handin_ans_2 = '';
 	var handin_ans_3 = '';
 	var handin_ans_4 = '';
-	if(input_essay != ""){
+	if((input_essay != "")&&(input_essay != null)){
 		handin_ans_1 += input_essay;
 	}
 	var check1 = $("input[class=choice_1]:checked").val()
