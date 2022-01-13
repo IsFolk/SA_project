@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
+					</div>
+					<ul class="sidebar-menu" id="sidebar_menu">
+					</ul>
+				</div>
+
+				<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">作業</span>
+					</div>
+					<div class="hr"></div>
+					<a href="addHomework.html"><span class="text go-add-btn pro-only">新增作業</span></a>
+					<table class="content-tbl">
+						<thead>
+							<tr>
+								<td>名稱</td><td>結束時間</td>
+								<!-- <td class="stu-only">狀態</td> -->
+							</tr>
+						</thead>
+						<tbody id="hw_list"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="statics/js/general.js"></script>
+
+		<script>
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id = url.searchParams.get("id");
+		var HwId = url.searchParams.get("HwId");
+		  function getCourseInfo() {
+			  $.ajax({
+		          type: "GET",
+		          url: "HomeworkController",
+		          //data: "CourseId=" + Course_id + "&HwId=" + HwId,
+		          data: "CourseId=" + id,
+		          crossDomain: true,
+		          cache: false,
+		          dataType: 'json',
+		          timeout: 5000,
+		          success: function (response) {
+		              if(response.status == 200){
+		            	  updateMenu(response.response.data);
+		            	  updateHTML(response.response.data);
+		              }
+		          },
+		          error: function () {
+		              alert("無法連線到伺服器！");
+		          }
+		    });
+		  }		
+		  getCourseInfo();
+		  
+		 function updateMenu(data) {
+			 console.log(data);
+	         $("#sidebar_menu").empty();
+	         var table_html = '';
+	         $.each(data, function(key, value) {
+	             table_html += '<li>';
+	             table_html += '<a href="info.html?id='+ value['CourseId'] + '">' + '<span class="text">' + "課程資訊" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li>';
+	             table_html += '<a href="board.html?id='+ value['CourseId'] + '">' + '<span class="text">' + "課程公告" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li>';
+	             table_html += '<a href="textbookList.html?id='+ value['CourseId'] + '">' + '<span class="text">' + "課程教材" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li class="currentpage">';
+	             table_html += '<a href="homeworkList.html?id='+ value['CourseId'] + '">' + '<span class="text">' + "作業" + '</span>' + '</a>';
+	             table_html += '</li>';
+	             table_html += '<li>';
+	             table_html += '<a href="testList.html?id='+ value['CourseId'] + '">' + '<span class="text">' + "測驗" + '</span>' + '</a>';
+	             table_html += '</li>';
+	        })
+
+	         $("#sidebar_menu").append(table_html);
+	     }
+		 
+		 function updateHTML(data) {
+	         $("#hw_list").empty();
+	         var bodyRows = '';
+	         $.each(data, function(index, value) {
+	     		bodyRows += '<tr>';
+	    		bodyRows += '<td>' + '<a href="homework.html?id='+ value['id'] + '">' + '<span class="content-tbl-link">' + value['HwName'] + '</span>'+'</a>'+'</td>' ;
+	    		bodyRows += '<td>' + value['EndingTime'] + '</td>' ;
+	    		//bodyRows += '<td class="stu-only">' + hm.status + '</td>' ;
+	    		bodyRows += '</tr>';
+	        })
+
+	         $("#hw_list").append(bodyRows);
+	     }
+		 
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id = url.searchParams.get("id");
+		function getValue(varname){
+		  var url = window.location.href;
+		  var qparts = url.split("?");
+		  if (qparts.length == 0){
+			return "";
+			}
+			  var query = qparts[1];
+			  var vars = query.split("&amp;");
+			  var value = "";
+			  for (i=0; i<vars.length; i++){
+				var parts = vars[i].split("=");
+				if (parts[0] == varname){
+				  value = parts[1];
+				  break;
+				}
+			  }
+		  value = unescape(value);
+		  value.replace(/\+/g," ");
+		  return value;
+		}
+		
+		var id = getValue("id");
+		</script>		
+		
+	</body>
+</html>

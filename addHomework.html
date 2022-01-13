@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="statics/img/logo." href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
+					</div>
+					<ul id="sidebar_menu" class="sidebar-menu">
+						
+					</ul>
+				</div>
+				<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">新增作業</span>
+					</div>
+					<div class="hr"></div>
+					<form>
+						<table class="form-tbl">
+							<tbody>
+								<tr>
+									<td class="tr-title"><span class="text-bold">標題</span></td>
+									<td><textarea id="hwname" class="round-border blue-border homework-name" name="title" type="text" placeholder="標題為必填，限50字" maxlength="50"></textarea></td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">開放時間</span></td>
+									<td>
+										<input id="hwopeningtime" class="round-border blue-border blue-border" type="date">&ensp;<input class="round-border blue-border" type="time">
+									</td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">結束時間</span></td>
+									<td>
+										<input id="hwendingtime" class="round-border blue-border blue-border" type="date">&ensp;<input class="round-border blue-border" type="time">
+									</td>
+								</tr>
+								<tr>
+									<td class="tr-title"><span class="text-bold">說明</span></td>
+									<td><textarea id="hwdetail" class="round-border blue-border homework-detail" name="description" placeholder="內文與檔案須至少擇一上傳" rows="6"></textarea></td>
+								</tr>
+								<!-- 
+								<tr>
+									<td class="tr-title"><span class="text-bold">附件</span></td>
+									<td><input id="hwdetailattachment" type="file" class="cursor-pointer"></td>
+								</tr>
+								 -->
+
+							</tbody>
+						</table>
+						<input id="submit" type="submit" class="submit-btn round-border cursor-pointer" value="確認新增">	<!-- onclick="addHomework()" -->
+					</form>
+				</div>
+			</div>
+		</div>
+		
+						<!--
+				console.log("有執行");
+				var hwname = $('#hwname').val();
+				var hwopeningtime = $('#hwopeningtime').val();
+				var hwendingtime = $('#hwendingtime').val();
+				var hwdetail = $('#hwdetail').val();
+				var hwdetailattachment = $('#hwdetailattachment').val();		
+
+				var data_object ={
+					"hwname": hwname,
+					"hwopeningtime": hwopeningtime,
+					"hwendingtime": hwendingtime,
+					"hwdetail": hwdetail,
+					"hwdetailattachment": hwdetailattachment
+				};
+				
+				var data_string = JSON.stringify(data_object);
+				-->
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="statics/js/general.js"></script>
+		<script>
+			var url_string = window.location.href;
+			var url = new URL(url_string);
+			var id = url.searchParams.get("id");
+	    	var type = "0";
+            $(document).ready(function() {
+                // 處理表單點擊事件
+                var $form = $('#submit');
+                $form.click(function() {
+                    submit();
+                });
+
+                function submit() {
+                    var data_object = {
+   		    			"CourseId": id,
+   		    			"HwName": $("#hwname").val(),
+   		    			"HwDetail": $("#hwdetail").val(),
+   		    			"HeDetailAttachment": $("#hwdetailattachment").val(),
+   		    			"Type": type,
+   		    			"HwOpeningTime":$("#hwopeningtime").val(),
+   		    			"HwEndingTime": $("#hwendingtime").val()
+                    };
+
+                    // 將JSON格式轉換成字串
+                    var data_string = JSON.stringify(data_object);
+
+                    // 發出POST的AJAX請求
+                    $.ajax({
+                            type: "POST",
+                            url: "HomeworkController",
+                            data: data_string,
+                            crossDomain: true,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                //$('#flashMessage').html(response.message);
+                               // $('#flashMessage').show();
+                                if(response.status == 200){
+                                    //updateSQLTable(response.response);
+                                    console.log("成功");
+                                }
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                    });
+                }
+            });
+            
+            updateMenu(id)
+            function updateMenu(id) {
+                 $("#sidebar_menu").empty();
+                 var table_html = '';
+                 
+                 table_html += '<li class="currentpage">';
+                 table_html += '<a href="info.html?id='+ id + '">' + '<span class="text">' + "課程資訊" + '</span>' + '</a>';
+                 table_html += '</li>';
+                 table_html += '<li>';
+                 table_html += '<a href="board.html?id='+ id + '">' + '<span class="text">' + "課程公告" + '</span>' + '</a>';
+                 table_html += '</li>';
+                 table_html += '<li>';
+                 table_html += '<a href="textbookList.html?id='+ id + '">' + '<span class="text">' + "課程教材" + '</span>' + '</a>';
+                 table_html += '</li>';
+                 table_html += '<li>';
+                 table_html += '<a href="homeworkList.html?id='+ id + '">' + '<span class="text">' + "作業" + '</span>' + '</a>';
+                 table_html += '</li>';
+                 table_html += '<li>';
+                 table_html += '<a href="testList.html?id='+ id + '">' + '<span class="text">' + "測驗" + '</span>' + '</a>';
+                 table_html += '</li>';
+                
+                 $("#sidebar_menu").append(table_html);
+            }
+
+		</script>
+	</body>
+</html>
