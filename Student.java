@@ -64,12 +64,13 @@ public class Student extends User{
      * @param login_times 更新時間的分鐘數
      * @param status the 會員之組別
      */
-    public Student(int id, String email, String password, String name, String department) {
+    public Student(int id, String email, String password, String name, String department, int grade) {
         this.Id = id;
         this.Email = email;
         this.Password = password;
         this.Name = name;
         this.Department = department;
+        this.Grade = grade;
     }
     
     /**
@@ -121,6 +122,9 @@ public class Student extends User{
         return this.CourseListId;
     }
     
+    public int getGrade() {
+    	return this.Grade;
+    }
     
     /**
      * 更新會員資料
@@ -149,9 +153,11 @@ public class Student extends User{
         JSONObject jso = new JSONObject();
         jso.put("StudentId", getId());
         jso.put("StudentName", getName());
-        jso.put("StudentEmail", getEmail());
-        jso.put("StudentPassword", getPassword());
-        jso.put("StudentCourseListId", getCourseListId());
+        jso.put("Email", getEmail());
+        jso.put("Password", getPassword());
+        jso.put("CourseListId", getCourseListId());
+        jso.put("Department", getDepartment());
+        jso.put("Grade", getGrade());
         
         return jso;
     }
