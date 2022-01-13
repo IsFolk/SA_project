@@ -97,6 +97,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
 		//////////////把資料塞進table裡////////////
+/*
 var testData = {
 	courseName: "SA",
 	test: [
@@ -126,36 +127,31 @@ function json2table(jsonString, $table){
 }
 
 json2table(testJson, $(".content-tbl"));
-
+*/
 //////////////////////////////////////////////////////////////
+var bodyRows = '';
+
 $.ajax({
-        url: "api/test.do",
-        type: "GET",
-		dataType:"json",
-        success: function (info) {
-			console.log(info.length);
-			total_len = info.length;
-			
-			for(i=0;i<total_len;i++){
-				console.log(info[i].name);
-				
-				for(let cell of info){ //將資料填入表格
-				bodyRows += '<tr>';
-				bodyRows += '<td><a href="test.html"><span class="content-tbl-link">' + cell.name + '</span></a></td>' ;
-				bodyRows += '<td>' + cell.end_time + '</td>' ;
-				bodyRows += '<td class="stu-only">' + cell.status + '</td>' ;
-				bodyRows += '</tr>';
+	url: "api/test.do",
+	type: "GET",
+	dataType:"json",
+	success: function (info) {
+		console.log(info.length);
+		var total_len = info.length;
+		
+		for(i=0;i<total_len;i++){
+			console.log(info[i].name);
+			//將資料填入表格
+			bodyRows += '<tr>';
+			bodyRows += '<td><a href="test.html"><span class="content-tbl-link">' + info[i].name + '</span></a></td>' ;
+			bodyRows += '<td>' + info[i].end_time + '</td>';
+			bodyRows += '</tr>';
+		}
+		$table.find('tbody').append(bodyRows);
+	},				
+	error: function (data) {
+		console.log("請求失敗");
 	}
-	
-	$table.find('tbody').append(bodyRows);
-				
-			}
-						
-        },
-        error: function (data) {
-            console.log("請求失敗");
-        }
-    });
 });
 		</script>
 		<script src="../../../js_files/general.js"></script>
