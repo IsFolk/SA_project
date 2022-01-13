@@ -149,12 +149,13 @@ public class StudentHelper {
                 /** 將 ResultSet 之資料取出 */
                 int id = rs.getInt("StudentId");
                 String name = rs.getString("StudentName");
-                String email = rs.getString("StudentEmail");
-                String password = rs.getString("StudentPassword");
-                String department = rs.getString("StudentDepartment");
+                String email = rs.getString("Email");
+                String password = rs.getString("Password");
+                String department = rs.getString("Department");
+                int grade = rs.getInt("Grade");
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
-                s = new Student(id, email, password, name, department);
+                s = new Student(id, email, password, name, department, grade);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(s.getData());
             }
@@ -230,12 +231,13 @@ public class StudentHelper {
                 /** 將 ResultSet 之資料取出 */
                 int Id = rs.getInt("StudentId");
                 String name = rs.getString("StudentName");
-                String email = rs.getString("StudentEmail");
-                String password = rs.getString("StudentPassword");
-                String department = rs.getString("StudentDepartment");
+                String email = rs.getString("Email");
+                int Grade = rs.getInt("Grade");
+                String department = rs.getString("Department");
+                String password = rs.getString("Password");
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
-                s = new Student(Id, email, password, name, department);
+                s = new Student(Id, email, password, name, department, Grade );
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(s.getData());
             }
@@ -283,7 +285,7 @@ public class StudentHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT count(*) FROM `sa_project`.`student` WHERE `StudentEmail` = ?";
+            String sql = "SELECT count(*) FROM `sa_project`.`student` WHERE `Email` = ?";
             
             /** 取得所需之參數 */
             String email = p.getEmail();
@@ -335,7 +337,7 @@ public class StudentHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "INSERT INTO `sa_project`.`student`(`StudentName`, `StudentEmail`, `Studentpassword`, `StudentDeaprtment`)"
+            String sql = "INSERT INTO `sa_project`.`student`(`StudentName`, `Email`, `password`, `Deaprtment`)"
                     + " VALUES(?, ?, ?, ?)";
             
             /** 取得所需之參數 */
@@ -403,7 +405,7 @@ public class StudentHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "Update `sa_project`.`student` SET `StudentName` = ? ,`StudentPassword` = ?  WHERE `StudentEmail` = ?";
+            String sql = "Update `sa_project`.`student` SET `StudentName` = ? ,`Password` = ?  WHERE `Email` = ?";
             /** 取得所需之參數 */
             String name = p.getName();
             String email = p.getEmail();
