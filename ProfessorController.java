@@ -12,9 +12,8 @@ import sa_project.tools.JsonReader;
 /**
  * Servlet implementation class ProfessorController
  */
-@WebServlet("/ProfessorController")
 
-
+//@WebServlet("/ProfessorController")
 // TODO: Auto-generated Javadoc
 /**
  * <p>
@@ -50,8 +49,8 @@ public class ProfessorController extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         /** 取出經解析到JSONObject之Request參數 */
-        String email = jso.getString("ProfessorEmail");
-        String password = jso.getString("ProfessorPassword");
+        String email = jso.getString("Email");
+        String password = jso.getString("Password");
         String name = jso.getString("ProfessorName");
         
         /** 建立一個新的會員物件 */
@@ -179,8 +178,8 @@ public class ProfessorController extends HttpServlet {
         
         /** 取出經解析到JSONObject之Request參數 */
         int id = jso.getInt("ProfessorId");
-        String email = jso.getString("Professoremail");
-        String password = jso.getString("ProfessorPassword");
+        String email = jso.getString("Email");
+        String password = jso.getString("Password");
         String name = jso.getString("ProfessorName");
 
         /** 透過傳入之參數，新建一個以這些參數之會員Member物件 */
