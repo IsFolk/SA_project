@@ -6,7 +6,11 @@
 		<base href="">
 		<link rel="icon" type="image/png" href="">
 		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
-		
+		<style>
+		#question{
+			margin: 50px 30px;
+		}
+		</style>
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -66,7 +70,7 @@
 					<form>
 						<div id="question"></div>
 						<br><br><br>
-						<input type="submit" id="submit_btn" class="submit-btn round-border next-ques-btn" value="下一題">
+						<input type="button" id="submit_btn" class="submit-btn round-border next-ques-btn" value="下一題">
 					</form>
 				</div>
 				
@@ -119,7 +123,7 @@ function updateSidebar(data) {
 	$.each(data, function(index, value) {
 		sidebar_list += '<li>';
 		sidebar_list += '<a href="answeringTest.html?questionid=' + value['id'] + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid +'">' ;
-		sidebar_list += '<span>第' + '<span id="ques-id">' + value['id'] + '</span>' + '題</span>';
+		sidebar_list += '<span>第' + value['id'] + '題</span>';
 		sidebar_list += '</a>' ;
 		sidebar_list += '</li>';
 	})
@@ -129,7 +133,7 @@ function updateSidebar(data) {
 function updateHtml(data) {
 	question_data = data[questionid-1];
 	var div_html = '';
-	div_html += '<span>第' + question_data['id'] + '題</span><br>';
+	div_html += '<span class="text-bold">第</span><span id="ques-id" class="text-bold">' + question_data['id'] + '</span><span class="text-bold">題</span><br><br><br>';
 	div_html += '<span>' + question_data['text'] + '</span>' ;//題目內容
 	var num = 0;
 	if(question_data['answerA']!=""){ num += 1; }
@@ -162,42 +166,22 @@ function updateHtml(data) {
 			break;
 	}
 	$("#question").append(div_html);
-	if (question_data['id'] >= question_data.length){
+	
+	if (parseInt(question_data['id']) >= data.length){
 		$("#submit_btn").attr('value', '交卷');
 	}
 }
 
-/*
-$.ajax({
-	url: "api/Question.do",  
-	type: "GET",
-	data: "QuestionId="+'1',
-	//data: {"QuestionId":questionid, "TestId":testid},
-	dataType:"json",
-	crossDomain: true,
-	cache: false,
-	timeout: 5000,
-	success: function (response) {
-		if(response.status == 200){
-			updateHtml(response.response.data);
-		}
-    },
-	error: function () {
-		console.log("請求失敗");
-	}
-
-});
-*/
-
-/////////////////////上傳/////////////////////
+///////////////////點擊submit按鈕/////
 $('#submit_btn').click(function(){
 	submit();
 	if($('#submit_btn').attr('value') == '交卷'){
-		var target = 'test.html?'+btn_url;
+		let target = 'test.html?'+btn_url;
 		window.location.href=target;
 	}else{
-	var target = "answeringTest.html?questionid=" + $('#ques-id').text() + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid;
-		window.location.href=target;
+		let n = parseInt($('#ques-id').text())+1;
+		let target = "answeringTest.html?questionid=" + n + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid;
+		window.location.href = target;
 	}
 });
 		
