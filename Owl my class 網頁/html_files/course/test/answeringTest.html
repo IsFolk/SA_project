@@ -5,8 +5,7 @@
 		<meta charset="utf-8">
 		<base href="">
 		<link rel="icon" type="image/png" href="">
-		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
 		
 	</head>
 	<body>
@@ -94,8 +93,8 @@ appendURL('#handin_test_btn', btn_url);
 function appendURL(selector, str){
 	$(selector).attr('href', $(selector).attr('href')+str);
 }
-////////////////載入左邊選單////////
-/*
+////////////////載入左邊選單&題目////////
+
 $.ajax({
 	type: "GET",
 	url: "api/Question.do",
@@ -107,6 +106,7 @@ $.ajax({
 	success: function (response) {
 		if(response.status == 200){
 			updateSidebar(response.response.data);
+			updateHtml(response.response.data);
 		}
 	},
 	error: function () {
@@ -118,17 +118,52 @@ function updateSidebar(data) {
 	var sidebar_list = '';
 	$.each(data, function(index, value) {
 		sidebar_list += '<li>';
-		sidebar_list += '<a href="answeringTest.html?questionid=' + (value['id']+1) + '">' ;
-		sidebar_list += '<span>第' + (value['id']+1) + '題</span>';
+		sidebar_list += '<a href="answeringTest.html?questionid=' + (value['id']) + '&testid=' + testid + '&userid=' + userid + '&courseid=' + courseid +'">' ;
+		sidebar_list += '<span>第' + (value['id']) + '題</span>';
 		sidebar_list += '</a>' ;
 		sidebar_list += '</li>';
 	})
 
 	$(".test-sidebar-menu").append(sidebar_list);
 }
-*/
-////////////////////////載入題目//////////////////////////
+function updateHtml(data) {
+	question_data = data[questionid-1];
+	var div_html = '';
+	div_html += '<span>' + question_data['text'] + '</span>' ;//題目內容
+	num = 0;
+	if(question_data['answerA']!=null){ num += 1; }
+	if(question_data['answerB']!=null){ num += 1; }
+	if(question_data['answerC']!=null){ num += 1; }
+	if(question_data['answerD']!=null){ num += 1; }
+	switch(num){
+		case 0: //簡答題
+			div_html += '<textarea class="essay round-border blue-border" rows="6"></textarea>';
+			break;
+			
+		case 1: //單選題
+			div_html += '<ul class="choice-list">';
+			div_html += '<li><input type="radio" class="choice_1"  name="1" question_data="1"><span class="choice-text">'+question_data["optionA"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_2"  name="1" question_data="1"><span class="choice-text">'+question_data["optionB"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_3"  name="1" question_data="1"><span class="choice-text">'+question_data["optionC"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_4"  name="1" question_data="1"><span class="choice-text">'+question_data["optionD"]+'</span></li>';
+			div_html += '</ul>';
+			break;
+			
+		case 2: //多選題
+		case 3:
+		case 4:
+			div_html += '<ul class="choice-list">';
+			div_html += '<li><input type="checkbox" class="choice_1"  name="2" question_data="1"><span class="choice-text">'+question_data['optionA']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_2"  name="2" question_data="1"><span class="choice-text">'+question_data['optionB']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_3"  name="2" question_data="1"><span class="choice-text">'+question_data['optionC']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_4"  name="2" question_data="1"><span class="choice-text">'+question_data['optionD']+'</span></li>';
+			div_html += '</ul>';
+			break;
+	}
+	$("#question").append(div_html);
+}
 
+/*
 $.ajax({
 	url: "api/Question.do",  
 	type: "GET",
@@ -148,41 +183,8 @@ $.ajax({
 	}
 
 });
-function updateHtml(data) {
-	var div_html = '';
-	div_html += '<span>' + data['text'] + '</span>' ;//題目內容
-	num = 0;
-	if(data['answerA']!=null){ num += 1; }
-	if(data['answerB']!=null){ num += 1; }
-	if(data['answerC']!=null){ num += 1; }
-	if(data['answerD']!=null){ num += 1; }
-	switch(num){
-		case 0: //簡答題
-			div_html += '<textarea class="essay round-border blue-border" rows="6"></textarea>';
-			break;
-			
-		case 1: //單選題
-			div_html += '<ul class="choice-list">';
-			div_html += '<li><input type="radio" class="choice_1"  name="1" data="1"><span class="choice-text">'+data["optionA"]+'</span></li>';
-			div_html += '<li><input type="radio" class="choice_2"  name="1" data="1"><span class="choice-text">'+data["optionB"]+'</span></li>';
-			div_html += '<li><input type="radio" class="choice_3"  name="1" data="1"><span class="choice-text">'+data["optionC"]+'</span></li>';
-			div_html += '<li><input type="radio" class="choice_4"  name="1" data="1"><span class="choice-text">'+data["optionD"]+'</span></li>';
-			div_html += '</ul>';
-			break;
-			
-		case 2: //多選題
-		case 3:
-		case 4:
-			div_html += '<ul class="choice-list">';
-			div_html += '<li><input type="checkbox" class="choice_1"  name="2" data="1"><span class="choice-text">'+data['optionA']+'</span></li>';
-			div_html += '<li><input type="checkbox" class="choice_2"  name="2" data="1"><span class="choice-text">'+data['optionB']+'</span></li>';
-			div_html += '<li><input type="checkbox" class="choice_3"  name="2" data="1"><span class="choice-text">'+data['optionC']+'</span></li>';
-			div_html += '<li><input type="checkbox" class="choice_4"  name="2" data="1"><span class="choice-text">'+data['optionD']+'</span></li>';
-			div_html += '</ul>';
-			break;
-	}
-	$("#question").append(div_html);
-}
+*/
+
 /////////////////////上傳/////////////////////
 $('#submit_btn').click(function(){
 	submit();
@@ -249,6 +251,6 @@ function submit() {
 
 
 		</script>
-		<script src="../../../js_files/general.js"></script>
+		<script src="statics/js/general.js"></script>
 	</body>
 </html>
