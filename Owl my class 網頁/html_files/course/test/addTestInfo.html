@@ -58,8 +58,11 @@
 							<li class="currentpage">
 								<a href="addTestInfo.html"><span class="text">測驗資訊</span></a>
 							</li>
+							<li>
+								<a href="addTestQuestion.html"><span id="add_question">新增題目</span></a>
+							</li>
 						</ul>
-						<a href="addTestQuestion.html"><span id="" class="text add-question-btn">+ 新增題目</span></a>
+						
 					</div>
 				</div>
 			<!--右下區域-->
@@ -87,10 +90,6 @@
 									<td class="tr-title"><span class="text-bold">說明</span></td>
 									<td><textarea class="round-border blue-border" id="test_detail" name="description" placeholder="測驗說明"></textarea></td>
 								</tr>
-								<tr>
-									<td class="tr-title"><span class="text-bold">配分</span></td>
-									<td><span class="text">平均分配總分</span><input id="total-score" class="round-border blue-border" type="number"><span class="text">分</span></td>
-								</tr>
 							</tbody>
 						</table>
 						<input id="submit_btn" type="submit" class="submit-btn round-border" value="完成編輯">
@@ -109,10 +108,47 @@ $('#opening_time').attr("value",'08:30');
 $('#ending_date').attr("value",'2022-01-03');
 $('#ending_time').attr("value",'09:30');
 $('#test_detail').text("測驗說明");
+///////////////side bar//////////////////////
+var question_data = [];
+$.ajax({
+		type: "GET",
+		url: "api/Question.do",
+		crossDomain: true,
+		cache: false,
+		dataType: 'json',
+		timeout: 5000,
+		success: function (response) {
+			if(response.status == 200){
+				question_data = response.response.data;
+			}
+			console.log(response);
+		},
+		error: function () {
+			alert("無法連線到伺服器！");
+		}
+});
+console.log(question_data);
+
+function updateTable(data) {
+	var table_html = '';
+	$.each(data, function(index, value) {
+		table_html += '<li>';
+		table_html += '<td><a href="test.html"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
+		table_html += '<td>' + value['end_time'] + '</td>';
+		table_html += '</li>';
+	})
+
+	$(".test-sidebar-menu").append(table_html);
+}
+
 
 ////////////////////////////////////////////////////
 $('#submit_btn').click(function(){
 	submit();
+});
+
+$('#add_question').click(function(){
+	addQuestion();
 });
 		
 function submit() {
@@ -120,16 +156,11 @@ function submit() {
 	var opentime_input = $('#opening_date').val() + ' ' + $('#opening_time').val() + ':00';
 	var endtime_input = $('#ending_date').val() + ' ' + $('#ending_time').val() + ':00';
 	var test_detail = $('#test_detail').val();
-	var total_score = $('#total-score').val();
-	
-	alert(opentime_input);
 	
 	if (test_name == ''){
 		alert("請輸入測驗標題!");
 	}else if((opening_time == '')||(ending_time == '')){
 		alert("請輸入測驗時間!");
-	}else if(total_score == ''){
-		alert("請輸入總分!");
 	}else{
 		//將資料轉成JSON格式
 		var data_object = {
@@ -137,26 +168,21 @@ function submit() {
 			"TestDetail":　test_detail,
 			"OpeningTime": opentime_input,
 			"EndingTime": endtime_input,
-			"TestTotalScore": total_score  //測驗資料表裡有這一項嗎??
 		};
 		//將JSON格式轉成字串
 		var data_string = JSON.stringify(data_object);
 		//發出POST的AJAX請求
 		$.ajax({
 			type: "POST",
-			url: "api/test.do",
+			url: "api/Test.do",
 			data: data_string,
 			crossDomain: true,
 			cache: false,
 			dataType: 'json',
 			timeout: 5000,
 			success: function(response){
-				alert("上傳成功!");
-				console.log("response.message");
-				console.log("response.response");
-				console.log("response.status");
 				if(response.status == 200){
-					updateSQLTable(response.response);
+					alert("上傳成功!");
 				}
 			},
 			error: function(){
@@ -164,6 +190,10 @@ function submit() {
 			}
 		});
 	}
+}
+
+function addQuestion(){
+	
 }
 		</script>
 		<script src="../../../js_files/general.js"></script>
