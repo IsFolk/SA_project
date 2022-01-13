@@ -143,10 +143,10 @@ function updateHtml(data) {
 			
 		case 1: //單選題
 			div_html += '<ul class="choice-list">';
-			div_html += '<li><input type="radio" class="choice_1"  name="1" question_data="1"><span class="choice-text">'+question_data["optionA"]+'</span></li>';
-			div_html += '<li><input type="radio" class="choice_2"  name="1" question_data="1"><span class="choice-text">'+question_data["optionB"]+'</span></li>';
-			div_html += '<li><input type="radio" class="choice_3"  name="1" question_data="1"><span class="choice-text">'+question_data["optionC"]+'</span></li>';
-			div_html += '<li><input type="radio" class="choice_4"  name="1" question_data="1"><span class="choice-text">'+question_data["optionD"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_1"  name="1" value="1"><span class="choice-text">'+question_data["optionA"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_2"  name="1" value="1"><span class="choice-text">'+question_data["optionB"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_3"  name="1" value="1"><span class="choice-text">'+question_data["optionC"]+'</span></li>';
+			div_html += '<li><input type="radio" class="choice_4"  name="1" value="1"><span class="choice-text">'+question_data["optionD"]+'</span></li>';
 			div_html += '</ul>';
 			break;
 			
@@ -154,10 +154,10 @@ function updateHtml(data) {
 		case 3:
 		case 4:
 			div_html += '<ul class="choice-list">';
-			div_html += '<li><input type="checkbox" class="choice_1"  name="2" question_data="1"><span class="choice-text">'+question_data['optionA']+'</span></li>';
-			div_html += '<li><input type="checkbox" class="choice_2"  name="2" question_data="1"><span class="choice-text">'+question_data['optionB']+'</span></li>';
-			div_html += '<li><input type="checkbox" class="choice_3"  name="2" question_data="1"><span class="choice-text">'+question_data['optionC']+'</span></li>';
-			div_html += '<li><input type="checkbox" class="choice_4"  name="2" question_data="1"><span class="choice-text">'+question_data['optionD']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_1"  name="2" value="1"><span class="choice-text">'+question_data['optionA']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_2"  name="2" value="1"><span class="choice-text">'+question_data['optionB']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_3"  name="2" value="1"><span class="choice-text">'+question_data['optionC']+'</span></li>';
+			div_html += '<li><input type="checkbox" class="choice_4"  name="2" value="1"><span class="choice-text">'+question_data['optionD']+'</span></li>';
 			div_html += '</ul>';
 			break;
 	}
