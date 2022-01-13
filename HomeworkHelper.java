@@ -124,8 +124,7 @@ private HomeworkHelper() {
             pres.setString(5, hwdetail);
             pres.setString(6, hwname);
             
-
-            
+         
             /** 執行新增之SQL指令並記錄影響之行數 */
             row = pres.executeUpdate();
             
@@ -167,7 +166,7 @@ private HomeworkHelper() {
         
         try {
             conn = DBMgr.getConnection();
-            String sql = "DELETE FROM `sa_project`.`hw` WHERE `id` = ? LIMIT 1";
+            String sql = "DELETE FROM `sa_project`.`hw` WHERE `HwId` = ? LIMIT 1";
             pres = conn.prepareStatement(sql);
             pres.setInt(1, id);
             row = pres.executeUpdate();
@@ -194,7 +193,7 @@ private HomeworkHelper() {
     }
     
     /**拿取全部作業**/
-    public JSONObject getAll() {
+    public JSONObject getAll(String id) {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
         Homework h = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
@@ -212,10 +211,11 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`hw`";
+            String sql = "SELECT * FROM `sa_project`.`hw` WHERE `CourseId`=?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
+            pres.setString(1, id);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
 
@@ -289,7 +289,7 @@ private HomeworkHelper() {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`hw` WHERE `CourseId` = ? LIMIT 1";
+            String sql = "SELECT * FROM `sa_project`.`hw` WHERE `HwId` = ? LIMIT 1";
             
             /** 將參數回填至SQL指令當中 */
             pres = conn.prepareStatement(sql);
