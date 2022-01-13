@@ -101,7 +101,8 @@ function getValue(varname)
   return value;
 }
 
-var id = 1;
+var questionid = 2;
+var testid = 4;
 
 ////////////////載入左邊選單////////
 /*
@@ -129,7 +130,7 @@ function updateSidebar(data) {
 	var sidebar_list = '';
 	$.each(data, function(index, value) {
 		sidebar_list += '<li>';
-		sidebar_list += '<a href="answeringTest.html?id=' + (value['id']+1) + '">' ;
+		sidebar_list += '<a href="answeringTest.html?questionid=' + (value['id']+1) + '">' ;
 		sidebar_list += '<span>第' + (value['id']+1) + '題</span>';
 		sidebar_list += '</a>' ;
 		sidebar_list += '</li>';
@@ -143,7 +144,7 @@ function updateSidebar(data) {
 $.ajax({
 	url: "api/Question.do",  
 	type: "GET",
-	data: "id=" + id,
+	data: "QuestionId=" + questionid + "&TestId" + testid,
 	dataType:"json",
 	crossDomain: true,
 	cache: false,
