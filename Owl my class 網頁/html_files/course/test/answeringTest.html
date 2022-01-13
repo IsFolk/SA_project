@@ -131,10 +131,10 @@ function updateHtml(data) {
 	var div_html = '';
 	div_html += '<span>' + question_data['text'] + '</span>' ;//題目內容
 	num = 0;
-	if(question_data['answerA']!=null){ num += 1; }
-	if(question_data['answerB']!=null){ num += 1; }
-	if(question_data['answerC']!=null){ num += 1; }
-	if(question_data['answerD']!=null){ num += 1; }
+	if(question_data['answerA']!=""){ num += 1; }
+	if(question_data['answerB']!=""){ num += 1; }
+	if(question_data['answerC']!=""){ num += 1; }
+	if(question_data['answerD']!=""){ num += 1; }
 	switch(num){
 		case 0: //簡答題
 			div_html += '<textarea class="essay round-border blue-border" rows="6"></textarea>';
@@ -200,7 +200,7 @@ function submit() {
 	var handin_ans_2 = '';
 	var handin_ans_3 = '';
 	var handin_ans_4 = '';
-	if(input_essay != null){
+	if(input_essay != ""){
 		handin_ans_1 += input_essay;
 	}
 	var check1 = $("input[class=choice_1]:checked").val()
