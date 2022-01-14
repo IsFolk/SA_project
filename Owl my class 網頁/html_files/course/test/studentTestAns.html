@@ -248,10 +248,10 @@ function updateStuAns(data){
 		c2 = '#' + value['id'] + 'choice_2';
 		c3 = '#' + value['id'] + 'choice_3';
 		c4 = '#' + value['id'] + 'choice_4';
-		if($(o1) == value['handInAnswer1']){$(c1).attr('checked', 'true');}
-		if($(o2) == value['handInAnswer2']){$(c2).attr('checked', 'true');}
-		if($(o3) == value['handInAnswer3']){$(c3).attr('checked', 'true');}
-		if($(o4) == value['handInAnswer4']){$(c4).attr('checked', 'true');}
+		if($(o1).text() == value['handInAnswer1']){$(c1).attr('checked', true);}
+		if($(o2).text() == value['handInAnswer2']){$(c2).attr('checked', true);}
+		if($(o3).text() == value['handInAnswer3']){$(c3).attr('checked', true);}
+		if($(o4).text() == value['handInAnswer4']){$(c4).attr('checked', true);}
 	});
 }
 		</script>
