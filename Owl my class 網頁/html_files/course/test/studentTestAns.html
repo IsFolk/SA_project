@@ -172,7 +172,7 @@ function updateQuestion(data) {
 		tbl_html += n + '.';
 		tbl_html += '</td>';
 		tbl_html += '<td><span>' + value["text"] + '</span></tr>' ;//題目內容
-		tbl_html += '<tr><td></td><td id="tbl_' + n + '">';
+		tbl_html += '<tr><td></td><td id="' + value['id'] + '">';
 		
 		switch(num){
 			case 0: //簡答題
@@ -219,8 +219,34 @@ function updateQuestion(data) {
 	$('#question-tbl').append(tbl_html);
 	
 }
-///////////////////////////////////////////////////////
+//////////////////////載入學生作答結果/////////////////////////////////
+$.ajax({
+	url: "api/HandIn.do",  
+	type: "GET",
+	data: "TestId="+testid,
+	dataType:"json",
+	crossDomain: true,
+	cache: false,
+	timeout: 5000,
+	success: function (response) {
+		if(response.status == 200){
+			updateStuAns(response.response.data);
+		}
+    },
+	error: function () {
+		console.log("請求失敗");
+	}
+});
 
+function updateStuAns(data){
+	$.each(data, function(index, value) {
+		n = '#' + value['id'];
+		if($(n '.option1') == value['handInAnswer1']){$(n '.choice1').attr('checked', 'true');}
+		if($(n '.option2') == value['handInAnswer2']){$(n '.choice2').attr('checked', 'true');}
+		if($(n '.option3') == value['handInAnswer3']){$(n '.choice3').attr('checked', 'true');}
+		if($(n '.option4') == value['handInAnswer4']){$(n '.choice4').attr('checked', 'true');}
+	});
+}
 		</script>
 		<script src="statics/js/general.js"></script>
 	</body>
