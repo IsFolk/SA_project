@@ -12,7 +12,7 @@ import sa_project.tools.JsonReader;
 /**
  * Servlet implementation class ProfessorController
  */
-@WebServlet("/HandInHwController")
+//@WebServlet("HandInHwController")
 
 
 // TODO: Auto-generated Javadoc
@@ -93,12 +93,25 @@ public class HandInHwController extends HttpServlet {
         /** 透過JsonReader類別將Request之JSON格式資料解析並取回 */
         JsonReader jsr = new JsonReader(request);
         /** 若直接透過前端AJAX之data以key=value之字串方式進行傳遞參數，可以直接由此方法取回資料 */
-        String id = jsr.getParameter("StudentId");
-        String id2= jsr.getParameter("CourseId");
+        String id = jsr.getParameter("CourseId");
+        String id2= jsr.getParameter("HwId");
         
         System.out.println(request);
         
-        /** 透過MemberHelper物件的getByID()方法自資料庫取回該名會員之資料，回傳之資料為JSONObject物件 */
+        if (id2.isEmpty()) {
+            /** 透過MemberHelper物件之getAll()方法取回所有會員之資料，回傳之資料為JSONObject物件 */
+            JSONObject query = hih.getAll(id);
+            
+            /** 新建一個JSONObject用於將回傳之資料進行封裝 */
+            JSONObject resp = new JSONObject();
+            resp.put("status", "200");
+            resp.put("message", "所有會員資料取得成功");
+            resp.put("response", query);
+    
+            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+            jsr.response(resp, response);
+        }
+        else {
         JSONObject query = hih.getByID(id,id2);
             
         /** 新建一個JSONObject用於將回傳之資料進行封裝 */
@@ -107,8 +120,9 @@ public class HandInHwController extends HttpServlet {
         resp.put("message", "會員資料取得成功");
         resp.put("response", query);
     
-        /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
-        jsr.response(resp, response);
+            /** 透過JsonReader物件回傳到前端（以JSONObject方式） */
+            jsr.response(resp, response);
+        }
         
     }
 
