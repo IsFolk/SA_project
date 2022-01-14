@@ -5,8 +5,6 @@
 		<meta charset="utf-8">
 		<base href="">
 		<link rel="icon" type="image/png" href="">
-		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
 		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
@@ -59,16 +57,16 @@
 					</div>
 					<ul class="sidebar-menu">
 						<li>
-							<a href="../info/info.html"><span class="text">課程資訊</span></a>
+							<a href="../info/info.html?"><span class="text">課程資訊</span></a>
 						</li>
 						<li>
-							<a href="../board/board.html"><span class="text">課程公告</span></a>
+							<a href="../board/board.html?"><span class="text">課程公告</span></a>
 						</li>
 						<li>
-							<a href="../textbook/textbookList.html"><span class="text">課程教材</span></a>
+							<a href="../textbook/textbookList.html?"><span class="text">課程教材</span></a>
 						</li>
 						<li>
-							<a href="../homework/homeworkList.html"><span class="text">作業</span></a>
+							<a href="../homework/homeworkList.html?"><span class="text">作業</span></a>
 						</li>
 						<li class="currentpage">
 							<a href="testList.html"><span class="text">測驗</span></a>
@@ -81,14 +79,15 @@
 						<span class="text-bold">測驗</span>
 					</div>
 					<div class="hr"></div>
-					<a href="addTestInfo.html"><span class="text go-add-btn pro-only">新增測驗</span></a>
+					<a href="addTestInfo.html" id="add-test-btn"><span class="text go-add-btn pro-only">新增測驗</span></a>
 					<table class="content-tbl">
 						<thead>
 							<tr>
 								<td>名稱</td><td>結束時間</td>
 							</tr>
 						</thead>
-						<tbody></tbody>
+						<tbody>
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -96,66 +95,25 @@
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
-		//////////////把資料塞進table裡////////////
-/*
-var testData = {
-	courseName: "SA",
-	test: [
-		{title: "測驗一", endDate: "2021.12.3", status: "59"}, 
-		{title: "測驗二", endDate: "2021.12.4", status: "6"}, 
-		{title: "測驗三", endDate: "2021.12.15", status: "尚未作答"},
-		{title: "喵喵", endDate: "タコヤキ", status: "尚未作答"},
-		{title: "喵喵", endDate: "食べたい", status: "尚未作答"}
-	]
-};
-var testJson = JSON.stringify(testData); //產生測試用的JSON資料
+		///////////////////從URL接收參數///////////////////////////
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+var userid = urlParams.get('userid');
+var courseid = urlParams.get('courseid');
 
-function json2table(jsonString, $table){
-	var json = JSON.parse(jsonString); 
-	
-	var bodyRows = '';
-	
-	for(let cell of json.test){ //將資料填入表格
-		bodyRows += '<tr>';
-		bodyRows += '<td><a href="test.html"><span class="content-tbl-link">' + cell.title + '</span></a></td>' ;
-		bodyRows += '<td>' + cell.endDate + '</td>' ;
-		bodyRows += '<td class="stu-only">' + cell.status + '</td>' ;
-		bodyRows += '</tr>';
-	}
-	
-	$table.find('tbody').append(bodyRows);
+//////////////在URL後加上參數///////////
+var str = 'courseid=' + courseid + '&userid=' + userid;
+appendURL('.sidebar_link', str);
+str = 'courseid=' + courseid + '&testid=0' + '&userid=' + userid;
+appendURL('#add-test-btn', str);
+
+//////////////在url後加字串/////////
+function appendURL(selector, str){
+	$(selector).attr('href', $(selector).attr('href')+str);
 }
 
-json2table(testJson, $(".content-tbl"));
-*/
-//////////////////////////////////////////////////////////////
-//var bodyRows = '';
-/*
-$.ajax({
-	url: "api/test.do",
-	type: "GET",
-	dataType:"json",
-	success: function (info) {
-		console.log(info.length);
-		var total_len = info.length;
 		
-		for(i=0;i<total_len;i++){
-			console.log(info[i].name);
-			//將資料填入表格
-			bodyRows += '<tr>';
-			bodyRows += '<td><a href="test.html"><span class="content-tbl-link">' + info[i].name + '</span></a></td>' ;
-			bodyRows += '<td>' + info[i].end_time + '</td>';
-			bodyRows += '</tr>';
-		}
-		$('.content-tbl tbody').append(bodyRows);
-	},				
-	error: function (data) {
-		console.log("請求失敗");
-	}
-});
-*/
-
-/////////////////////////////////////
+		//////////////把資料塞進table裡////////////
 $.ajax({
 		type: "GET",
 		url: "api/Test.do",
@@ -175,18 +133,20 @@ $.ajax({
 });
 
 function updateTable(data) {
-	//$("#table > tbody").empty();
 	var table_html = '';
 	$.each(data, function(index, value) {
 		table_html += '<tr>';
-		table_html += '<td><a href="test.html?id=' + (index+1) + '"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
+		table_html += '<td><a href="test.html?testid=' + (index+1) + '&userid='+ userid + '&courseid=' + courseid +'"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
 		table_html += '<td>' + value['end_time'] + '</td>';
 		table_html += '</tr>';
 	})
 
 	$(".content-tbl > tbody").append(table_html);
 }
+
+
+
 		</script>
-		<script src="../../../js_files/general.js"></script>
+		<script src="statics/js/general.js"></script>
 	</body>
 </html>
