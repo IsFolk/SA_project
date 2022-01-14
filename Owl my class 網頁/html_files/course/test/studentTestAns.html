@@ -240,18 +240,14 @@ $.ajax({
 
 function updateStuAns(data){
 	$.each(data, function(index, value) {
-		o1 = '#' + value['id'] + 'option1';
-		o2 = '#' + value['id'] + 'option2';
-		o3 = '#' + value['id'] + 'option3';
-		o4 = '#' + value['id'] + 'option4';
 		c1 = '#' + value['id'] + 'choice_1';
 		c2 = '#' + value['id'] + 'choice_2';
 		c3 = '#' + value['id'] + 'choice_3';
 		c4 = '#' + value['id'] + 'choice_4';
-		if($(o1).text() == value['handInAnswer1']){$(c1).attr('checked', true);}
-		if($(o2).text() == value['handInAnswer2']){$(c2).attr('checked', true);}
-		if($(o3).text() == value['handInAnswer3']){$(c3).attr('checked', true);}
-		if($(o4).text() == value['handInAnswer4']){$(c4).attr('checked', true);}
+		if(value['handInAns1']) != ""){$(c1).attr('checked', true);}
+		if(value['handInAns2']) != ""){$(c2).attr('checked', true);}
+		if(value['handInAns3']) != ""){$(c3).attr('checked', true);}
+		if(value['handInAns4']) != ""){$(c4).attr('checked', true);}
 	});
 }
 		</script>
