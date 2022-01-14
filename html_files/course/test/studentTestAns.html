@@ -5,16 +5,253 @@
 		<meta charset="utf-8">
 		<base href="">
 		<link rel="icon" type="image/png" href="">
-		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/.css" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+		<style>
+		#question-tbl{margin: 0px 50px; min-width: 600px;}
+		td{padding: 5px 2px;}
+		.ques-num{
+			max-width: 5px;
+		}
+		</style>
 	</head>
 	<body>
-		
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="student-name banner-name text-bold"></span>&ensp;
+					<span class="student-id banner-name text-bold"></span>&ensp;
+					<span class="test-name"></span>&ensp;
+					<span class="banner-extInfo course-name"></span>
+			</div>
+		</div>
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<div class="content-center">
+					<table id="question-tbl">
+					</table>
+					<!-- 
+					<ol class="question-list">
+						<li>
+							<span>題目內容/////// ////KKKKKKKKKKKKKKKK KKKKKKKKKKKKK KKKKKKKKKK///////////////PPPPPP PPPPPPPPPPPP PPPPPPPPP PPPPPPPPPPPPPPPPP/////////////// //////// //////////////// /////////////////// /////////// /////////</span>
+							<img src=""/>
+							<ul class="choice-list">
+								<li>
+									<input class="" type="radio" name="choices1" value="1" disabled="disabled">
+									<span id="option">choice1</span>
+								</li>
+								<li>
+									<input class="" type="radio" name="choices1" value="2" disabled="disabled">
+									<span id="option">choice2</span>
+								</li>
+								<li>
+									<input class="" type="radio" name="choices1" value="3" disabled="disabled">
+									<span id="option">choice3</span>
+								</li>
+								<li>
+									<input class="" type="radio" name="choices1" value="4" disabled="disabled">
+									<span id="option">choice4</span>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<span>題目內容/////// ////KKKKKKKKKKKKKKKK KKKKKKKKKKKKK KKKKKKKKKK///////////////PPPPPP PPPPPPPPPPPP PPPPPPPPP PPPPPPPPPPPPPPPPP/////////////// //////// //////////////// /////////////////// /////////// /////////</span>
+							<img src=""/>
+							<ul class="choice-list">
+								<li>
+									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled" checked>
+									<span id="option">choice1</span>
+								</li>
+								<li>
+									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
+									<span id="option">choice2</span>
+								</li>
+								<li>
+									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
+									<span id="option">choice3</span>
+								</li>
+								<li>
+									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
+									<span id="option">choice4</span>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<span>題目內容/////// ////KKKKKKKKKKKKKKKK KKKKKKKKKKKKK KKKKKKKKKK///////////////PPPPPP PPPPPPPPPPPP PPPPPPPPP PPPPPPPPPPPPPPPPP/////////////// //////// //////////////// /////////////////// /////////// /////////</span>
+							<img src=""/>
+							<p class="essay">簡答內容wwwwwwww</p>
+						</li>
+					</ol>
+					 -->
+					<a href="test.html?" id="goto-test-btn"><span class="goto-btn">返回</span></a>
+				</div>
+			</div>
+		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
+$(".test-name").text("測驗一");
+$(".student-name").text("學生一");
+$(".student-id").text("108000001");
+///////////////////從URL接收參數///////////////////////////
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+var testid = urlParams.get('testid');
+var userid = urlParams.get('userid');
+var courseid = urlParams.get('courseid');
+//////////////在URL後加上參數///////////
+let btn_url = 'userid='+userid+'&courseid='+courseid+'&testid='+testid;
+appendURL('#goto-test-btn', btn_url);
+
+//////////////在url後加字串/////////
+function appendURL(selector, str){
+	$(selector).attr('href', $(selector).attr('href')+str);
+}
+////////////////////////載入題目//////////////////////////
+
+$.ajax({
+	url: "api/Question.do",  
+	type: "GET",
+	data: "TestId="+testid,
+	dataType:"json",
+	crossDomain: true,
+	cache: false,
+	timeout: 5000,
+	success: function (response) {
+		if(response.status == 200){
+			updateQuestion(response.response.data);
+		}
+    },
+	error: function () {
+		console.log("請求失敗");
+	}
+});
+function updateQuestion(data) {
+	var tbl_html = '';
+	$.each(data, function(index, value) {
+		var n = parseInt(value['id']);//題號
+		
+		var num = 0;
+		if(value['answerA']!=""){ num += 1; }
+		if(value['answerB']!=""){ num += 1; }
+		if(value['answerC']!=""){ num += 1; }
+		if(value['answerD']!=""){ num += 1; }
+		
+		tbl_html += '<tr><td class="ques-num">';
+		tbl_html += n + '.';
+		tbl_html += '</td>';
+		tbl_html += '<td><span>' + value["text"] + '</span></tr>' ;//題目內容
+		tbl_html += '<tr><td></td><td id="' + value['id'] + '">';
+		
+		switch(num){
+			case 0: //簡答題
+				tbl_html += '<span>回答:</span>'+'<span class="ans"></span>';
+				break;
+				
+			case 1: //單選題
+				tbl_html += '<ul class="choice-list">';
+				tbl_html += '<li class="op1"><input type="radio" id="' + n + 'choice_1"  name="1" value="1" disabled="disabled"><span id="' + n + 'option1" checked="true">'+value["optionA"]+'</span></li>';
+				tbl_html += '<li class="op2"><input type="radio" id="' + n + 'choice_2"  name="1" value="1" disabled="disabled"><span id="' + n + 'option2">'+value["optionB"]+'</span></li>';
+				tbl_html += '<li class="op3"><input type="radio" id="' + n + 'choice_3"  name="1" value="1" disabled="disabled"><span id="' + n + 'option3">'+value["optionC"]+'</span></li>';
+				tbl_html += '<li class="op4"><input type="radio" id="' + n + 'choice_4"  name="1" value="1" disabled="disabled"><span id="' + n + 'option4">'+value["optionD"]+'</span></li>';
+				var ans = '';
+				if(value['optionA'] == value['answerA']){ ans += 'A ' }
+				if(value['optionB'] == value['answerB']){ ans += 'B ' }
+				if(value['optionC'] == value['answerC']){ ans += 'C ' }
+				if(value['optionD'] == value['answerD']){ ans += 'D ' }
+				tbl_html += '<li>&ensp;&ensp;&ensp;&ensp;&ensp;Ans: ' + ans + '</li>';
+				tbl_html += '</ul>';
+				break;
+				
+			case 2: //多選題
+			case 3:
+			case 4:
+				tbl_html += '<ul class="choice-list">';
+				tbl_html += '<li class="op1"><input type="checkbox" id="' + n + 'choice_1"  name="2" value="1" disabled="disabled"><span id="' + n + 'option1" checked="checked">'+value['optionA']+'</span></li>';
+				tbl_html += '<li class="op2"><input type="checkbox" id="' + n + 'choice_2"  name="2" value="1" disabled="disabled"><span id="' + n + 'option2" checked="checked">'+value['optionB']+'</span></li>';
+				tbl_html += '<li class="op3"><input type="checkbox" id="' + n + 'choice_3"  name="2" value="1" disabled="disabled"><span id="' + n + 'option3">'+value['optionC']+'</span></li>';
+				tbl_html += '<li class="op4"><input type="checkbox" id="' + n + 'choice_4"  name="2" value="1" disabled="disabled"><span id="' + n + 'option4">'+value['optionD']+'</span></li>';
+				var ans = '';
+				if(value['optionA'] == value['answerA']){ ans += 'A ' }
+				if(value['optionB'] == value['answerB']){ ans += 'B ' }
+				if(value['optionC'] == value['answerC']){ ans += 'C ' }
+				if(value['optionD'] == value['answerD']){ ans += 'D ' }
+				tbl_html += '<li>&ensp;&ensp;&ensp;&ensp;&ensp;Ans: ' + ans + '</li>';
+				tbl_html += '</ul>';
+				break;
+			default:
+				alert('Failed');
+		}
+		tbl_html += '<br><br><br></td></tr>';
+	});
+	
+	$('#question-tbl').append(tbl_html);
+	
+}
+//////////////////////載入學生作答結果/////////////////////////////////
+$.ajax({
+	url: "api/HandIn.do",  
+	type: "GET",
+	data: "TestId="+testid,
+	dataType:"json",
+	crossDomain: true,
+	cache: false,
+	timeout: 5000,
+	success: function (response) {
+		if(response.status == 200){
+			updateStuAns(response.response.data);
+		}
+    },
+	error: function () {
+		console.log("請求失敗");
+	}
+});
+
+function updateStuAns(data){
+	$.each(data, function(index, value) {
+		c1 = '#' + value['id'] + 'choice_1';
+		c2 = '#' + value['id'] + 'choice_2';
+		c3 = '#' + value['id'] + 'choice_3';
+		c4 = '#' + value['id'] + 'choice_4';
+		if(value['handInAns1'] != ""){$(c1).attr('checked', true);}
+		if(value['handInAns2'] != ""){$(c2).attr('checked', true);}
+		if(value['handInAns3'] != ""){$(c3).attr('checked', true);}
+		if(value['handInAns4'] != ""){$(c4).attr('checked', true);}
+		{$(c4).attr('checked', true);}
+	});
+}
 		</script>
-		<script src="../../../js_files/general.js"></script>
+		<script src="statics/js/general.js"></script>
 	</body>
 </html>
