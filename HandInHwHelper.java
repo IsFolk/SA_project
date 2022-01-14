@@ -197,7 +197,7 @@ public class HandInHwHelper {
      * @param id 會員編號
      * @return the JSON object 回傳SQL執行結果與該會員編號之會員資料
      */
-    public JSONObject getById(String id, String id2) {
+    public JSONObject getByID(String id, String id2) {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
     	HandInHw p = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
@@ -215,7 +215,7 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`handinhw` WHERE  `CourseId`=?, `HwId`=?";
+            String sql = "SELECT * FROM `sa_project`.`handinhw` INNER JOIN `sa_project`.`hw` ON `sa_project`.`handinhw`.`CourseId`= `sa_project`.`hw`.'CourseId' WHERE  `sa_project`.`handinhw`.`CourseId`=? AND `sa_project`.`handinhw`.`HwId`=?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
@@ -234,16 +234,23 @@ public class HandInHwHelper {
                 row += 1;
                 
                 /** 將 ResultSet 之資料取出 */
-                int c_id = rs.getInt("CourseId");
-                int hw_id = rs.getInt("HwId");
-                int st_id = rs.getInt("StudentId");
+                int c_id = rs.getInt("OpeningTime");
+                int hw_id = rs.getInt("EndindTime");
+                int st_id = rs.getInt("HwDetail");
                 String detail = rs.getString("HwHandInDetail");
                 int score =rs.getInt("HwHandInScore");
+                int courseid=rs.getInt("CourseId");
                 
-                /** 將每一筆會員資料產生一名新Member物件 */
-                p = new HandInHw(c_id, hw_id, st_id, detail, score);
+                JSONObject jso = new JSONObject();
+                jso.put("OpeningTime", c_id);
+                jso.put("EndingTime", hw_id);
+                jso.put("HwDetail", st_id);
+                jso.put("HwHandInDetail",detail);
+                jso.put("HwHandInScore", score);
+                jso.put("CourseId", courseid);
+                
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
-                jsa.put(p.getData());
+                jsa.put(jso);
             }
 
         } catch (SQLException e) {
