@@ -191,9 +191,24 @@ function updateQuestion(data) {
 		}
 		
 		if(value['optionA']==value['answerA']){
-			$($('#tbl_' + n)>$('.op'+i)).append("<span>Correct</span>");
+			$($('#tbl_' + n)>$('.op1')).append("<span>Correct</span>");
 		}else{
-			$($('#tbl_' + n)>$('.op'+i)).append("<span>Incorrect</span>");
+			$($('#tbl_' + n)>$('.op1')).append("<span>Incorrect</span>");
+		}
+		if(value['optionB']==value['answerB']){
+			$($('#tbl_' + n)>$('.op2')).append("<span>Correct</span>");
+		}else{
+			$($('#tbl_' + n)>$('.op2')).append("<span>Incorrect</span>");
+		}
+		if(value['optionC']==value['answerC']){
+			$($('#tbl_' + n)>$('.op3')).append("<span>Correct</span>");
+		}else{
+			$($('#tbl_' + n)>$('.op3')).append("<span>Incorrect</span>");
+		}
+		if(value['optionD']==value['answerD']){
+			$($('#tbl_' + n)>$('.op4')).append("<span>Correct</span>");
+		}else{
+			$($('#tbl_' + n)>$('.op4')).append("<span>Incorrect</span>");
 		}
 		tbl_html += '</tr>';
 	})
