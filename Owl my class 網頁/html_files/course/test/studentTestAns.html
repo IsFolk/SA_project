@@ -61,19 +61,19 @@
 							<ul class="choice-list">
 								<li>
 									<input class="" type="radio" name="choices1" value="1" disabled="disabled">
-									<span class="choice-text">choice1</span>
+									<span class="option">choice1</span>
 								</li>
 								<li>
 									<input class="" type="radio" name="choices1" value="2" disabled="disabled">
-									<span class="choice-text">choice2</span>
+									<span class="option">choice2</span>
 								</li>
 								<li>
 									<input class="" type="radio" name="choices1" value="3" disabled="disabled">
-									<span class="choice-text">choice3</span>
+									<span class="option">choice3</span>
 								</li>
 								<li>
 									<input class="" type="radio" name="choices1" value="4" disabled="disabled">
-									<span class="choice-text">choice4</span>
+									<span class="option">choice4</span>
 								</li>
 							</ul>
 						</li>
@@ -83,19 +83,19 @@
 							<ul class="choice-list">
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled" checked>
-									<span class="choice-text">choice1</span>
+									<span class="option">choice1</span>
 								</li>
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
-									<span class="choice-text">choice2</span>
+									<span class="option">choice2</span>
 								</li>
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
-									<span class="choice-text">choice3</span>
+									<span class="option">choice3</span>
 								</li>
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
-									<span class="choice-text">choice4</span>
+									<span class="option">choice4</span>
 								</li>
 							</ul>
 						</li>
@@ -152,46 +152,57 @@ function updateQuestion(data) {
 	var tbl_html = '';
 	
 	$.each(data, function(index, value) {
+		var n = parseInt(value['id']);//題號
 		var num = 0;
 		if(value['answerA']!=""){ num += 1; }
 		if(value['answerB']!=""){ num += 1; }
 		if(value['answerC']!=""){ num += 1; }
 		if(value['answerD']!=""){ num += 1; }
 		
-		tbl_html = '<td>';
-		tbl_html = value['id'] + '.';//題號
-		tbl_html = '</td>';
-		tbl_html = '<tr id="tbl_' + value['id'] + '">';
+		tbl_html += '<td>';
+		tbl_html += n + '.';//題號
+		tbl_html += '</td>';
+		tbl_html += '<tr id="tbl_' + value['id'] + '">';
 		tbl_html += '<span>' + data['text'] + '</span>' ;//題目內容
 		switch(num){
-		case 0: //簡答題
-			tbl_html += '<span>回答:</span>''<span class="ans"></span>';
-			break;
-			
-		case 1: //單選題
-			tbl_html += '<ul class="choice-list">';
-			tbl_html += '<li><input type="radio" class="choice_1"  name="1" value="1" disabled="disabled"><span class="choice-text">'+value["optionA"]+'</span></li>';
-			tbl_html += '<li><input type="radio" class="choice_2"  name="1" value="1" disabled="disabled"><span class="choice-text">'+value["optionB"]+'</span></li>';
-			tbl_html += '<li><input type="radio" class="choice_3"  name="1" value="1" disabled="disabled"><span class="choice-text">'+value["optionC"]+'</span></li>';
-			tbl_html += '<li><input type="radio" class="choice_4"  name="1" value="1" disabled="disabled"><span class="choice-text">'+value["optionD"]+'</span></li>';
-			tbl_html += '</ul>';
-			break;
-			
-		case 2: //多選題
-		case 3:
-		case 4:
-			tbl_html += '<ul class="choice-list">';
-			tbl_html += '<li><input type="checkbox" class="choice_1"  name="2" disabled="disabled"><span class="choice-text">'+value['optionA']+'</span></li>';
-			tbl_html += '<li><input type="checkbox" class="choice_2"  name="2" disabled="disabled"><span class="choice-text">'+value['optionB']+'</span></li>';
-			tbl_html += '<li><input type="checkbox" class="choice_3"  name="2" disabled="disabled"><span class="choice-text">'+value['optionC']+'</span></li>';
-			tbl_html += '<li><input type="checkbox" class="choice_4"  name="2" disabled="disabled"><span class="choice-text">'+value['optionD']+'</span></li>';
-			tbl_html += '</ul>';
-			break;
-	}
-		tbl_html = '</tr>';
+			case 0: //簡答題
+				tbl_html += '<span>回答:</span>''<span class="ans"></span>';
+				break;
+				
+			case 1: //單選題
+				tbl_html += '<ul class="choice-list">';
+				tbl_html += '<li class="op1"><input type="radio" class="choice_1"  name="1" value="1" disabled="disabled"><span class="option1">'+value["optionA"]+'</span></li>';
+				tbl_html += '<li class="op2"><input type="radio" class="choice_2"  name="1" value="1" disabled="disabled"><span class="option2">'+value["optionB"]+'</span></li>';
+				tbl_html += '<li class="op3"><input type="radio" class="choice_3"  name="1" value="1" disabled="disabled"><span class="option3">'+value["optionC"]+'</span></li>';
+				tbl_html += '<li class="op4"><input type="radio" class="choice_4"  name="1" value="1" disabled="disabled"><span class="option4">'+value["optionD"]+'</span></li>';
+				tbl_html += '</ul>';
+				break;
+				
+			case 2: //多選題
+			case 3:
+			case 4:
+				tbl_html += '<ul class="choice-list">';
+				tbl_html += '<li class="op1"><input type="checkbox" class="choice_1"  name="2" value="1" disabled="disabled"><span class="option1">'+value['optionA']+'</span></li>';
+				tbl_html += '<li class="op2"><input type="checkbox" class="choice_2"  name="2" value="1" disabled="disabled"><span class="option2">'+value['optionB']+'</span></li>';
+				tbl_html += '<li class="op3"><input type="checkbox" class="choice_3"  name="2" value="1" disabled="disabled"><span class="option3">'+value['optionC']+'</span></li>';
+				tbl_html += '<li class="op4"><input type="checkbox" class="choice_4"  name="2" value="1" disabled="disabled"><span class="option4">'+value['optionD']+'</span></li>';
+				tbl_html += '</ul>';
+				break;
+		}
+		
+		for(i=0;i<4;i++){
+			var ques = index[i];
+			if(){
+				$($('#tbl_' + n)>$('.op'+i)).append("<span>Correct</span>");
+			}else{
+				$($('#tbl_' + n)>$('.op'+i)).append("<span>Incorrect</span>");
+			}
+		}
+		tbl_html += '</tr>';
 	})
 	$("#question-tbl").append(tbl_html);
 }
+///////////////////////////////////////////////////////
 
 		</script>
 		<script src="statics/js/general.js"></script>
