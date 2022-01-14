@@ -136,7 +136,7 @@ function updateTable(data) {
 	var table_html = '';
 	$.each(data, function(index, value) {
 		table_html += '<tr>';
-		table_html += '<td><a href="test.html?testid=' + (index+1) + '&userid='+ userid + '&courseid=' + courseid +'"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
+		table_html += '<td><a href="test.html?testid=' + (index+1) + '&userid='+ userid + '&courseid=' + courseid + '&finished=0'"><span class="content-tbl-link">' + value['name'] +'</span></a></td>' ;
 		table_html += '<td>' + value['end_time'] + '</td>';
 		table_html += '</tr>';
 	})
