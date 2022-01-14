@@ -172,7 +172,7 @@ function updateHtml(data) {
 $('#submit_btn').click(function(){
 	submit();
 	if($('#submit_btn').attr('value') == '交卷'){
-		let target = 'test.html?userid='+userid+'&testid='+testid+'&courseid='+courseid;
+		let target = 'studentTestAns.html?userid='+userid+'&testid='+testid+'&courseid='+courseid;
 		window.location.href=target;
 	}else{
 		let n = parseInt($('#ques-id').text())+1;
