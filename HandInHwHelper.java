@@ -117,9 +117,9 @@ public class HandInHwHelper {
      *
      * @return the JSONObject 回傳SQL執行結果與自資料庫取回之所有資料
      */
-    public JSONObject getAll() {
+    public JSONObject getAll(String courseid) {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
-    	Professor p = null;
+    	HandInHw p = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
         JSONArray jsa = new JSONArray();
         /** 記錄實際執行之SQL指令 */
@@ -135,10 +135,11 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM `sa_project`.`handinhw`";
+            String sql = "SELECT * FROM `sa_project`.`handinhw` WHERE  `CourseId`=?";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
+            pres.setString(1,courseid);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
 
@@ -152,15 +153,14 @@ public class HandInHwHelper {
                 row += 1;
                 
                 /** 將 ResultSet 之資料取出 */
-                int id = rs.getInt("ProfessorId");
-                String name = rs.getString("ProfessorName");
-                String email = rs.getString("Email");
-                String password = rs.getString("Password");
-                String department = rs.getString("Department");
-                String position=rs.getString("Position");
+                int c_id = rs.getInt("CourseId");
+                int hw_id = rs.getInt("HwId");
+                int st_id = rs.getInt("StudentId");
+                String detail = rs.getString("HwHandInDetail");
+                int score =rs.getInt("HwHandInScore");
                 
                 /** 將每一筆會員資料產生一名新Member物件 */
-                p = new Professor(id, email, password, name, department, position);
+                p = new HandInHw(c_id, hw_id, st_id, detail, score);
                 /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
                 jsa.put(p.getData());
             }
@@ -343,7 +343,7 @@ public class HandInHwHelper {
             conn = DBMgr.getConnection();
             /** SQL指令 */
             String sql = "INSERT INTO `sa_project`.`handinhw`(`CourseId`, `HwId`, `StudentId`, `HwHandInDetail`, `HwHandInScore`)"
-                    + " VALUES(?, ?, ?, ?)";
+                    + " VALUES(?, ?, ?, ?, ?)";
             
             /** 取得所需之參數 */
             int c_id = p.getCourseId();
