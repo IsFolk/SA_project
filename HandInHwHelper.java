@@ -197,7 +197,7 @@ public class HandInHwHelper {
      * @param id 會員編號
      * @return the JSON object 回傳SQL執行結果與該會員編號之會員資料
      */
-    public JSONObject getByID(String id, String id2) {
+    public JSONObject getById(String id, String id2) {
         /** 新建一個 Member 物件之 m 變數，用於紀錄每一位查詢回之會員資料 */
     	HandInHw p = null;
         /** 用於儲存所有檢索回之會員，以JSONArray方式儲存 */
@@ -215,12 +215,12 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT `StudentName` FROM `sa_project`.`Student` INNER JOIN (SELECT * FROM `sa_project`.`handinhw` LEFT JOIN 'sa_project'.'hw' ON `sa_project`.`handinhw`.`CourseId`='sa_project'.'hw'.`CourseId`) ON `sa_project`.`Student`.`StudentId`=`sa_project`.`handinhw`.'StudentId' WHERE `StudentId` = ? AND 'CourseId' = ? ";
+            String sql = "SELECT * FROM `sa_project`.`handinhw` WHERE  `CourseId`=?, `HwId`=?";
             
-            /** 將參數回填至SQL指令當中 */
+            /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
-            pres.setString(1, id);
-            pres.setString(2,  id2);
+            pres.setString(1,id);
+            pres.setString(2,id2);
             /** 執行查詢之SQL指令並記錄其回傳之資料 */
             rs = pres.executeQuery();
 
@@ -228,25 +228,24 @@ public class HandInHwHelper {
             exexcute_sql = pres.toString();
             System.out.println(exexcute_sql);
             
-            int c_Id = rs.getInt("CourseId");
-            int s_id = rs.getInt("StudentId");
-            String s_name=rs.getString("StudentName");
-            String hw_name = rs.getString("HwName");
-            String optime = rs.getString("HwOpeningTime");
-            String endtime = rs.getString("HwEndingTime");
-            String hwdetail = rs.getString("HwHandInDetail");
-            int hwscore =rs.getInt("HwHandInScore");
+            /** 透過 while 迴圈移動pointer，取得每一筆回傳資料 */
+            while(rs.next()) {
+                /** 每執行一次迴圈表示有一筆資料 */
+                row += 1;
                 
-            JSONObject jso = new JSONObject();
-            jso.put("CourseId", c_Id);
-            jso.put("StudentId", s_id);
-            jso.put("StudentName", s_name);
-            jso.put("HwName", hw_name);
-            jso.put("HwOpeningTime", optime);
-            jso.put("HwEndingTime", endtime);
-            jso.put("HwHandInDetail", hwdetail);
-            jso.put("HwHandInScore", hwscore);
-            
+                /** 將 ResultSet 之資料取出 */
+                int c_id = rs.getInt("CourseId");
+                int hw_id = rs.getInt("HwId");
+                int st_id = rs.getInt("StudentId");
+                String detail = rs.getString("HwHandInDetail");
+                int score =rs.getInt("HwHandInScore");
+                
+                /** 將每一筆會員資料產生一名新Member物件 */
+                p = new HandInHw(c_id, hw_id, st_id, detail, score);
+                /** 取出該名會員之資料並封裝至 JSONsonArray 內 */
+                jsa.put(p.getData());
+            }
+
         } catch (SQLException e) {
             /** 印出JDBC SQL指令錯誤 **/
             System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
