@@ -26,6 +26,13 @@ public class HandInHw {
         this.StudentId = studentid;
         this.HwHandInDetail = HwHandInDetail;
     }
+    public HandInHw(int courseid, int hwid, int studentid, String HwHandInDetail, int score) {
+        this.CourseId=courseid;
+        this.HwId = hwid;
+        this.StudentId = studentid;
+        this.HwHandInDetail = HwHandInDetail;
+        this.HwHandInScore=score;
+    }
     
     public HandInHw(int courseid, int hwid, String detail) {
         this.CourseId=courseid;
@@ -66,6 +73,18 @@ public class HandInHw {
         return data;
     }
     
+    public JSONObject getData() {
+        /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
+        JSONObject jso = new JSONObject();
+        jso.put("CourseId", getCourseId());
+        jso.put("HwId", getHwId());
+        jso.put("StudentId", getStudentId());
+        jso.put("HwHandInDretail",getHwHandInDetail());
+        jso.put("HwHandInScore", getHwHandInScore());
+
+        
+        return jso;
+    }
 
 
     
