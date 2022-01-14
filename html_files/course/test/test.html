@@ -108,7 +108,7 @@ const urlParams = new URLSearchParams(queryString);
 var testid = urlParams.get('testid');
 var userid = urlParams.get('userid');
 var courseid = urlParams.get('courseid');
-
+var finished = urlParams.get('finished');
 
 ////////////////把資料塞進table//////////////
 $.ajax({
@@ -138,18 +138,12 @@ function updateHTML(data){
 	$(".end-time").text(str);
 	str = data['detail'];
 	$(".test-detail").text(str);
-	if( data['id']==6 ){
-		$('.see-result').remove();
-	}
-	else{
-		$('start-test').remove();
-	}
 }
 
 /////////////////////////////////////////////
 
 //////////////作答前/作答後////////////////////
-var test_finished = 0;
+var test_finished = finished;
 if(test_finished){
 	$(".start-test").remove();
 }else{
