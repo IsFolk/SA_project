@@ -215,8 +215,8 @@ public class HandInHwHelper {
             /** 取得資料庫之連線 */
             conn = DBMgr.getConnection();
             /** SQL指令 */
-            String sql = "SELECT * FROM (SELECT * FROM sa_project.hw WHERE CourseId=?) AS hw\r\n"
-            		+ "INNER JOIN (SELECT * FROM sa_project.handinhw WHERE StudentId=?) AS handinhw ON hw.StudentId=hw.StudentId\r\n";
+            String sql = "SELECT * FROM (SELECT * FROM sa_project.hw WHERE CourseId=?) AS hw\n"
+            		+ "INNER JOIN (SELECT * FROM sa_project.handinhw WHERE StudentId=?) AS handinhw ON hw.CourseId=handinhw.CourseId\n";
             
             /** 將參數回填至SQL指令當中，若無則不用只需要執行 prepareStatement */
             pres = conn.prepareStatement(sql);
