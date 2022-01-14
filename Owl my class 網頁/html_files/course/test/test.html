@@ -5,8 +5,6 @@
 		<meta charset="utf-8">
 		<base href="">
 		<link rel="icon" type="image/png" href="">
-		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
 		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
@@ -59,16 +57,16 @@
 					</div>
 					<ul class="sidebar-menu">
 						<li>
-							<a href="../info/info.html" class="sidebar_link"><span class="text">課程資訊</span></a>
+							<a href="../info/info.html?" class="sidebar_link"><span class="text">課程資訊</span></a>
 						</li>
 						<li>
-							<a href="../board/board.html" class="sidebar_link"><span class="text">課程公告</span></a>
+							<a href="../board/board.html?" class="sidebar_link"><span class="text">課程公告</span></a>
 						</li>
 						<li>
-							<a href="../textbook/textbookList.html" class="sidebar_link"><span class="text">課程教材</span></a>
+							<a href="../textbook/textbookList.html?" class="sidebar_link"><span class="text">課程教材</span></a>
 						</li>
 						<li>
-							<a href="../homework/homeworkList.html" class="sidebar_link"><span class="text">作業</span></a>
+							<a href="../homework/homeworkList.html?" class="sidebar_link"><span class="text">作業</span></a>
 						</li>
 						<li class="currentpage">
 							<a href="testList.html" class="sidebar_link"><span class="text">測驗</span></a>
@@ -95,9 +93,8 @@
 						</tbody>
 					</table>
 					<br><br><br>
-					<a href="studentTestAns.html" id="check_ans_btn"><span class="text test-goto-btn see-result stu-only">查看作答結果</span></a>
-					<a href="answeringTest.html" id="start_test_btn"><span class="text test-goto-btn start-test stu-only">開始測驗</span></a>
-					<a href="studentTestAnsList.html" id="stu_anslist_btn"><span class="text test-goto-btn pro-only">查看學生作答結果</span></a>
+					<a href="answeringTest.html?" id="start_test_btn"><span class="text test-goto-btn start-test stu-only">開始測驗</span></a>
+					<a href="studentTestAns.html?" id="check_ans_btn"><span class="text test-goto-btn see-result stu-only">查看作答結果</span></a>
 				</div>
 			</div>
 		</div>
@@ -106,34 +103,18 @@
 		<script src="statics/js/general.js"></script>
 		<script>
 ///////////////////從URL接收參數///////////////////////////
-function getValue(varname)
-{
-  var url = window.location.href;
-  var qparts = url.split("?");
-  if (qparts.length == 0){return "";}
-  var query = qparts[1];
-  var vars = query.split("&amp;");
-  var value = "";
-  for (i=0; i<vars.length; i++)
-  {
-    var parts = vars[i].split("=");
-    if (parts[0] == varname)
-    {
-      value = parts[1];
-      break;
-    }
-  }
-  value = unescape(value);
-  value.replace(/\+/g," ");
-  return value;
-}
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+var testid = urlParams.get('testid');
+var userid = urlParams.get('userid');
+var courseid = urlParams.get('courseid');
+var finished = urlParams.get('finished');
 
-var id = getValue("id");
 ////////////////把資料塞進table//////////////
 $.ajax({
 	type: "GET",
 	url: "api/Test.do",
-	data: "id=" + id,
+	data: "id=" + testid,
 	crossDomain: true,
 	cache: false,
 	dataType: 'json',
@@ -162,16 +143,15 @@ function updateHTML(data){
 /////////////////////////////////////////////
 
 //////////////作答前/作答後////////////////////
-var test_finished = 1;
+var test_finished = finished;
 if(test_finished){
 	$(".start-test").remove();
 }else{
 	$(".see-result").remove();
 }
 //////////////在URL後加上參數///////////
-let sidebar_url = '?courseId='+''
-let btn_url = '&testid=0';
-appendURL('.sidebar_link', '');
+var str = 'courseid=' + courseid + '&userid=' + userid;
+appendURL('.sidebar_link', str);
 $('#check_ans_btn').attr('href', $('#check_ans_btn').attr('href')+btn_url);
 $('#start_test_btn').attr('href', $('#start_test_btn').attr('href')+btn_url);
 $('#stu_anslist_btn').attr('href', $('#stu_anslist_btn').attr('href')+btn_url);
@@ -180,7 +160,6 @@ $('#stu_anslist_btn').attr('href', $('#stu_anslist_btn').attr('href')+btn_url);
 function appendURL(selector, str){
 	$(selector).attr('href', $(selector).attr('href')+str);
 }
-
 		</script>
 	</body>
 </html>
