@@ -6,6 +6,13 @@
 		<base href="">
 		<link rel="icon" type="image/png" href="">
 		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+		<style>
+		#question-tbl{margin: 0px 50px; min-width: 600px;}
+		td{padding: 5px 2px;}
+		.ques-num{
+			max-width: 5px;
+		}
+		</style>
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -54,6 +61,7 @@
 				<div class="content-center">
 					<table id="question-tbl">
 					</table>
+					<!-- 
 					<ol class="question-list">
 						<li>
 							<span>題目內容/////// ////KKKKKKKKKKKKKKKK KKKKKKKKKKKKK KKKKKKKKKK///////////////PPPPPP PPPPPPPPPPPP PPPPPPPPP PPPPPPPPPPPPPPPPP/////////////// //////// //////////////// /////////////////// /////////// /////////</span>
@@ -105,6 +113,7 @@
 							<p class="essay">簡答內容wwwwwwww</p>
 						</li>
 					</ol>
+					 -->
 					<a href="test.html?" id="goto-test-btn"><span class="goto-btn">返回</span></a>
 				</div>
 			</div>
@@ -150,23 +159,24 @@ $.ajax({
 });
 function updateQuestion(data) {
 	var tbl_html = '';
-	
 	$.each(data, function(index, value) {
 		var n = parseInt(value['id']);//題號
+		
 		var num = 0;
 		if(value['answerA']!=""){ num += 1; }
 		if(value['answerB']!=""){ num += 1; }
 		if(value['answerC']!=""){ num += 1; }
 		if(value['answerD']!=""){ num += 1; }
 		
-		tbl_html += '<td>';
-		tbl_html += n + '.';//題號
+		tbl_html += '<tr><td class="ques-num">';
+		tbl_html += n + '.';
 		tbl_html += '</td>';
-		tbl_html += '<tr id="tbl_' + value['id'] + '">';
-		tbl_html += '<span>' + data['text'] + '</span>' ;//題目內容
+		tbl_html += '<td><span>' + value["text"] + '</span></tr>' ;//題目內容
+		tbl_html += '<tr><td></td><td id="tbl_' + n + '">';
+		
 		switch(num){
 			case 0: //簡答題
-				tbl_html += '<span>回答:</span>''<span class="ans"></span>';
+				tbl_html += '<span>回答:</span>'+'<span class="ans"></span>';
 				break;
 				
 			case 1: //單選題
@@ -175,6 +185,12 @@ function updateQuestion(data) {
 				tbl_html += '<li class="op2"><input type="radio" class="choice_2"  name="1" value="1" disabled="disabled"><span class="option2">'+value["optionB"]+'</span></li>';
 				tbl_html += '<li class="op3"><input type="radio" class="choice_3"  name="1" value="1" disabled="disabled"><span class="option3">'+value["optionC"]+'</span></li>';
 				tbl_html += '<li class="op4"><input type="radio" class="choice_4"  name="1" value="1" disabled="disabled"><span class="option4">'+value["optionD"]+'</span></li>';
+				var ans = '';
+				if(value['optionA'] == value['answerA']){ ans += 'A ' }
+				if(value['optionB'] == value['answerB']){ ans += 'B ' }
+				if(value['optionC'] == value['answerC']){ ans += 'C ' }
+				if(value['optionD'] == value['answerD']){ ans += 'D ' }
+				tbl_html += '<li>&ensp;&ensp;&ensp;&ensp;&ensp;Ans: ' + ans + '</li>';
 				tbl_html += '</ul>';
 				break;
 				
@@ -186,33 +202,22 @@ function updateQuestion(data) {
 				tbl_html += '<li class="op2"><input type="checkbox" class="choice_2"  name="2" value="1" disabled="disabled"><span class="option2">'+value['optionB']+'</span></li>';
 				tbl_html += '<li class="op3"><input type="checkbox" class="choice_3"  name="2" value="1" disabled="disabled"><span class="option3">'+value['optionC']+'</span></li>';
 				tbl_html += '<li class="op4"><input type="checkbox" class="choice_4"  name="2" value="1" disabled="disabled"><span class="option4">'+value['optionD']+'</span></li>';
+				var ans = '';
+				if(value['optionA'] == value['answerA']){ ans += 'A ' }
+				if(value['optionB'] == value['answerB']){ ans += 'B ' }
+				if(value['optionC'] == value['answerC']){ ans += 'C ' }
+				if(value['optionD'] == value['answerD']){ ans += 'D ' }
+				tbl_html += '<li>&ensp;&ensp;&ensp;&ensp;&ensp;Ans: ' + ans + '</li>';
 				tbl_html += '</ul>';
 				break;
+			default:
+				alert('Failed');
 		}
-		
-		if(value['optionA']==value['answerA']){
-			$($('#tbl_' + n)>$('.op1')).append("<span>Correct</span>");
-		}else{
-			$($('#tbl_' + n)>$('.op1')).append("<span>Incorrect</span>");
-		}
-		if(value['optionB']==value['answerB']){
-			$($('#tbl_' + n)>$('.op2')).append("<span>Correct</span>");
-		}else{
-			$($('#tbl_' + n)>$('.op2')).append("<span>Incorrect</span>");
-		}
-		if(value['optionC']==value['answerC']){
-			$($('#tbl_' + n)>$('.op3')).append("<span>Correct</span>");
-		}else{
-			$($('#tbl_' + n)>$('.op3')).append("<span>Incorrect</span>");
-		}
-		if(value['optionD']==value['answerD']){
-			$($('#tbl_' + n)>$('.op4')).append("<span>Correct</span>");
-		}else{
-			$($('#tbl_' + n)>$('.op4')).append("<span>Incorrect</span>");
-		}
-		tbl_html += '</tr>';
-	})
-	$("#question-tbl").append(tbl_html);
+		tbl_html += '<br><br><br></td></tr>';
+	});
+	
+	$('#question-tbl').append(tbl_html);
+	
 }
 ///////////////////////////////////////////////////////
 
