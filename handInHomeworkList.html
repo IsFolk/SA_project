@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>OWL MY CLASS</title>
+		<meta charset="utf-8">
+		<base href="">
+		<link rel="icon" type="image/png" href="">
+		<link href="" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+		<link href="statics/css/handInHomework.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<!--畫面最上方的橫條navbar-->
+		<nav>
+			<div class="container">
+				<div class="navbar-header">
+					<img src="" alt="logo">
+					<span class="text">OWL MY CLASS</span>
+				</div>
+				<div class="navbar-collapse">
+					<ul class="navbar-right">
+						<li>
+							<div class="homebtn">
+								<a href="#"><span class="text">我的主頁</span></a>
+							</div>
+						</li>
+						<li class="dropdown-btn">
+							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#"><span class="text">個人資訊</span></a>
+								</li>
+								<li>
+									<a href="#"><span class="text">登出</span></a>		
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!--橫幅-->
+		<div class="banner">
+			<div class="container">
+				<img src="" alt="img">
+					<span class="banner-name course-name text-bold"></span>
+					<span class="banner-extInfo course-code"></span>
+			</div>
+		</div>
+		<!--下半部分-->
+		<div class="lowerhalf">
+			<div class="container">
+				<!--左下的選單-->
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
+					</div>
+					<ul class="sidebar-menu" id="sidebar_menu">
+					
+					</ul>
+				</div>
+				<!--右下區域-->
+				<div class="content-right">
+					<div class="content-right-title">
+						<span class="text-bold">已繳作業</span>
+					</div>
+					<div class="hr"></div>
+					<table class="content-tbl">
+						<thead>
+							<tr>
+								<td>學號</td><td>得分</td>
+							</tr>
+						</thead>
+						<tbody id="handIn_list"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="statics/js/general.js"></script>
+		<script>
+		//////////////把資料塞進table裡////////////
+var testData = {
+	handInHomework: [
+		{studentId: 108000001, name: "學生1", updateDate: "2021.12.3", status: "已繳交", score: "0"}, 
+		{studentId: 108000002, name: "學生2", updateDate: "2021.12.5", status: "已繳交", score: "未批改"},
+		{studentId: 108000003, name: "學生3", updateDate: "2021.12.9", status: "已繳交", score: "未批改"},
+		{studentId: 108000004, name: "學生4", updateDate: "2021.12.12", status: "未繳交", score: ""}
+	]
+};
+var testJson = JSON.stringify(testData); //產生測試用的JSON資料
+
+function json2table(jsonString, $table){
+	var json = JSON.parse(jsonString); 
+	
+	var bodyRows = '';
+	
+	for(let hm of json.handInHomework){ //將資料填入表格
+		bodyRows += '<tr>';
+		bodyRows += '<td><a href="handInHomework.html"><span class="content-tbl-link">' + hm.studentId + '</span></a></td>' ;
+		bodyRows += '<td>' + hm.name + '</td>' ;
+		bodyRows += '<td>' + hm.updateDate + '</td>' ;
+		bodyRows += '<td>' + hm.status + '</td>' ;
+		bodyRows += '<td>' + hm.score + '</td>' ;
+		bodyRows += '</tr>';
+	}
+	
+	$table.find('tbody').append(bodyRows);
+}
+
+//json2table(testJson, $(".content-tbl"));
+
+
+var url_string = window.location.href;
+var url = new URL(url_string);
+var id = url.searchParams.get("id");
+var HwId = url.searchParams.get("HwId");
+  function getCourseInfo() {
+	  $.ajax({
+          type: "GET",
+          url: "HandInHwController",
+          //data: "CourseId=" + id + "&HwId=" + HwId,
+          data: "CourseId=" + id,
+          crossDomain: true,
+          cache: false,
+          dataType: 'json',
+          timeout: 5000,
+          success: function (response) {
+              if(response.status == 200){
+            	  updateHTML(response.response.data);
+              }
+          },
+          error: function () {
+              alert("無法連線到伺服器！");
+          }
+    });
+  }		
+  
+updateMenu(id); 
+getCourseInfo();
+function updateMenu(id) {
+   $("#sidebar_menu").empty();
+   var table_html = '';     
+   table_html += '<li>';
+   table_html += '<a href="info.html?id='+ id + '">' + '<span class="text">' + "課程資訊" + '</span>' + '</a>';
+   table_html += '</li>';
+   table_html += '<li>';
+   table_html += '<a href="board.html?id='+ id + '">' + '<span class="text">' + "課程公告" + '</span>' + '</a>';
+   table_html += '</li>';
+   table_html += '<li>';
+   table_html += '<a href="textbookList.html?id='+ id + '">' + '<span class="text">' + "課程教材" + '</span>' + '</a>';
+   table_html += '</li>';
+   table_html += '<li class="currentpage">';
+   table_html += '<a href="homeworkList.html?id='+ id + '">' + '<span class="text">' + "作業" + '</span>' + '</a>';
+   table_html += '</li>';
+   table_html += '<li>';
+   table_html += '<a href="testList.html?id='+ id + '">' + '<span class="text">' + "測驗" + '</span>' + '</a>';
+   table_html += '</li>';
+  
+   $("#sidebar_menu").append(table_html);
+}
+
+function updateHTML(data) {
+    $("#handIn_list").empty();
+    var bodyRows = '';
+    $.each(data, function(index, value) {	
+		bodyRows += '<tr>';
+		bodyRows += '<td>' + '<a href="homework.html?id='+ value[''] + "&HwId=" + value['HwId'] + '">' + '<span class="content-tbl-link">' + value['StudentId'] + '</span>'+'</a>'+'</td>' ;
+		//bodyRows += '<td>' + value['StudentId'] + '</td>' ;
+		//bodyRows += '<td>' + value['UpdateTime'] + '</td>' ;
+		//bodyRows += '<td>' + value['Statuw'] + '</td>' ;
+		bodyRows += '<td>' + value['HwHandInScore'] + '</td>' ;
+		//bodyRows += '<td class="stu-only">' + hm.status + '</td>' ;
+		bodyRows += '</tr>';
+   })
+
+    $("#handIn_list").append(bodyRows);
+}
+		</script>
+	</body>
+</html>

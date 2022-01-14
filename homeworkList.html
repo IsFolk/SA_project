@@ -6,8 +6,7 @@
 		<base href="">
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../css_files/homework.css" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -55,24 +54,10 @@
 					<div class="professor">
 						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
 					</div>
-					<ul class="sidebar-menu">
-						<li>
-							<a href="../info/info.html"><span class="text">課程資訊</span></a>
-						</li>
-						<li>
-							<a href="../board/board.html"><span class="text">課程公告</span></a>
-						</li>
-						<li>
-							<a href="../textbook/textbookList.html"><span class="text">課程教材</span></a>
-						</li>
-						<li class="currentpage">
-							<a href="homeworkList.html"><span class="text">作業</span></a>
-						</li>
-						<li>
-							<a href="../test/testList.html"><span class="text">測驗</span></a>
-						</li>
+					<ul class="sidebar-menu" id="sidebar_menu">
 					</ul>
 				</div>
+
 				<!--右下區域-->
 				<div class="content-right">
 					<div class="content-right-title">
@@ -83,48 +68,108 @@
 					<table class="content-tbl">
 						<thead>
 							<tr>
-								<td>名稱</td><td>結束時間</td><td class="stu-only">狀態</td>
+								<td>名稱</td><td>結束時間</td>
+								<!-- <td class="stu-only">狀態</td> -->
 							</tr>
 						</thead>
-						<tbody></tbody>
+						<tbody id="hw_list"></tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="statics/js/general.js"></script>
+
 		<script>
-		//////////////把資料塞進table裡////////////
-var testData = {
-	courseName: "SA",
-	homework: [
-		{title: "作業一", endDate: "2021.12.3", status: "95"}, 
-		{title: "作業二", endDate: "2021.12.4", status: "待批改"}, 
-		{title: "作業三", endDate: "2021.12.5", status: "尚未繳交"},
-		{title: "喵喵", endDate: "にゃんにゃん", status: "wwwwww"},
-		{title: "喵喵", endDate: "にゃんにゃん", status: "wwwwww"}
-	]
-};
-var testJson = JSON.stringify(testData); //產生測試用的JSON資料
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id = url.searchParams.get("id");
+		  function getCourseInfo() {
+			  $.ajax({
+		          type: "GET",
+		          url: "HomeworkController",
+		          data: "CourseId=" + id,
+		          crossDomain: true,
+		          cache: false,
+		          dataType: 'json',
+		          timeout: 5000,
+		          success: function (response) {
+		              if(response.status == 200){
+		            	  updateHTML(response.response.data);
+		              }
+		          },
+		          error: function () {
+		              alert("無法連線到伺服器！");
+		          }
+		    });
+		  }		
+		  
+    	  updateMenu(id);
+		  getCourseInfo();
+		  
+		  function updateMenu(id) {
+			     $("#sidebar_menu").empty();
+			     var table_html = '';     
+			     table_html += '<li>';
+			     table_html += '<a href="info.html?id='+ id + '">' + '<span class="text">' + "課程資訊" + '</span>' + '</a>';
+			     table_html += '</li>';
+			     table_html += '<li>';
+			     table_html += '<a href="board.html?id='+ id + '">' + '<span class="text">' + "課程公告" + '</span>' + '</a>';
+			     table_html += '</li>';
+			     table_html += '<li>';
+			     table_html += '<a href="textbookList.html?id='+ id + '">' + '<span class="text">' + "課程教材" + '</span>' + '</a>';
+			     table_html += '</li>';
+			     table_html += '<li class="currentpage">';
+			     table_html += '<a href="homeworkList.html?id='+ id + '">' + '<span class="text">' + "作業" + '</span>' + '</a>';
+			     table_html += '</li>';
+			     table_html += '<li>';
+			     table_html += '<a href="testList.html?id='+ id + '">' + '<span class="text">' + "測驗" + '</span>' + '</a>';
+			     table_html += '</li>';
+			    
+			     $("#sidebar_menu").append(table_html);
+	     }
+		 
+		 function updateHTML(data) {
+	         $("#hw_list").empty();
+	         var bodyRows = '';
+	         $.each(data, function(index, value) {
+	     		bodyRows += '<tr>';
+	    		bodyRows += '<td>' + '<a href="homework.html?id='+ value['CourseId'] + "&HwId=" + value['HwId'] + '">' + '<span class="content-tbl-link">' + value['HwName'] + '</span>'+'</a>'+'</td>' ;
+	    		bodyRows += '<td>' + value['EndingTime'] + '</td>' ;
+	    		//bodyRows += '<td class="stu-only">' + hm.status + '</td>' ;
+	    		bodyRows += '</tr>';
+	        })
 
-function json2table(jsonString, $table){
-	var json = JSON.parse(jsonString); 
-	
-	var bodyRows = '';
-	
-	for(let hm of json.homework){ //將資料填入表格
-		bodyRows += '<tr>';
-		bodyRows += '<td><a href="homework.html"><span class="content-tbl-link">' + hm.title + '</span></a></td>' ;
-		bodyRows += '<td>' + hm.endDate + '</td>' ;
-		bodyRows += '<td class="stu-only">' + hm.status + '</td>' ;
-		bodyRows += '</tr>';
-	}
-	
-	$table.find('tbody').append(bodyRows);
-}
-
-json2table(testJson, $(".content-tbl"));
-		</script>
-		<script src="../../../js_files/general.js"></script>
+	         $("#hw_list").append(bodyRows);
+	     }
+		 
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id = url.searchParams.get("id");
+		function getValue(varname){
+		  var url = window.location.href;
+		  var qparts = url.split("?");
+		  if (qparts.length == 0){
+			return "";
+			}
+			  var query = qparts[1];
+			  var vars = query.split("&amp;");
+			  var value = "";
+			  for (i=0; i<vars.length; i++){
+				var parts = vars[i].split("=");
+				if (parts[0] == varname){
+				  value = parts[1];
+				  break;
+				}
+			  }
+		  value = unescape(value);
+		  value.replace(/\+/g," ");
+		  return value;
+		}
+		
+		var id = getValue("id");
+		</script>		
+		
 	</body>
 </html>

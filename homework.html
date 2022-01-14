@@ -6,8 +6,8 @@
 		<base href="">
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../css_files/homework.css" type="text/css" rel="stylesheet">
+		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+		<link href="statics/css/homework.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -55,22 +55,7 @@
 					<div class="professor">
 						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
 					</div>
-					<ul class="sidebar-menu">
-						<li>
-							<a href="../info/info.html"><span class="text">課程資訊</span></a>
-						</li>
-						<li>
-							<a href="../board/board.html"><span class="text">課程公告</span></a>
-						</li>
-						<li>
-							<a href="../textbook/textbookList.html"><span class="text">課程教材</span></a>
-						</li>
-						<li class="currentpage">
-							<a href="homeworkList.html"><span class="text">作業</span></a>
-						</li>
-						<li>
-							<a href="../test/testList.html"><span class="text">測驗</span></a>
-						</li>
+					<ul class="sidebar-menu" id="sidebar_menu">
 					</ul>
 				</div>
 				<!--右下區域-->
@@ -81,47 +66,108 @@
 					<div class="hr"></div>
 					<a href="editHomework.html"><span class="text go-edit-btn pro-only">修改作業</span></a>
 					<table class="info-tbl">
-						<tbody>
-							<tr>
-								<td class="tr-title">開放時間</td>
-								<td><span class="start-time"></span>~<span class="end-time"></span></td>
-							</tr>
-							<tr>
-								<td class="tr-title">說明</td>
-								<td><div class="homework-detail"></div></td>
-							</tr>
-							<tr>
-								<td class="tr-title">附件</td>
-								<td><div class="homework-attachmentName"></div></td>
-							</tr>
+						<tbody id="hw_info">
 						</tbody>
 					</table>
 					<br><br><br>
-					<a href="handInHomeworkList.html"><span class="text goto-btn pro-only">查看學生作業</span></a>
-					<a href="editHandInHomework.html"><span class="text goto-btn stu-only go-handin">繳交作業</span></a>
-					<a href="HandInHomework.html"><span class="text goto-btn stu-only go-see-hw">查看作業</span></a>
-					<a href="#"><span class="text download-btn round-border">下載附件</span></a>
+					<div id="links">
+					
+					</div>
+					<!-- <a href="#"><span class="text download-btn round-border">下載附件</span></a> -->
 				</div>
 			</div>
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="../../../js_files/general.js"></script>
+		<script src="statics/js/general.js"></script>
 		<script>
-$(".homework-name").text("作業一");
-$(".start-time").text("time");
-$(".end-time").text("time");
-$(".homework-detail").text("作業說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明");
-$(".homework-attachmentName").text("HWattachment.pdf");
-///////////////////////////////////////////////
 
-/////////////finished///////////////
-var hw_finished = 0;
-if(hw_finished){
-	$(".go-handin").remove();
-}else{
-	$(".go-see-hw").remove();
+var url_string = window.location.href;
+var url = new URL(url_string);
+var id = url.searchParams.get("id");
+var HwId = url.searchParams.get("HwId");
+  function getCourseInfo() {
+	  $.ajax({
+          type: "GET",
+          url: "HomeworkController",
+          data: "CourseId=" + id + "&HwId=" + HwId,
+          crossDomain: true,
+          cache: false,
+          dataType: 'json',
+          timeout: 5000,
+          success: function (response) {
+              if(response.status == 200){
+            	  updateHTML(response.response.data);
+              }
+          },
+          error: function () {
+              alert("無法連線到伺服器！");
+          }
+    });
+  }
+
+  updateMenu(id); 
+  updateLink();
+  getCourseInfo();
+
+
+function updateMenu(id) {
+     $("#sidebar_menu").empty();
+     var table_html = '';     
+     table_html += '<li class="currentpage">';
+     table_html += '<a href="info.html?id='+ id + '">' + '<span class="text">' + "課程資訊" + '</span>' + '</a>';
+     table_html += '</li>';
+     table_html += '<li>';
+     table_html += '<a href="board.html?id='+ id + '">' + '<span class="text">' + "課程公告" + '</span>' + '</a>';
+     table_html += '</li>';
+     table_html += '<li>';
+     table_html += '<a href="textbookList.html?id='+ id + '">' + '<span class="text">' + "課程教材" + '</span>' + '</a>';
+     table_html += '</li>';
+     table_html += '<li>';
+     table_html += '<a href="homeworkList.html?id='+ id + '">' + '<span class="text">' + "作業" + '</span>' + '</a>';
+     table_html += '</li>';
+     table_html += '<li>';
+     table_html += '<a href="testList.html?id='+ id + '">' + '<span class="text">' + "測驗" + '</span>' + '</a>';
+     table_html += '</li>';
+    
+     $("#sidebar_menu").append(table_html);
 }
+
+function updateHTML(data) {
+    $("#hw_info").empty();
+    var table_html = '';
+    $.each(data, function(index, value) {
+        table_html += '<tr>';
+        table_html += '<td class="tr-title">' + "開放時間" + '</td>';
+        table_html += '<td>' +''+'<span class="start-time">'+ value['OpeningTime'] + '</span>' + "~" +'<span class="end-time">'+ value['endingTime'] + '</span>' + '</td>';
+        table_html += '</tr>';
+        table_html += '<tr>';
+        table_html += '<td class="tr-title">' + "說明" + '</td>';
+        table_html += '<td>' + '<div class="homework-detail">' + value['HwDetail'] + '</div>' + '</td>';
+        table_html += '</tr>';
+        //table_html += '<tr>';
+        //table_html += '<td class="tr-title">' + "附件" + '</td>';
+        //table_html += '<td>' + '<div class="homework-attachmentName">' + value['HwAtta'] + '</div>' + '</td>';
+        //table_html += '</tr>';
+   })
+
+    $("#hw_info").append(table_html);
+}
+
+function updateLink() {
+	var url_string = window.location.href;
+	var url = new URL(url_string);
+	var id = url.searchParams.get("id");
+	var HwId = url.searchParams.get("HwId");
+    $("#links").empty();
+    var links_html = '';
+    //老師的功能
+    //links_html += '<a href="handInHomeworkList.html?id=' + id + "&HwId=" + HwId + '">' + '<span class="text goto-btn pro-only">' + "查看學生作業" + '</span>' + '</a>';
+    links_html += '<a href="editHandInHomework.html?id=' + id + "&HwId=" + HwId + '">' + '<span class="text goto-btn stu-only go-handin">' + "繳交作業" + '</span>' + '</a>';
+    links_html += '<a href="handInHomework.html?id=' + id + "&HwId=" + HwId + '">' + '<span class="text goto-btn stu-only go-see-hw">' + "查看作業" + '</span>' + '</a>';   
+    $("#links").append(links_html);
+}
+
 
 		</script>
 	</body>
