@@ -190,13 +190,10 @@ function updateQuestion(data) {
 				break;
 		}
 		
-		for(i=0;i<4;i++){
-			var ques = index[i];
-			if(){
-				$($('#tbl_' + n)>$('.op'+i)).append("<span>Correct</span>");
-			}else{
-				$($('#tbl_' + n)>$('.op'+i)).append("<span>Incorrect</span>");
-			}
+		if(value['optionA']==value['answerA']){
+			$($('#tbl_' + n)>$('.op'+i)).append("<span>Correct</span>");
+		}else{
+			$($('#tbl_' + n)>$('.op'+i)).append("<span>Incorrect</span>");
 		}
 		tbl_html += '</tr>';
 	})
