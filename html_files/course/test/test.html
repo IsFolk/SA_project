@@ -94,10 +94,7 @@
 					</table>
 					<br><br><br>
 					<a href="answeringTest.html?" id="start_test_btn"><span class="text test-goto-btn start-test stu-only">開始測驗</span></a>
-					<!--
 					<a href="studentTestAns.html?" id="check_ans_btn"><span class="text test-goto-btn see-result stu-only">查看作答結果</span></a>
-					<a href="studentTestAnsList.html?" id="stu_anslist_btn"><span class="text test-goto-btn pro-only">查看學生作答結果</span></a>
-					-->
 				</div>
 			</div>
 		</div>
@@ -141,6 +138,12 @@ function updateHTML(data){
 	$(".end-time").text(str);
 	str = data['detail'];
 	$(".test-detail").text(str);
+	if( data['id']==6 ){
+		$('.see-result').remove();
+	}
+	else{
+		$('start-test').remove();
+	}
 }
 
 /////////////////////////////////////////////
