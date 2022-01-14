@@ -69,19 +69,19 @@
 							<ul class="choice-list">
 								<li>
 									<input class="" type="radio" name="choices1" value="1" disabled="disabled">
-									<span class="option">choice1</span>
+									<span id="option">choice1</span>
 								</li>
 								<li>
 									<input class="" type="radio" name="choices1" value="2" disabled="disabled">
-									<span class="option">choice2</span>
+									<span id="option">choice2</span>
 								</li>
 								<li>
 									<input class="" type="radio" name="choices1" value="3" disabled="disabled">
-									<span class="option">choice3</span>
+									<span id="option">choice3</span>
 								</li>
 								<li>
 									<input class="" type="radio" name="choices1" value="4" disabled="disabled">
-									<span class="option">choice4</span>
+									<span id="option">choice4</span>
 								</li>
 							</ul>
 						</li>
@@ -91,19 +91,19 @@
 							<ul class="choice-list">
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled" checked>
-									<span class="option">choice1</span>
+									<span id="option">choice1</span>
 								</li>
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
-									<span class="option">choice2</span>
+									<span id="option">choice2</span>
 								</li>
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
-									<span class="option">choice3</span>
+									<span id="option">choice3</span>
 								</li>
 								<li>
 									<input class="round-border" type="checkbox" name="choices2" value="1" disabled="disabled">
-									<span class="option">choice4</span>
+									<span id="option">choice4</span>
 								</li>
 							</ul>
 						</li>
@@ -181,10 +181,10 @@ function updateQuestion(data) {
 				
 			case 1: //單選題
 				tbl_html += '<ul class="choice-list">';
-				tbl_html += '<li class="op1"><input type="radio" class="choice_1"  name="1" value="1" disabled="disabled"><span class="option1">'+value["optionA"]+'</span></li>';
-				tbl_html += '<li class="op2"><input type="radio" class="choice_2"  name="1" value="1" disabled="disabled"><span class="option2">'+value["optionB"]+'</span></li>';
-				tbl_html += '<li class="op3"><input type="radio" class="choice_3"  name="1" value="1" disabled="disabled"><span class="option3">'+value["optionC"]+'</span></li>';
-				tbl_html += '<li class="op4"><input type="radio" class="choice_4"  name="1" value="1" disabled="disabled"><span class="option4">'+value["optionD"]+'</span></li>';
+				tbl_html += '<li class="op1"><input type="radio" id="' + n + 'choice_1"  name="1" value="1" disabled="disabled"><span id="' + n + 'option1">'+value["optionA"]+'</span></li>';
+				tbl_html += '<li class="op2"><input type="radio" id="' + n + 'choice_2"  name="1" value="1" disabled="disabled"><span id="' + n + 'option2">'+value["optionB"]+'</span></li>';
+				tbl_html += '<li class="op3"><input type="radio" id="' + n + 'choice_3"  name="1" value="1" disabled="disabled"><span id="' + n + 'option3">'+value["optionC"]+'</span></li>';
+				tbl_html += '<li class="op4"><input type="radio" id="' + n + 'choice_4"  name="1" value="1" disabled="disabled"><span id="' + n + 'option4">'+value["optionD"]+'</span></li>';
 				var ans = '';
 				if(value['optionA'] == value['answerA']){ ans += 'A ' }
 				if(value['optionB'] == value['answerB']){ ans += 'B ' }
@@ -198,10 +198,10 @@ function updateQuestion(data) {
 			case 3:
 			case 4:
 				tbl_html += '<ul class="choice-list">';
-				tbl_html += '<li class="op1"><input type="checkbox" class="choice_1"  name="2" value="1" disabled="disabled"><span class="option1">'+value['optionA']+'</span></li>';
-				tbl_html += '<li class="op2"><input type="checkbox" class="choice_2"  name="2" value="1" disabled="disabled"><span class="option2">'+value['optionB']+'</span></li>';
-				tbl_html += '<li class="op3"><input type="checkbox" class="choice_3"  name="2" value="1" disabled="disabled"><span class="option3">'+value['optionC']+'</span></li>';
-				tbl_html += '<li class="op4"><input type="checkbox" class="choice_4"  name="2" value="1" disabled="disabled"><span class="option4">'+value['optionD']+'</span></li>';
+				tbl_html += '<li class="op1"><input type="checkbox" id="' + n + 'choice_1"  name="2" value="1" disabled="disabled"><span id="' + n + 'option1">'+value['optionA']+'</span></li>';
+				tbl_html += '<li class="op2"><input type="checkbox" id="' + n + 'choice_2"  name="2" value="1" disabled="disabled"><span id="' + n + 'option2">'+value['optionB']+'</span></li>';
+				tbl_html += '<li class="op3"><input type="checkbox" id="' + n + 'choice_3"  name="2" value="1" disabled="disabled"><span id="' + n + 'option3">'+value['optionC']+'</span></li>';
+				tbl_html += '<li class="op4"><input type="checkbox" id="' + n + 'choice_4"  name="2" value="1" disabled="disabled"><span id="' + n + 'option4">'+value['optionD']+'</span></li>';
 				var ans = '';
 				if(value['optionA'] == value['answerA']){ ans += 'A ' }
 				if(value['optionB'] == value['answerB']){ ans += 'B ' }
@@ -240,11 +240,18 @@ $.ajax({
 
 function updateStuAns(data){
 	$.each(data, function(index, value) {
-		n = '#' + value['id'];
-		if($(n '.option1') == value['handInAnswer1']){$(n '.choice1').attr('checked', 'true');}
-		if($(n '.option2') == value['handInAnswer2']){$(n '.choice2').attr('checked', 'true');}
-		if($(n '.option3') == value['handInAnswer3']){$(n '.choice3').attr('checked', 'true');}
-		if($(n '.option4') == value['handInAnswer4']){$(n '.choice4').attr('checked', 'true');}
+		o1 = '#' + value['id'] + 'option1';
+		o2 = '#' + value['id'] + 'option2';
+		o3 = '#' + value['id'] + 'option3';
+		o4 = '#' + value['id'] + 'option4';
+		c1 = '#' + value['id'] + 'choice_1';
+		c2 = '#' + value['id'] + 'choice_2';
+		c3 = '#' + value['id'] + 'choice_3';
+		c4 = '#' + value['id'] + 'choice_4';
+		if($(o1) == value['handInAnswer1']){$(c1).attr('checked', 'true');}
+		if($(o2) == value['handInAnswer2']){$(c2).attr('checked', 'true');}
+		if($(o3) == value['handInAnswer3']){$(c3).attr('checked', 'true');}
+		if($(o4) == value['handInAnswer4']){$(c4).attr('checked', 'true');}
 	});
 }
 		</script>
