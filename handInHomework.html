@@ -7,7 +7,7 @@
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
 		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
-		<link href="../css_files/homework.css" type="text/css" rel="stylesheet">
+		<link href="../../../css_files/handInHomework.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
@@ -76,31 +76,50 @@
 				<!--右下區域-->
 				<div class="content-right">
 					<div class="content-right-title">
-						<span class="text-bold homework-name"></span>
+						<span class="text-bold homework-name"></span>&ensp;
+						<span class="text pro-only student-id"></span>
+						<span class="text pro-only student-name"></span>
 					</div>
 					<div class="hr"></div>
-					<a href="editHomework.html"><span class="text go-edit-btn pro-only">修改作業</span></a>
 					<table class="info-tbl">
 						<tbody>
+							<tr>
+								<td class="tr-title">評分</td>
+								<td><span class="score"></span></td>
+							</tr>
 							<tr>
 								<td class="tr-title">開放時間</td>
 								<td><span class="start-time"></span>~<span class="end-time"></span></td>
 							</tr>
 							<tr>
-								<td class="tr-title">說明</td>
-								<td><div class="homework-detail"></div></td>
+								<td></td>
+								<td><div class="handin-hw-text"></div></td>
 							</tr>
 							<tr>
 								<td class="tr-title">附件</td>
-								<td><div class="homework-attachmentName"></div></td>
+								<td><div class="handin-hw-attachmentName"></div></td>
 							</tr>
 						</tbody>
 					</table>
 					<br><br><br>
-					<a href="handInHomeworkList.html"><span class="text goto-btn pro-only">查看學生作業</span></a>
-					<a href="editHandInHomework.html"><span class="text goto-btn stu-only go-handin">繳交作業</span></a>
-					<a href="HandInHomework.html"><span class="text goto-btn stu-only go-see-hw">查看作業</span></a>
+					<a href="editHandInHomework.html"><span class="text goto-btn stu-only">修改作業</span></a>
+					<a><span class="text show-hide-modal goto-btn pro-only">批改作業</span></a>
 					<a href="#"><span class="text download-btn round-border">下載附件</span></a>
+				</div>
+			</div>
+		</div>
+		<!--modal-->
+		<div class="modal-container do-not-show">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="modal-title"></span>
+					<span class="x-btn show-hide-modal cursor-pointer">x</span>
+				</div>
+				<div class="modal-body">
+					<span class="text">分數:</span>&ensp;
+					<input class="round-border blue-border" type="number" value="" min="0" step="10">
+					<br>
+					<input type="submit" class="modal-submit-btn" value="確認">
 				</div>
 			</div>
 		</div>
@@ -108,21 +127,21 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="../../../js_files/general.js"></script>
 		<script>
+
 $(".homework-name").text("作業一");
-$(".start-time").text("time");
-$(".end-time").text("time");
-$(".homework-detail").text("作業說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明");
-$(".homework-attachmentName").text("HWattachment.pdf");
-///////////////////////////////////////////////
+$(".score").text("");
+$(".start-time").text("start time");
+$(".end-time").text("end time");
+$(".handin-hw-text").text("繳交作業內容內容內容內容內容內容內容內容內容內容內容內容內容內容");
+$(".handin-hw-attachmentName").text("HWattachment.pdf");
+$(".student-name").text("學生N");
+$(".student-id").text("108000001");
 
-/////////////finished///////////////
-var hw_finished = 0;
-if(hw_finished){
-	$(".go-handin").remove();
-}else{
-	$(".go-see-hw").remove();
-}
+////////////////show/hide modal////
 
+$(".show-hide-modal").click(function(){
+  $(".modal-container").toggleClass("do-not-show");
+});
 		</script>
 	</body>
 </html>

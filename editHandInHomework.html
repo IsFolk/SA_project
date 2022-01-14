@@ -79,28 +79,30 @@
 						<span class="text-bold homework-name"></span>
 					</div>
 					<div class="hr"></div>
-					<a href="editHomework.html"><span class="text go-edit-btn pro-only">修改作業</span></a>
-					<table class="info-tbl">
-						<tbody>
-							<tr>
-								<td class="tr-title">開放時間</td>
-								<td><span class="start-time"></span>~<span class="end-time"></span></td>
-							</tr>
-							<tr>
-								<td class="tr-title">說明</td>
-								<td><div class="homework-detail"></div></td>
-							</tr>
-							<tr>
-								<td class="tr-title">附件</td>
-								<td><div class="homework-attachmentName"></div></td>
-							</tr>
-						</tbody>
-					</table>
-					<br><br><br>
-					<a href="handInHomeworkList.html"><span class="text goto-btn pro-only">查看學生作業</span></a>
-					<a href="editHandInHomework.html"><span class="text goto-btn stu-only go-handin">繳交作業</span></a>
-					<a href="HandInHomework.html"><span class="text goto-btn stu-only go-see-hw">查看作業</span></a>
-					<a href="#"><span class="text download-btn round-border">下載附件</span></a>
+					<form>
+						<table class="form-tbl">
+							<tbody>
+								<tr>
+									<td class="tr-title">開放時間</td>
+									<td><span class="start-time"></span>~<span class="end-time"></span></td>
+								</tr>
+								<tr>
+									<td class="tr-title">繳交作業<br>內容</td>
+									<td><textarea class="round-border blue-border handin-hw-text" name ="" rows="6"></textarea></td>
+								</tr>
+								<tr>
+									<td class="tr-title">附件</td>
+									<td>
+										<span class="handin-hw-attachmentName"></span>
+										<br>
+										<input type="file" class="cursor-pointer">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br><br><br>
+						<input type="submit" class="submit-btn round-border cursor-pointer" value="確認繳交">
+					</form>
 				</div>
 			</div>
 		</div>
@@ -111,18 +113,8 @@
 $(".homework-name").text("作業一");
 $(".start-time").text("time");
 $(".end-time").text("time");
-$(".homework-detail").text("作業說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明說明");
-$(".homework-attachmentName").text("HWattachment.pdf");
-///////////////////////////////////////////////
-
-/////////////finished///////////////
-var hw_finished = 0;
-if(hw_finished){
-	$(".go-handin").remove();
-}else{
-	$(".go-see-hw").remove();
-}
-
+$(".handin-hw-text").text("繳交作業內容");
+$(".handin-hw-attachmentName").text("HWattachment.pdf");
 		</script>
 	</body>
 </html>
