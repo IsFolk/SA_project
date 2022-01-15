@@ -6,9 +6,15 @@
 		<base href="">
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="css_files/general.css" type="text/css" rel="stylesheet">
 		<style>
-
+			#submit_btn, #finish_btn{
+				margin: 0 10px;
+				cursor: pointer;
+			}
+			ol{
+				list-style-type: upper-alpha;
+			}
 		</style>
 	</head>
 	<body>
@@ -16,8 +22,7 @@
 		<nav>
 			<div class="container">
 				<div class="navbar-header">
-					<img src="" alt="logo">
-					<span class="text">OWL MY CLASS</span>
+					<img src="statics/icon/logo.jpg" alt="logo" style="max-width: 150px; height: auto;">
 				</div>
 				<div class="navbar-collapse">
 					<ul class="navbar-right">
@@ -55,30 +60,37 @@
 		<div class="lowerhalf">
 			<div class="container">
 				<!--左下的選單-->
-				<div class="test-sidebar-container">
-					<div class="test-sidebar">
-						<ul class="test-sidebar-menu">
-							<li>
-								<a href="addTestInfo.html"><span class="text">測驗資訊</span></a>
-							</li>
-							<li class="currentpage">
-								<a href="#"><span class="text">第</span><span class="text question-order"></span><span class="text">題</span></a>
-							</li>
-						</ul>
-						<a href="#"><span class="text add-question-btn">+ 新增題目</span></a>
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
 					</div>
-				</div>
+					<ul class="sidebar-menu">
+						<li>
+							<a id="info" href="info.html"><span class="text">課程資訊</span></a>
+						</li>
+						<li>
+							<a id="board" href="board.html"><span class="text">課程公告</span></a>
+						</li>
+						<li>
+							<a id="textbooklist" href="textbookList.html"><span class="text">課程教材</span></a>
+						</li>
+						<li>
+							<a id="homeworklist" href="homeworkList.html"><span class="text">作業</span></a>
+						</li>
+						<li class="currentpage">
+							<a id="test" href="testList.html"><span class="text">測驗</span></a>
+						</li>
+					</ul>
+				</div>	
 			<!--右下區域-->
 				<div class="content-right">
 					<div class="content-right-title">
-						<span class="text-bold">編輯題目</span>
+						<span class="text-bold">新增題目</span>
 					</div>
 					<div class="hr"></div>
 					<form>
 						<table class="form-tbl">
-							<tr><td><span class="text-bold question-order"></span><span class="text-bold">.</span></td></tr>
 							<tr>
-								<td></td>
 								<td><textarea class="round-border blue-border" id="question" name="question" placeholder="題目敘述" rows="6"></textarea></td>
 								<td>
 									<select class="round-border blue-border" id="slt">
@@ -87,11 +99,10 @@
 										<option value=".ans_3">簡答題</option>
 									</select>
 									<br><br>
-									<span class="text">配分:</span>&ensp;<input class="round-border blue-border" id="score" type="number" step="10" value="50">
+									<span class="text">配分:</span>&ensp;<input class="round-border blue-border" id="score" type="number" step="10" value="10">
 								</td>
 							</tr>
 							<tr>
-								<td></td>
 								<td id="ans_td">
 									<div>
 										<span class="text-reminder">(請選取正確選項)</span>
@@ -117,7 +128,8 @@
 								</td>
 							</tr>
 						</table>
-						<input type="submit" id="submit_btn" class="submit-btn round-border" value="完成編輯">
+						<input type="button" id="finish_btn" class="submit-btn round-border" value="完成">
+						<input type="button" id="submit_btn" class="submit-btn round-border" value="新增下一題">
 					</form>
 				</div>
 			</div>
@@ -170,19 +182,44 @@
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="../../../js_files/general.js"></script>
-		<script src="../../../js_files/test.js"></script>
 		<script>
-		/////////第N題//////////////////
-var questionNumber = 1;
-$(".question-order").text(questionNumber);
+var courseInfo = {
+		name: "系統分析與設計",
+		semester: "110-1",
+		code: "IM3069*",
+		division: "資管系",
+		professor: "喵喵喵",
+		credits: 3,
+		description: "課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹"
+};
+$(".course-name").text(courseInfo.name);
+$(".course-semester").text(courseInfo.semester);
+$(".course-code").text(courseInfo.code);
+$(".course-division").text(courseInfo.division);
+$(".course-professor").text(courseInfo.professor);
+$(".course-credits").text(courseInfo.credits);
+$(".course-description").text(courseInfo.description);
+		
 ///////////////////////////////////
+		var url_string = window.location.href;                
+		var url = new URL(url_string);
+		console.log(url);
+		var courseid = url.searchParams.get("CourseId");
+        var boardid;
+		//console.log(courseid);
+		
+		var testid = url.searchParams.get("TestId");
+		
 
+document.getElementById("info").href = "info.html?CourseId="+courseid;
+document.getElementById("board").href = "board.html?CourseId="+courseid;
+document.getElementById("test").href = "testList.html?CourseId="+courseid;
+document.getElementById("textbooklist").href = "textbookList.html?CourseId="+courseid;
+document.getElementById("homeworklist").href = "homeworkList.html?CourseId="+courseid;
+			
 ////////////select////////////////////
 var div3_is_not_showing = 1;
 $(function(){
-	
-	
 	var sltValue = ".ans_1";
 	$('#slt').change(function(){
 		sltValue = $(this).val();
@@ -205,20 +242,6 @@ $(function(){
 	});
 });
 ///////////////////////////////
-//////////////preview img/////////
-$("#input-img").change(function(){
-	readURL(this);
-});
-
-function readURL(input){
-  if(input.files && input.files[0]){
-    var reader = new FileReader();
-    reader.onload = function (e) {
-		$("#preview-img").attr('src', e.target.result);
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
 
 /////////////////submit/////////////////////////
 $('#submit_btn').click(function(){
@@ -226,12 +249,14 @@ $('#submit_btn').click(function(){
 });
 		
 function submit() {
+	var success = 0;
 	var question_detail = $('#question').val();
 	var score = $('#score').val();
 	var choice_1 = $('.choice1').val();
 	var choice_2 = $('.choice2').val();
 	var choice_3 = $('.choice3').val();
 	var choice_4 = $('.choice4').val();
+	var fake_id = 1;
 	var ans_1 = '';
 	var ans_2 = '';
 	var ans_3 = '';
@@ -255,8 +280,8 @@ function submit() {
 
 	if (question_detail == ''){
 		alert("請輸入題目!");
-	}else if(choice_1 == ''){
-		alert("請至少輸入選項一!");
+	}else if((choice_1 == '')||(choice_2 == '')||(choice_3 == '')||(choice_4 == '')){
+		alert("請輸入選項!");
 	}
 	else if((ans_1+ans_2+ans_3+ans_4 == '')&&(div3_is_not_showing == 1)){
 		alert("請選取正確答案!");
@@ -272,14 +297,14 @@ function submit() {
 			"CorrectAnswer1":　ans_1,
 			"CorrectAnswer2":　ans_2,
 			"CorrectAnswer3":　ans_3,
-			"CorrectAnswer4":　ans_4
+			"CorrectAnswer4":　ans_4,
 		};
 		//將JSON格式轉成字串
 		var data_string = JSON.stringify(data_object);
 		//發出POST的AJAX請求
 		$.ajax({
 			type: "POST",
-			url: "api/test.do",
+			url: "api/Question.do",
 			data: data_string,
 			crossDomain: true,
 			cache: false,
@@ -288,6 +313,9 @@ function submit() {
 			success: function(response){
 				if(response.status == 200){
 					alert("上傳成功!");
+					success = 1;
+					////跳轉頁面
+					window.location.href="addTestQuestion.html?CourseId="+courseid;
 				}
 			},
 			error: function(){
@@ -295,7 +323,19 @@ function submit() {
 			}
 		});
 	}
+	return success;
 }
+////////////完成///////////////
+$('#finish_btn').click(function(){
+	let sub = submit();
+	if(sub == 1){
+		var yes = confirm('確定完成編輯？');
+		if (yes) {
+			////跳轉頁面
+			window.location.href="testList.html?CourseId="+courseid;
+		}
+	}
+});
 
 		</script>
 	</body>
