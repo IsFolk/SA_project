@@ -5,15 +5,14 @@
 		<meta charset="utf-8">
 		<base href="">
 		<link rel="icon" type="image/png" href="">
-		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+		<link href="css_files/general.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
 		<nav>
 			<div class="container">
 				<div class="navbar-header">
-					<img src="" alt="logo">
-					<span class="text">OWL MY CLASS</span>
+					<img src="statics/icon/logo.jpg" alt="logo" style="max-width: 150px; height: auto;">
 				</div>
 				<div class="navbar-collapse">
 					<ul class="navbar-right">
@@ -23,7 +22,7 @@
 							</div>
 						</li>
 						<li class="dropdown-btn">
-							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<a href="#" tabindex="0"></a>
 							<ul class="dropdown-menu">
 								<li>
 									<a href="#"><span class="text">個人資訊</span></a>
@@ -41,7 +40,6 @@
 		<!--橫幅-->
 		<div class="banner">
 			<div class="container">
-				<img src="" alt="img">
 					<span class="banner-name course-name text-bold"></span>
 					<span class="banner-extInfo course-code"></span>
 			</div>
@@ -57,19 +55,19 @@
 					</div>
 					<ul class="sidebar-menu">
 						<li>
-							<a href="../info/info.html?" class="sidebar_link"><span class="text">課程資訊</span></a>
+							<a id="info" href="../info/info.html?" class="sidebar_link"><span class="text">課程資訊</span></a>
 						</li>
 						<li>
-							<a href="../board/board.html?" class="sidebar_link"><span class="text">課程公告</span></a>
+							<a id="board" href="../board/board.html?" class="sidebar_link"><span class="text">課程公告</span></a>
 						</li>
 						<li>
-							<a href="../textbook/textbookList.html?" class="sidebar_link"><span class="text">課程教材</span></a>
+							<a id="textbooklist" href="../textbook/textbookList.html?" class="sidebar_link"><span class="text">課程教材</span></a>
 						</li>
 						<li>
-							<a href="../homework/homeworkList.html?" class="sidebar_link"><span class="text">作業</span></a>
+							<a id="homeworklist" href="../homework/homeworkList.html?" class="sidebar_link"><span class="text">作業</span></a>
 						</li>
 						<li class="currentpage">
-							<a href="testList.html" class="sidebar_link"><span class="text">測驗</span></a>
+							<a id="test" href="testList.html" class="sidebar_link"><span class="text">測驗</span></a>
 						</li>
 					</ul>
 				</div>
@@ -100,15 +98,45 @@
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="statics/js/general.js"></script>
 		<script>
+		
+		var userIsProfessor = 1;
+		if(userIsProfessor){
+			$(".stu-only").remove();
+		}else{
+			$(".pro-only").remove();
+		}
+///////////
+var courseInfo = {
+				name: "系統分析與設計",
+				semester: "110-1",
+				code: "IM3069*",
+				division: "資管系",
+				professor: "喵喵喵",
+				credits: 3,
+				description: "課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹"
+		};
+		$(".course-name").text(courseInfo.name);
+		$(".course-semester").text(courseInfo.semester);
+		$(".course-code").text(courseInfo.code);
+		$(".course-division").text(courseInfo.division);
+		$(".course-professor").text(courseInfo.professor);
+		$(".course-credits").text(courseInfo.credits);
+		$(".course-description").text(courseInfo.description);		
+
 ///////////////////從URL接收參數///////////////////////////
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-var testid = urlParams.get('testid');
-var userid = urlParams.get('userid');
-var courseid = urlParams.get('courseid');
-var finished = urlParams.get('finished');
+var courseid = urlParams.get('CourseId');
+
+
+document.getElementById("info").href = "info.html?CourseId="+courseid;
+document.getElementById("board").href = "board.html?CourseId="+courseid;
+document.getElementById("textbooklist").href = "textbookList.html?CourseId="+courseid;
+document.getElementById("test").href = "testList.html?CourseId="+courseid;
+document.getElementById("homeworklist").href = "homeworkList.html?CourseId="+courseid;
+
+
 
 ////////////////把資料塞進table//////////////
 $.ajax({
@@ -143,23 +171,14 @@ function updateHTML(data){
 /////////////////////////////////////////////
 
 //////////////作答前/作答後////////////////////
-var test_finished = finished;
+var test_finished = 0;
 if(test_finished){
 	$(".start-test").remove();
 }else{
 	$(".see-result").remove();
 }
-//////////////在URL後加上參數///////////
-var str = 'courseid=' + courseid + '&userid=' + userid;
-appendURL('.sidebar_link', str);
-$('#check_ans_btn').attr('href', $('#check_ans_btn').attr('href')+btn_url);
-$('#start_test_btn').attr('href', $('#start_test_btn').attr('href')+btn_url);
-$('#stu_anslist_btn').attr('href', $('#stu_anslist_btn').attr('href')+btn_url);
 
-//////////////在url後加字串/////////
-function appendURL(selector, str){
-	$(selector).attr('href', $(selector).attr('href')+str);
-}
+
 		</script>
 	</body>
 </html>
