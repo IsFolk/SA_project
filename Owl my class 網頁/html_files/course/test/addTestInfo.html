@@ -6,15 +6,14 @@
 		<base href="">
 		<link rel="icon" type="image/png" href="">
 		<link href="" type="text/css" rel="stylesheet">
-		<link href="../../../css_files/general.css" type="text/css" rel="stylesheet">
+		<link href="css_files/general.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
 		<nav>
 			<div class="container">
 				<div class="navbar-header">
-					<img src="" alt="logo">
-					<span class="text">OWL MY CLASS</span>
+					<img src="statics/icon/logo.jpg" alt="logo" style="max-width: 150px; height: auto;">
 				</div>
 				<div class="navbar-collapse">
 					<ul class="navbar-right">
@@ -51,24 +50,33 @@
 		<!--下半部分-->
 		<div class="lowerhalf">
 			<div class="container">
-				<!--左下的選單-->
-				<div class="test-sidebar-container">
-					<div class="test-sidebar">
-						<ul class="test-sidebar-menu">
-							<li class="currentpage">
-								<a href="addTestInfo.html"><span class="text">測驗資訊</span></a>
-							</li>
-							<li>
-								<a href="addTestQuestion.html"><span id="add_question">新增題目</span></a>
-							</li>
-						</ul>
-						
+			<!--左下的選單-->
+				<div class="sidebar">
+					<div class="professor">
+						<span class="text-bold">教授:</span><span class="text-bold course-professor"></span>
 					</div>
-				</div>
+					<ul class="sidebar-menu">
+						<li>
+							<a id="info" href="info.html"><span class="text">課程資訊</span></a>
+						</li>
+						<li>
+							<a id="board" href="board.html"><span class="text">課程公告</span></a>
+						</li>
+						<li>
+							<a id="textbooklist" href="textbookList.html"><span class="text">課程教材</span></a>
+						</li>
+						<li>
+							<a id="homeworklist" href="homeworkList.html"><span class="text">作業</span></a>
+						</li>
+						<li class="currentpage">
+							<a id="test" href="testList.html"><span class="text">測驗</span></a>
+						</li>
+					</ul>
+				</div>	
 			<!--右下區域-->
 				<div class="content-right">
 					<div class="content-right-title">
-						<span class="text-bold">編輯測驗資訊</span>
+						<span class="text-bold">新增測驗資訊</span>
 					</div>
 					<div class="hr"></div>
 					<form>
@@ -92,64 +100,65 @@
 								</tr>
 							</tbody>
 						</table>
-						<input id="submit_btn" type="submit" class="submit-btn round-border" value="完成編輯">
+						<input id="submit_btn" type="button" class="submit-btn round-border" value="下一步">
 					</form>
 				</div>
 			</div>
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="../../../js_files/test.js"></script>
 		<script>
+var courseInfo = {
+		name: "系統分析與設計",
+		semester: "110-1",
+		code: "IM3069*",
+		division: "資管系",
+		professor: "喵喵喵",
+		credits: 3,
+		description: "課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹"
+};
+$(".course-name").text(courseInfo.name);
+$(".course-semester").text(courseInfo.semester);
+$(".course-code").text(courseInfo.code);
+$(".course-division").text(courseInfo.division);
+$(".course-professor").text(courseInfo.professor);
+$(".course-credits").text(courseInfo.credits);
+$(".course-description").text(courseInfo.description);
+//////////////////////////////////////////////////////
+		var url_string = window.location.href;                
+		var url = new URL(url_string);
+		var courseid = url.searchParams.get("CourseId");
+		
 
-$('#test_name').attr("value", "測驗一");
-$('#opening_date').attr("value",'2022-01-03');
-$('#opening_time').attr("value",'08:30');
-$('#ending_date').attr("value",'2022-01-03');
-$('#ending_time').attr("value",'09:30');
-$('#test_detail').text("測驗說明");
-///////////////side bar//////////////////////
+document.getElementById("info").href = "info.html?CourseId="+courseid;
+document.getElementById("board").href = "board.html?CourseId="+courseid;
+document.getElementById("test").href = "testList.html?CourseId="+courseid;
+document.getElementById("textbooklist").href = "textbookList.html?CourseId="+courseid;
+document.getElementById("homeworklist").href = "homeworkList.html?CourseId="+courseid;
+
+/////////////取得現有的test數量/////////////////////////??????????
+var new_test_id;
 $.ajax({
 	type: "GET",
-	url: "api/Question.do",
+	url: "api/Test.do",
 	crossDomain: true,
 	cache: false,
 	dataType: 'json',
 	timeout: 5000,
 	success: function (response) {
 		if(response.status == 200){
-			updateSidebar(response.response.data);
+			new_test_id = value[''];
 		}
+		console.log(response);
 	},
 	error: function () {
 		alert("無法連線到伺服器！");
 	}
 });
 
-
-
-
-function updateSidebar(data) {
-	var sidebar_list = '';
-	$.each(data, function(index, value) {
-		sidebar_list += '<li>';
-		sidebar_list += '<a href="editTestQuestion.html">' ;
-		sidebar_list += '<span id="' + value['id'] + '">第' + (value['id']+1) + '題</span>';
-		sidebar_list += '</a>' ;
-		sidebar_list += '</li>';
-	})
-
-	$(".test-sidebar-menu").append(sidebar_list);
-}
-
-
-////////////////////////////////////////////////////
+///////////////////////submit/////////////////////////////
 $('#submit_btn').click(function(){
 	submit();
-});
-
-$('#add_question').click(function(){
-	addQuestion();
 });
 		
 function submit() {
@@ -157,10 +166,9 @@ function submit() {
 	var opentime_input = $('#opening_date').val() + ' ' + $('#opening_time').val() + ':00';
 	var endtime_input = $('#ending_date').val() + ' ' + $('#ending_time').val() + ':00';
 	var test_detail = $('#test_detail').val();
-	
 	if (test_name == ''){
 		alert("請輸入測驗標題!");
-	}else if((opening_time == '')||(ending_time == '')){
+	}else if((opentime_input == ' :00')||(endtime_input == ' :00')){
 		alert("請輸入測驗時間!");
 	}else{
 		//將資料轉成JSON格式
@@ -183,7 +191,9 @@ function submit() {
 			timeout: 5000,
 			success: function(response){
 				if(response.status == 200){
-					alert("上傳成功!");
+					alert('上傳成功');
+					////跳轉頁面
+					window.location.href="addTestQuestion.html?CourseId="+courseid;
 				}
 			},
 			error: function(){
@@ -192,11 +202,7 @@ function submit() {
 		});
 	}
 }
-
-function addQuestion(){
-	
-}
 		</script>
-		<script src="../../../js_files/general.js"></script>
+		<script src="statics/js/general.js"></script>
 	</body>
 </html>
