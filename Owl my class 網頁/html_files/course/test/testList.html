@@ -5,15 +5,14 @@
 		<meta charset="utf-8">
 		<base href="">
 		<link rel="icon" type="image/png" href="">
-		<link href="statics/css/general.css" type="text/css" rel="stylesheet">
+		<link href="css_files/general.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
 		<!--畫面最上方的橫條navbar-->
 		<nav>
 			<div class="container">
 				<div class="navbar-header">
-					<img src="" alt="logo">
-					<span class="text">OWL MY CLASS</span>
+					<img src="statics/icon/logo.jpg" alt="logo" style="max-width: 150px; height: auto;">
 				</div>
 				<div class="navbar-collapse">
 					<ul class="navbar-right">
@@ -23,7 +22,7 @@
 							</div>
 						</li>
 						<li class="dropdown-btn">
-							<a href="#" tabindex="0"><img src="" alt="img"></a>
+							<a href="#" tabindex="0"></a>
 							<ul class="dropdown-menu">
 								<li>
 									<a href="#"><span class="text">個人資訊</span></a>
@@ -41,7 +40,6 @@
 		<!--橫幅-->
 		<div class="banner">
 			<div class="container">
-				<img src="" alt="img">
 					<span class="banner-name course-name text-bold"></span>
 					<span class="banner-extInfo course-code"></span>
 			</div>
@@ -57,19 +55,19 @@
 					</div>
 					<ul class="sidebar-menu">
 						<li>
-							<a href="../info/info.html?"><span class="text">課程資訊</span></a>
+							<a id="info" href="../info/info.html?"><span class="text">課程資訊</span></a>
 						</li>
 						<li>
-							<a href="../board/board.html?"><span class="text">課程公告</span></a>
+							<a id="board" href="../board/board.html?"><span class="text">課程公告</span></a>
 						</li>
 						<li>
-							<a href="../textbook/textbookList.html?"><span class="text">課程教材</span></a>
+							<a id="textbooklist" href="../textbook/textbookList.html?"><span class="text">課程教材</span></a>
 						</li>
 						<li>
-							<a href="../homework/homeworkList.html?"><span class="text">作業</span></a>
+							<a id="homeworklist" href="../homework/homeworkList.html?"><span class="text">作業</span></a>
 						</li>
 						<li class="currentpage">
-							<a href="testList.html"><span class="text">測驗</span></a>
+							<a id="test" href="testList.html"><span class="text">測驗</span></a>
 						</li>
 					</ul>
 				</div>
@@ -95,24 +93,31 @@
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
+		
+		
+		var userIsProfessor = 1;
+		if(userIsProfessor){
+			$(".stu-only").remove();
+		}else{
+			$(".pro-only").remove();
+		}
 		///////////////////從URL接收參數///////////////////////////
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 var userid = urlParams.get('userid');
-var courseid = urlParams.get('courseid');
+var courseid = urlParams.get('CourseId');
 
-//////////////在URL後加上參數///////////
-var str = 'courseid=' + courseid + '&userid=' + userid;
-appendURL('.sidebar_link', str);
-str = 'courseid=' + courseid + '&testid=0' + '&userid=' + userid;
-appendURL('#add-test-btn', str);
 
-//////////////在url後加字串/////////
-function appendURL(selector, str){
-	$(selector).attr('href', $(selector).attr('href')+str);
-}
 
-		
+
+document.getElementById("info").href = "info.html?CourseId="+courseid;
+document.getElementById("board").href = "board.html?CourseId="+courseid;
+document.getElementById("textbooklist").href = "textbookList.html?CourseId="+courseid;
+document.getElementById("test").href = "testList.html?CourseId="+courseid;
+document.getElementById("homeworklist").href = "homeworkList.html?CourseId="+courseid;
+
+document.getElementById("add-test-btn").href = "addTestInfo.html?CourseId="+courseid;
+
 		//////////////把資料塞進table裡////////////
 $.ajax({
 		type: "GET",
@@ -136,7 +141,7 @@ function updateTable(data) {
 	var table_html = '';
 	$.each(data, function(index, value) {
 		table_html += '<tr>';
-		table_html += '<td><a href="test.html?testid=' + (index+1) + '&userid='+ userid + '&courseid=' + courseid + '&finished=0'"><span class="content-tbl-link">' + value['name'] +'</span></a></td>' ;
+		table_html += '<td><a href="test.html?testid=' + (index+1) + '&userid='+ userid + '&courseid=' + courseid +'"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
 		table_html += '<td>' + value['end_time'] + '</td>';
 		table_html += '</tr>';
 	})
@@ -144,9 +149,24 @@ function updateTable(data) {
 	$(".content-tbl > tbody").append(table_html);
 }
 
-
+////////////////////////////////////////////////////
+var courseInfo = {
+				name: "系統分析與設計",
+				semester: "110-1",
+				code: "IM3069*",
+				division: "資管系",
+				professor: "喵喵喵",
+				credits: 3,
+				description: "課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹課程介紹"
+		};
+		$(".course-name").text(courseInfo.name);
+		$(".course-semester").text(courseInfo.semester);
+		$(".course-code").text(courseInfo.code);
+		$(".course-division").text(courseInfo.division);
+		$(".course-professor").text(courseInfo.professor);
+		$(".course-credits").text(courseInfo.credits);
+		$(".course-description").text(courseInfo.description);
 
 		</script>
-		<script src="statics/js/general.js"></script>
 	</body>
 </html>
