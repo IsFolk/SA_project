@@ -81,7 +81,7 @@
 					<table class="content-tbl">
 						<thead>
 							<tr>
-								<td>名稱</td><td>結束時間</td>
+								<td>名稱</td><td>結束時間</td><td></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -143,12 +143,41 @@ function updateTable(data) {
 		table_html += '<tr>';
 		table_html += '<td><a href="test.html?testid=' + (index+1) + '&userid='+ userid + '&courseid=' + courseid +'"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
 		table_html += '<td>' + value['end_time'] + '</td>';
+		table_html += '<td><a href="javascript: deleteTest(' + value['TestId'] + ');">刪除</a></td></tr>';
 		table_html += '</tr>';
 	})
 
 	$(".content-tbl > tbody").append(table_html);
 }
-
+//////////////////////刪除/////////
+function deleteTest(id) {
+    var check = window.confirm("確認刪除測驗？");
+    if (check == true) {
+        console.log("You pressed OK!");
+        var request = {'TestId': id};
+        var data_string = JSON.stringify(request);
+        $.ajax({
+            type: "DELETE",
+            url: "api/Test.do",
+            crossDomain: true,
+            data: data_string,
+            cache: false,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                if(response.status == 200){
+                    $("#flashMessage").html("成功! 已經成功刪除測驗...");
+                    $("#flashMessage").show();
+                    location.reload();
+                }
+                console.log(response);
+            },
+            error: function () {
+                alert("無法連線到伺服器！");
+            }
+        });
+    }
+}
 ////////////////////////////////////////////////////
 var courseInfo = {
 				name: "系統分析與設計",
