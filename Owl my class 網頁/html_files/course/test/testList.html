@@ -143,7 +143,7 @@ function updateTable(data) {
 		table_html += '<tr>';
 		table_html += '<td><a href="test.html?testid=' + (index+1) + '&userid='+ userid + '&courseid=' + courseid +'"><span class="content-tbl-link">' + value['name'] + '</span></a></td>' ;
 		table_html += '<td>' + value['end_time'] + '</td>';
-		table_html += '<td><a href="javascript: deleteTest(' + value['TestId'] + ');">刪除</a></td></tr>';
+		table_html += '<td><a href="javascript: deleteTest(' + (index+1) + ');">刪除</a></td></tr>';
 		table_html += '</tr>';
 	})
 
