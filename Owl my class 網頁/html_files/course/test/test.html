@@ -129,6 +129,7 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 var courseid = urlParams.get('CourseId');
 
+var testid = urlParams.get('TestId');   //加上這行
 
 document.getElementById("info").href = "info.html?CourseId="+courseid;
 document.getElementById("board").href = "board.html?CourseId="+courseid;
